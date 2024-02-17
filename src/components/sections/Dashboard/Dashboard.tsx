@@ -1,55 +1,41 @@
 // src/components/sections/Dashboard/Dashboard.tsx
 
-import { GAMES } from '../../../games'
-import { GameCard } from './GameCard'
-import React from 'react'
-import { SlideSection } from '../../Slider'
-import { WelcomeBanner } from './WelcomeBanner'
-import styled from 'styled-components'
+import { GAMES } from '../../../games';
+import { GameCard } from './GameCard';
+import React from 'react';
+import { SlideSection } from '../../Slider';
+import { WelcomeBanner } from './WelcomeBanner';
 
 export function GameSlider() {
   return (
     <SlideSection>
-      {GAMES.map((game) => (
-        <div key={game.id} style={{ width: '160px', display: 'flex' }}>
-          <GameCard game={game} />
-        </div>
-      ))}
+      <div className="flex flex-wrap justify-center">
+        {GAMES.map((game) => (
+          <div key={game.id} className="w-40 flex justify-center">
+            <GameCard game={game} />
+          </div>
+        ))}
+      </div>
     </SlideSection>
-  )
+  );
 }
-
-const Grid = styled.div`
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  @media (min-width: 600px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  @media (min-width: 800px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  @media (min-width: 1200px) {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-`
 
 export function GameGrid() {
   return (
-    <Grid>
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {GAMES.map((game) => (
         <GameCard key={game.id} game={game} />
       ))}
-    </Grid>
-  )
+    </div>
+  );
 }
 
 export default function Dashboard() {
   return (
     <>
       <WelcomeBanner />
-      <h2 style={{ textAlign: 'center' }}>Games</h2>
+      <h2 className="text-center">Games</h2>
       <GameGrid />
     </>
-  )
+  );
 }

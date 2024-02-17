@@ -1,21 +1,23 @@
 // src/components/sections/Dashboard/GameCard.tsx
 
-import { NavLink, useLocation } from 'react-router-dom'
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components';
 
-import { GameBundle } from 'gamba-react-ui-v2'
-import React from 'react'
+import { GameBundle } from 'gamba-react-ui-v2';
+import Link from 'next/link';
+import React from 'react';
+import { useRouter } from 'next/router';
 
 const tileAnimation = keyframes`
   0% {
-  background-position: -100px 100px;
+    background-position: -100px 100px;
   }
   100% {
     background-position: 100px -100px;
   }
-`
+`;
 
-const StyledGameCard = styled(NavLink)<{$small: boolean, $background: string}>`
+
+const StyledGameCard = styled.a<{$small: boolean, $background: string}>`
   width: 100%;
 
   @media (min-width: 800px) {
@@ -107,17 +109,17 @@ const StyledGameCard = styled(NavLink)<{$small: boolean, $background: string}>`
   }
 `
 
-export function GameCard({ game }: {game: GameBundle}) {
-  const small = useLocation().pathname !== '/'
+export function GameCard({ game }: { game: GameBundle }) {
+  const router = useRouter();
+  const small = router.pathname !== '/';
+
   return (
-    <StyledGameCard
-      to={'/' + game.id}
-      $small={small ?? false}
-      $background={game.meta?.background}
-    >
-      <div className="background" />
-      <div className="image" style={{ backgroundImage: `url(${game.meta.image})` }} />
-      <div className="play">Play {game.meta.name}</div>
-    </StyledGameCard>
-  )
+  <Link href={`/play/${game.id}`} passHref>
+      <StyledGameCard $small={small ?? false} $background={game.meta?.background}>
+        <div className="background" />
+        <div className="image" style={{ backgroundImage: `url(${game.meta.image})` }} />
+        <div className="play">Play {game.meta.name}</div>
+      </StyledGameCard>
+    </Link>
+  );
 }

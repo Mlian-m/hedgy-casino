@@ -1,44 +1,53 @@
 // src/components/sections/RecentPlays/useRecentPlays.ts
+// src/components/sections/RecentPlays/useRecentPlays.ts
 
-import { useGambaEventListener, useGambaEvents, useWalletAddress } from 'gamba-react-v2'
+import React, { useMemo, useState } from "react";
+import {
+  useGambaEventListener,
+  useGambaEvents,
+  useWalletAddress,
+} from "gamba-react-v2";
 
-import { GambaTransaction } from 'gamba-core-v2'
-import { PLATFORM_CREATOR_ADDRESS } from '../../../../config'
-import React from 'react'
-import { useLocation } from 'react-router-dom'
+import { GambaTransaction } from "gamba-core-v2";
+import { PLATFORM_CREATOR_ADDRESS } from "../../../../config";
+import { useRouter } from "next/router";
 
 export function useRecentPlays() {
-  const location = useLocation()
-  const userAddress = useWalletAddress()
+  const router = useRouter();
+  const userAddress = useWalletAddress();
 
   // Fetch previous events from our platform
-  const previousEvents = useGambaEvents('GameSettled', { address: PLATFORM_CREATOR_ADDRESS })
+  const previousEvents = useGambaEvents("GameSettled", {
+    address: PLATFORM_CREATOR_ADDRESS,
+  });
 
-  const [newEvents, setEvents] = React.useState<GambaTransaction<'GameSettled'>[]>([])
+  const [newEvents, setEvents] = useState<GambaTransaction<"GameSettled">[]>(
+    []
+  );
 
   // Listen for new events
   useGambaEventListener(
-    'GameSettled',
+    "GameSettled",
     (event) => {
-      // Ignore events that occured on another platform
-      if (!event.data.creator.equals(PLATFORM_CREATOR_ADDRESS)) return
-      // Todo handle delays in platform library
-      const delay = event.data.user.equals(userAddress) && ['plinko', 'slots'].some((x) => location.pathname.includes(x)) ? 3000 : 1
-      setTimeout(
-        () => {
-          setEvents((events) => [event, ...events])
-        },
-        delay,
-      )
+      // Ignore events that occurred on another platform
+      if (!event.data.creator.equals(PLATFORM_CREATOR_ADDRESS)) return;
+
+      // Handle delays in platform library
+      const delay =
+        event.data.user.equals(userAddress) &&
+        ["plinko", "slots"].some((x) => router.pathname.includes(x))
+          ? 3000
+          : 1;
+      setTimeout(() => {
+        setEvents((events) => [event, ...events]);
+      }, delay);
     },
-    [location.pathname, userAddress],
-  )
+    [router.pathname, userAddress] // Updated dependency array to use router.pathname
+  );
 
   // Merge previous & new events
-  return React.useMemo(
-    () => {
-      return [...newEvents, ...previousEvents]
-    },
-    [newEvents, previousEvents],
-  )
+  return useMemo(
+    () => [...newEvents, ...previousEvents],
+    [newEvents, previousEvents]
+  );
 }

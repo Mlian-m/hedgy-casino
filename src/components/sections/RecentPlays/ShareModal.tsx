@@ -1,79 +1,61 @@
 // src/components/sections/RecentPlays/ShareModal.tsx
 
-import { GambaUi, TokenValue, useTokenMeta } from 'gamba-react-ui-v2'
+import { GambaUi, TokenValue, useTokenMeta } from 'gamba-react-ui-v2';
+import React, { useRef, useState } from 'react';
 
-import { Flex } from '@/components'
-import { GambaTransaction } from 'gamba-core-v2'
-import { Modal } from '../../Modal'
-import { PLATFORM_SHARABLE_URL } from '../../../../config'
-import React from 'react'
-import { extractMetadata } from '../../../utils/utils'
-import html2canvas from 'html2canvas'
-import { useNavigate } from 'react-router-dom'
-import { useToast } from '../../../hooks/useToast'
-
-// const saveBlob = (function() {
-//   const a = document.createElement('a')
-//   document.body.appendChild(a)
-//   a.setAttribute('style', 'display: none')
-
-//   return function(blob: Blob, fileName: string) {
-//     const url = window.URL.createObjectURL(blob)
-//     a.href = url
-//     a.download = fileName
-//     a.click()
-//     window.URL.revokeObjectURL(url)
-//   }
-// })()
+import { Flex } from '@/components';
+import { GambaTransaction } from 'gamba-core-v2';
+import { Modal } from '../../Modal';
+import { PLATFORM_SHARABLE_URL } from '../../../../config';
+import { extractMetadata } from '../../../utils/utils';
+import html2canvas from 'html2canvas';
+import { useRouter } from 'next/router';
+import { useToast } from '../../../hooks/useToast';
 
 const canvasToClipboard = async (canvas: HTMLCanvasElement) => {
   return new Promise((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => {
-        if (!blob) {
-          return reject()
-        }
-        if (blob) {
-          // saveBlob(blob, 'play.png')
-          // resolve(true)
-          navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
-            .then(resolve)
-            .catch(reject)
-        }
-      },
-    )
-  })
-}
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        return reject(new Error('Canvas to Blob conversion failed'));
+      }
+      navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+        .then(resolve)
+        .catch(reject);
+    });
+  });
+};
 
-export function ShareModal({ event, onClose }: {event: GambaTransaction<'GameSettled'>, onClose: () => void}) {
-  const navigate = useNavigate()
-  const { game } = extractMetadata(event)
+export function ShareModal({ event, onClose }: { event: GambaTransaction<'GameSettled'>; onClose: () => void }) {
+  const router = useRouter();
+  const tokenMeta = useTokenMeta(event.data.tokenMint);
+  const ref = useRef<HTMLDivElement>(null);
+  const toast = useToast();
+  const profit = event.data.payout.sub(event.data.wager).toNumber();
+  const percentChange = profit / event.data.wager.toNumber();
+  const [copying, setCopying] = useState(false);
+  const { game } = extractMetadata(event);
+
   const gotoGame = () => {
-    navigate('/' + game?.id)
-    onClose()
-  }
-  const tokenMeta = useTokenMeta(event.data.tokenMint)
-  const ref = React.useRef<HTMLDivElement>(null!)
-
-  const toast = useToast()
-
-  const profit = event.data.payout.sub(event.data.wager).toNumber()
-  const percentChange = profit / event.data.wager.toNumber()
-  const [copying, setCopying] = React.useState(false)
+    router.push('/' + game?.id);
+    onClose();
+  };
 
   const copyImage = async () => {
-    try {
-      setCopying(true)
-      const canvas = await html2canvas(ref.current, { removeContainer: true, backgroundColor: '#000' })
-      await canvasToClipboard(canvas)
-      toast({
-        title: '📋 Copied image to clipboard',
-        description: 'You can paste it in Twitter or Telegram etc.',
-      })
-    } finally {
-      setCopying(false)
+    if (ref.current) {
+      try {
+        setCopying(true);
+        const canvas = await html2canvas(ref.current, { removeContainer: true, backgroundColor: '#000' });
+        await canvasToClipboard(canvas);
+        toast({
+          title: '📋 Copied image to clipboard',
+          description: 'You can paste it in Twitter or Telegram etc.',
+        });
+      } finally {
+        setCopying(false);
+      }
     }
-  }
+  };
+
 
   return (
     <Modal onClose={() => onClose()}>

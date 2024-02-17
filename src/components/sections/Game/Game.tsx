@@ -10,7 +10,7 @@ import { Modal } from '../../Modal'
 import { ProvablyFairModal } from './ProvablyFairModal'
 import React from 'react'
 import { useGamba } from 'gamba-react-v2'
-import { useParams } from 'react-router-dom'
+import { useRouter } from 'next/router';
 
 function CustomError() {
   return (
@@ -79,9 +79,13 @@ function CustomRenderer() {
   )
 }
 
-export default function Game() {
-  const { gameId } = useParams()
-  const game = GAMES.find((x) => x.id === gameId)
+interface GameProps {
+  gameId: string
+}
+
+export default function Game({ gameId } : GameProps) {
+  const router = useRouter();
+  const game = GAMES.find((x) => x.id === gameId);
 
   return (
     <>
