@@ -19,8 +19,8 @@ export const RANK_SYMBOLS: Record<number, string> = {
 }
 export const RANKS = Object.keys(RANK_SYMBOLS).length
 
-export const SOUND_CARD = '../../../public/games/HiLo/card.mp3'
-export const SOUND_FINISH = '../../../public/games/HiLo/finish.mp3'
-export const SOUND_LOSE = '../../../public/games/HiLo/lose.mp3'
-export const SOUND_PLAY = '../../../public/games/HiLo/play.mp3'
-export const SOUND_WIN = '../../../public/games/HiLo/win.mp3'
+export const SOUND_CARD = '/games/hilo/card.mp3'
+export const SOUND_FINISH = '/games/hilo/finish.mp3'
+export const SOUND_LOSE = '/games/hilo/lose.mp3'
+export const SOUND_PLAY = '/games/hilo/play.mp3'
+export const SOUND_WIN = '/games/hilo/win.mp3'

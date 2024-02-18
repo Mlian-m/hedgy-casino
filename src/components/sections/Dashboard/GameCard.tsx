@@ -113,11 +113,15 @@ export function GameCard({ game }: { game: GameBundle }) {
   const router = useRouter();
   const small = router.pathname !== '/';
 
+  // Construct the correct path for the game image based on your described structure
+  const imagePath = `/games/${game.id}/logo.png`;
+
   return (
-  <Link href={`/play/${game.id}`} passHref>
+    <Link href={`/play/${game.id}`} passHref>
       <StyledGameCard $small={small ?? false} $background={game.meta?.background}>
         <div className="background" />
-        <div className="image" style={{ backgroundImage: `url(${game.meta.image})` }} />
+        {/* Update the backgroundImage style to use the new imagePath */}
+        <div className="image" style={{ backgroundImage: `url(${imagePath})` }} />
         <div className="play">Play {game.meta.name}</div>
       </StyledGameCard>
     </Link>

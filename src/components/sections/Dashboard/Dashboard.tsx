@@ -1,10 +1,10 @@
 // src/components/sections/Dashboard/Dashboard.tsx
 
-import { GAMES } from '../../../games';
-import { GameCard } from './GameCard';
-import React from 'react';
-import { SlideSection } from '../../Slider';
-import { WelcomeBanner } from './WelcomeBanner';
+import { GAMES } from "../../../games";
+import { GameCard } from "./GameCard";
+import React from "react";
+import { SlideSection } from "../../Slider";
+import { WelcomeBanner } from "./WelcomeBanner";
 
 export function GameSlider() {
   return (
@@ -22,7 +22,7 @@ export function GameSlider() {
 
 export function GameGrid() {
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
       {GAMES.map((game) => (
         <GameCard key={game.id} game={game} />
       ))}

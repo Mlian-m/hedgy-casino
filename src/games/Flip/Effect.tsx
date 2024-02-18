@@ -8,7 +8,7 @@ import { useTexture } from '@react-three/drei'
 
 const tmp = new THREE.Object3D
 
-const TEXTURE_STAR = '/games/Flip/star.png'
+const TEXTURE_STAR = '/games/flip/star.png'
 const STARS = 10
 
 export const Effect = ({ color }: {color: string}) => {

@@ -9,6 +9,7 @@ import { Icon } from '../../Icon'
 import { Modal } from '../../Modal'
 import { ProvablyFairModal } from './ProvablyFairModal'
 import React from 'react'
+import RecentPlays from '../RecentPlays/RecentPlays'
 import { useGamba } from 'gamba-react-v2'
 import { useRouter } from 'next/router';
 
@@ -37,10 +38,13 @@ function CustomRenderer() {
   const [provablyFair, setProvablyFair] = React.useState(false)
   const audioStore = useGambaAudioStore()
 
+  const imagePath = `/games/${game.id}/logo.png`;
+
   return (
     <>
       {info && (
         <Modal onClose={() => setInfo(false)}>
+          <img height="150px" src={imagePath} alt={`Splash for ${game.meta.name}`} />
           <h1>{game.meta.name}</h1>
           <p>{game.meta.description}</p>
         </Modal>
@@ -50,7 +54,7 @@ function CustomRenderer() {
       )}
       <Container>
         <Splash>
-          <img height="150px" src={game.meta.image} />
+        <img height="150px" src={imagePath} alt={`Splash for ${game.meta.name}`} />
         </Splash>
         <Screen>
           <GambaUi.PortalTarget target="error" />
@@ -99,6 +103,7 @@ export default function Game({ gameId } : GameProps) {
         <h1>Game not found! 👎</h1>
       )}
       <GameSlider />
+      <RecentPlays />
     </>
   )
 }

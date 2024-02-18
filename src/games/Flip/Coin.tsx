@@ -1,13 +1,14 @@
 // src/games/Flip/Coin.tsx
+
 import React, { useEffect, useRef } from 'react';
 import { useGLTF, useTexture } from '@react-three/drei';
 
 import { Group } from 'three';
 import { useFrame } from '@react-three/fiber';
 
-const MODEL_COIN = '/games/Flip/Coin.glb';
-const TEXTURE_HEADS = '/games/Flip/heads.png';
-const TEXTURE_TAILS = '/games/Flip/tails.png';
+const MODEL_COIN = '/games/flip/Coin.glb';
+const TEXTURE_HEADS = '/games/flip/heads.png';
+const TEXTURE_TAILS = '/games/flip/tails.png';
 
 function CoinModel() {
   // Use the `useGLTF` and `useTexture` hooks with the paths

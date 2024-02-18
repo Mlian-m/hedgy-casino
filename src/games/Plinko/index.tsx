@@ -1,3 +1,4 @@
+// src/games/Plinko/index.tsx
 import { GambaUi, useSound, useWagerInput } from 'gamba-react-ui-v2'
 import { PEG_RADIUS, PLINKO_RAIUS, Plinko as PlinkoGame, PlinkoProps, barrierHeight, barrierWidth, bucketHeight } from './game'
 
@@ -19,9 +20,9 @@ function usePlinko(props: PlinkoProps, deps: React.DependencyList) {
   return plinko
 }
 
-const BUMP = '../../../public/games/Plinko/bump.mp3'
-const WIN = '../../../public/games/Plinko/win.mp3'
-const FALL = '../../../public/games/Plinko/fall.mp3'
+const BUMP = '/games/plinko/bump.mp3'
+const WIN = '/games/plinko/win.mp3'
+const FALL = '/games/plinko/fall.mp3'
 
 const DEGEN_BET = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 10, 10, 10, 15]
 const BET = [.5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, .5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 3, 3, 3, 3, 3, 3, 3, 6]

@@ -1,52 +1,12 @@
 // src/components/sections/Header.tsx
 
-import React, { useState } from "react";
-import { TokenValue, useCurrentPool, useUserBalance } from "gamba-react-ui-v2";
+import React, { useState } from 'react';
+import { TokenValue, useCurrentPool, useUserBalance } from 'gamba-react-ui-v2';
 
-import Link from "next/link";
-import { Modal } from "../Modal";
-import TokenSelect from "./TokenSelect";
-import { UserButton } from "./UserButton";
-import styled from "styled-components";
-
-const Bonus = styled.button`
-  all: unset;
-  cursor: pointer;
-  color: #003c00;
-  border-radius: 10px;
-  background: #03ffa4;
-  padding: 2px 10px;
-  font-size: 12px;
-  text-transform: uppercase;
-  font-weight: bold;
-  transition: background 0.2s;
-  &:hover {
-    background: white;
-  }
-`;
-
-const StyledHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 10px;
-  background: rgba(33, 34, 51, 0.9);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  backdrop-filter: blur(20px);
-`;
-
-const Logo = styled.a`
-  height: 35px;
-  margin: 0 10px;
-  cursor: pointer;
-  & > img {
-    height: 100%;
-  }
-`;
+import Link from 'next/link';
+import { Modal } from '../Modal';
+import TokenSelect from './TokenSelect';
+import { UserButton } from './UserButton';
 
 export default function Header() {
   const pool = useCurrentPool();
@@ -60,12 +20,11 @@ export default function Header() {
         <Modal onClose={() => setBonusHelp(false)}>
           <h1>You have a bonus!</h1>
           <p>
-            You have{" "}
+            You have{' '}
             <b>
               <TokenValue amount={balance.bonusBalance} />
-            </b>{" "}
-            worth of free plays. This bonus will be applied automatically when
-            you play.
+            </b>{' '}
+            worth of free plays. This bonus will be applied automatically when you play.
           </p>
         </Modal>
       )}
@@ -77,36 +36,35 @@ export default function Header() {
           </p>
         </Modal>
       )}
-      <StyledHeader>
-        <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+      <div className="flex items-center justify-between w-full p-2.5 bg-[rgba(33,34,51,0.9)] fixed top-0 left-0 z-50 backdrop-blur-[20px]">
+        <div className="flex gap-5 items-center">
           <Link href="/" passHref>
-            <Logo>
-              <img alt="Gamba logo" src="/logo.svg" />
-            </Logo>
+            <a className="h-9 m-0 cursor-pointer">
+              <img alt="Gamba logo" src="/logo.svg" className="h-full" />
+            </a>
           </Link>
         </div>
-        <div
-          style={{
-            display: "flex",
-            gap: "10px",
-            alignItems: "center",
-            position: "relative",
-          }}
-        >
+        <div className="flex gap-2.5 items-center relative">
           {pool.jackpotBalance > 0 && (
-            <Bonus onClick={() => setJackpotHelp(true)}>
+            <button
+              onClick={() => setJackpotHelp(true)}
+              className="all-unset cursor-pointer text-[#003c00] rounded-lg bg-[#03ffa4] px-2.5 py-0.5 text-xs uppercase font-bold transition-colors duration-200 hover:bg-white"
+            >
               <TokenValue amount={pool.jackpotBalance} />
-            </Bonus>
+            </button>
           )}
           {balance.bonusBalance > 0 && (
-            <Bonus onClick={() => setBonusHelp(true)}>
+            <button
+              onClick={() => setBonusHelp(true)}
+              className="all-unset cursor-pointer text-[#003c00] rounded-lg bg-[#03ffa4] px-2.5 py-0.5 text-xs uppercase font-bold transition-colors duration-200 hover:bg-white"
+            >
               +<TokenValue amount={balance.bonusBalance} />
-            </Bonus>
+            </button>
           )}
           <TokenSelect />
           <UserButton />
         </div>
-      </StyledHeader>
+      </div>
     </>
   );
 }

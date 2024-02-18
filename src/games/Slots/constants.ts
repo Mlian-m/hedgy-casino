@@ -1,18 +1,18 @@
 // src/games/Slots/constants.ts
-export const SOUND_LOSE = "../../../public/games/Slots/lose.mp3";
-export const SOUND_PLAY = "../../../public/games/Slots/insert.mp3";
+export const SOUND_LOSE = "/games/slots/lose.mp3";
+export const SOUND_PLAY = "/games/slots/insert.mp3";
 export const SOUND_REVEAL_LEGENDARY =
-  "../../../public/games/Slots/reveal-legendary.mp3";
-export const SOUND_REVEAL = "../../../public/games/Slots/reveal.mp3";
-export const SOUND_SPIN = "../../../public/games/Slots/spin.mp3";
-export const SOUND_WIN = "../../../public/games/Slots/win.mp3";
-export const IMAGE_2X = "../../../public/games/Slots/2x.png";
-export const IMAGE_3X = "../../../public/games/Slots/3x.png";
-export const IMAGE_5X = "../../../public/games/Slots/5x.png";
-export const IMAGE_COOL = "../../../public/games/Slots/emoji-cool.png";
-export const IMAGE_HEARTS = "../../../public/games/Slots/emoji-hearts.png";
-export const IMAGE_UNICORN = "../../../public/games/Slots/unicorn.png";
-export const IMAGE_WOJAK = "../../../public/games/Slots/wojak.png";
+  "/games/slots/reveal-legendary.mp3";
+export const SOUND_REVEAL = "/games/slots/reveal.mp3";
+export const SOUND_SPIN = "/games/slots/spin.mp3";
+export const SOUND_WIN = "/games/slots/win.mp3";
+export const IMAGE_2X = "/games/slots/2x.png";
+export const IMAGE_3X = "/games/slots/3x.png";
+export const IMAGE_5X = "/games/slots/5x.png";
+export const IMAGE_COOL = "/games/slots/emoji-cool.png";
+export const IMAGE_HEARTS = "/games/slots/emoji-hearts.png";
+export const IMAGE_UNICORN = "/games/slots/unicorn.png";
+export const IMAGE_WOJAK = "/games/slots/wojak.png";
 
 export interface SlotItem {
   multiplier: number;

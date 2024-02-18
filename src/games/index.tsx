@@ -1,90 +1,78 @@
 // src/games/index.tsx
 
-import { GameBundle } from 'gamba-react-ui-v2'
-import dynamic from 'next/dynamic';
+import { GameBundle } from "gamba-react-ui-v2";
+import dynamic from "next/dynamic";
 
 export const GAMES: GameBundle[] = [
   {
-    id: 'dice',
+    id: "dice",
     meta: {
-      background: '#ff6490',
-      name: 'Dice',
-      image: '/games/dice.png',
-      description: `
-        Use the slider to pick a number, then roll below that number to win. Lower numbers will increase your potential payout, while higher ones are safer.
-      `,
+      background: "#ff6490",
+      name: "Dice",
+      image: "/games/dice.png",
+      description: `Dice challenges players to predict the outcome of a roll with a unique twist. Select a number and aim to roll below it to win. Adjusting your choice affects potential payouts, balancing risk and reward for an engaging experience.`,
     },
-    app: dynamic(() => import('./Dice')),
+    app: dynamic(() => import("./Dice")),
   },
   {
-    id: 'slots',
+    id: "slots",
     meta: {
-      background: '#5465ff',
-      name: 'Slots',
-      image: '/games/slots.png',
-      description: `
-        Play and pray. At the top of the slot machine you can see your potential rewards. Always fair.
-      `,
+      background: "#5465ff",
+      name: "Slots",
+      image: "/games/slots.png",
+      description: `Slots is the quintessential game of luck and anticipation. Spin the reels and match symbols to win, with potential rewards displayed upfront. A fair and exciting game, Slots offers a classic casino experience tailored for digital enjoyment.`,
     },
-    app: dynamic(() => import('./Slots')),
+    app: dynamic(() => import("./Slots")),
   },
   {
-    id: 'flip',
+    id: "flip",
     meta: {
-      name: 'Flip',
-      description: `
-        Pick Heads or Tails. Double your money or go broke. Simple as.
-      `,
-      image: '/games/flip.png',
-      background: '#ffe694',
+      name: "Flip",
+      description: `Flip offers a straightforward yet thrilling gamble: choose Heads or Tails and double your money or lose it all. This simple, high-stakes game tests your luck and decision-making with every flip of the coin.`,
+      image: "/games/flip.png",
+      background: "#ffe694",
     },
-    app: dynamic(() => import('./Flip')),
+    app: dynamic(() => import("./Flip")),
   },
   {
-    id: 'plinko',
+    id: "plinko",
     meta: {
-      background: '#7272ff',
-      image: '/games/plinko.png',
-      name: 'Plinko',
-      description: `
-        Plinko
-      `,
+      background: "#7272ff",
+      image: "/games/plinko.png",
+      name: "Plinko",
+      description: `Plinko combines strategy with chance, inviting players to drop chips down a pegged board to land in winning slots. Each drop is a mix of anticipation and strategy, making Plinko an endlessly entertaining game of chance.`,
     },
-    app: dynamic(() => import('./Plinko')),
+    app: dynamic(() => import("./Plinko")),
   },
   {
-    id: 'hilo',
+    id: "hilo",
     meta: {
-      name: 'HiLo',
-      image: '/games/hilo.png',
-      description: 'Guess if the next card is going to be higher or lower than the current one. Continue until you want to cash out!',
-      background: '#77bbff',
+      name: "HiLo",
+      image: "/games/hilo.png",
+      description: `HiLo is a game of foresight and luck, challenging players to guess whether the next card will be higher or lower. Make consecutive correct guesses to increase your winnings, and decide when to cash out for maximum rewards.`,
+      background: "#77bbff",
     },
-    props: { logo: '/logo.svg' },
-    app: dynamic(() => import('./HiLo')),
+    props: { logo: "/logo.svg" },
+    app: dynamic(() => import("./HiLo")),
   },
   {
-    id: 'mines',
+    id: "mines",
     meta: {
-      name: 'Mines',
-      description: `
-        There's money hidden beneath the squares. The reward will increase the more squares you reveal, but watch out for the 5 hidden mines. Touch one and you'll go broke. You can cash out at any time.
-      `,
-      image: '/games/mines.png',
-      background: '#8376ff',
+      name: "Mines",
+      description: `Mines is a strategic game of risk and reward. Uncover squares to find hidden treasures, but beware of mines that could end your game instantly. With every square, the stakes get higher, offering a thrilling experience for daring players.`,
+      image: "/games/mines.png",
+      background: "#8376ff",
     },
-    app: dynamic(() => import('./Mines')),
+    app: dynamic(() => import("./Mines")),
   },
   {
-    id: 'roulette',
+    id: "roulette",
     meta: {
-      name: 'Roulette',
-      image: '/games/roulette.png',
-      description: `
-        A miniature version of Roulette. WYSIWYG!
-      `,
-      background: '#1de87e',
+      name: "Roulette",
+      image: "/games/roulette.png",
+      description: `Roulette brings the classic wheel-spinning game to life with a digital twist. Bet on where the ball will land and watch as the wheel decides your fate. With straightforward rules and the chance for big wins, Roulette is a timeless game of chance.`,
+      background: "#1de87e",
     },
-    app: dynamic(() => import('./Roulette')),
-  },
-]
+    app: dynamic(() => import("./Roulette")),
+  }
+];

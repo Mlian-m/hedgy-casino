@@ -13,9 +13,9 @@ const SIDES = {
   tails: [0, 2],
 }
 
-const SOUND_COIN = '/games/Flip/coin.mp3'
-const SOUND_WIN = '/games/Flip/win.mp3'
-const SOUND_LOSE = '/games/Flip/lose.mp3'
+const SOUND_COIN = '/games/flip/coin.mp3'
+const SOUND_WIN = '/games/flip/win.mp3'
+const SOUND_LOSE = '/games/flip/lose.mp3'
 
 type Side = keyof typeof SIDES
 
@@ -114,8 +114,7 @@ function Flip() {
         />
         <GambaUi.Button disabled={gamba.isPlaying} onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}>
           <div style={{ display: 'flex' }}>
-            <img height="20px" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} />
-            {side === 'heads' ? 'Heads' : 'Tails' }
+            <img width={64} src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} />
           </div>
         </GambaUi.Button>
         <GambaUi.PlayButton onClick={play}>

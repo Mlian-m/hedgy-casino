@@ -8,10 +8,10 @@ import React from 'react'
 import Slider from './Slider'
 import { useGamba } from 'gamba-react-v2'
 
-const SOUND_PLAY = '/games/Dice/play.mp3'
-const SOUND_LOSE = '/games/Dice/lose.mp3'
-const SOUND_WIN = '/games/Dice/win.mp3'
-const SOUND_TICK = '/games/Dice/tick.mp3'
+const SOUND_PLAY = '/games/dice/play.mp3'
+const SOUND_LOSE = '/games/dice/lose.mp3'
+const SOUND_WIN = '/games/dice/win.mp3'
+const SOUND_TICK = '/games/dice/tick.mp3'
 
 const DICE_SIDES = 100
 

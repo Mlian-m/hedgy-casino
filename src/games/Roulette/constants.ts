@@ -1,9 +1,9 @@
 // src/games/Roulette/constants.ts
 
-export const SOUND_PLAY = '../../../public/games/Roulette/play.mp3'
-export const SOUND_CHIP = '../../../public/games/Roulette/chip.mp3'
-export const SOUND_WIN = '../../../public/games/Roulette/win.mp3'
-export const SOUND_LOSE = '../../../public/games/Roulette/lose.mp3'
+export const SOUND_PLAY = '/games/roulette/play.mp3'
+export const SOUND_CHIP = '/games/roulette/chip.mp3'
+export const SOUND_WIN = '/games/roulette/win.mp3'
+export const SOUND_LOSE = '/games/roulette/lose.mp3'
 
 export const CHIPS = [1, 2, 10]
 export const NUMBERS = 18
