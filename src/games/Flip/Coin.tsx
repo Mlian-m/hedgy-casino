@@ -38,7 +38,7 @@ interface CoinFlipProps {
 }
 
 export function Coin({ flipping, result }: CoinFlipProps) {
-  const group = useRef<Group>();
+  const group = useRef<Group | null>(null);
   const target = useRef(0);
 
   useEffect(() => {
