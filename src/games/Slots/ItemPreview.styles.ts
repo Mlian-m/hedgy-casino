@@ -13,7 +13,7 @@ export const StyledItemPreview = styled.div`
   }
 
   & > div.hidden {
-    opacity: .5;
+    opacity: 0.5;
   }
 
   & > div > .icon {
@@ -39,5 +39,4 @@ export const StyledItemPreview = styled.div`
     border-radius: 2px;
     z-index: 1;
   }
-
-`
+`;

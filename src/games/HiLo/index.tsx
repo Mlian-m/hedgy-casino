@@ -56,16 +56,16 @@ const generateBetArray = (currentRank: number, isHi: boolean) => {
             ? BigInt(RANKS * BPS_PER_WHOLE) / BigInt(RANKS - 1 - currentRank)
             : BigInt(0)
           : i >= currentRank
-          ? BigInt(RANKS * BPS_PER_WHOLE) / BigInt(RANKS - currentRank)
-          : BigInt(0);
+            ? BigInt(RANKS * BPS_PER_WHOLE) / BigInt(RANKS - currentRank)
+            : BigInt(0);
       }
       return currentRank === RANKS - 1
         ? i < currentRank
           ? BigInt(RANKS * BPS_PER_WHOLE) / BigInt(currentRank)
           : BigInt(0)
         : i <= currentRank
-        ? BigInt(RANKS * BPS_PER_WHOLE) / BigInt(currentRank + 1)
-        : BigInt(0);
+          ? BigInt(RANKS * BPS_PER_WHOLE) / BigInt(currentRank + 1)
+          : BigInt(0);
     })();
     return Number(result) / BPS_PER_WHOLE;
   });
@@ -92,7 +92,7 @@ export default function HiLo(props: HiLoConfig) {
   const [profit, setProfit] = React.useState(0);
   const currentRank = cards[cards.length - 1].rank;
   const [option, setOption] = React.useState<"hi" | "lo">(
-    currentRank > RANKS / 2 ? "lo" : "hi"
+    currentRank > RANKS / 2 ? "lo" : "hi",
   );
   const [hoveredOption, hoverOption] = React.useState<"hi" | "lo">();
 
@@ -109,11 +109,11 @@ export default function HiLo(props: HiLoConfig) {
 
   const betHi = React.useMemo(
     () => generateBetArray(currentRank, true),
-    [currentRank]
+    [currentRank],
   );
   const betLo = React.useMemo(
     () => generateBetArray(currentRank, false),
-    [currentRank]
+    [currentRank],
   );
 
   const _bet = React.useMemo(() => {
@@ -239,7 +239,7 @@ export default function HiLo(props: HiLoConfig) {
               <Profit key={profit} onClick={resetGame}>
                 <TokenValue amount={profit} /> +
                 {Math.round(
-                  (profit / initialWager) * 100 - 100
+                  (profit / initialWager) * 100 - 100,
                 ).toLocaleString()}
                 %
               </Profit>

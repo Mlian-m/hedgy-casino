@@ -1,13 +1,13 @@
-import React from 'react'
-import { SLOT_ITEMS, SlotItem } from './constants'
-import styled, { css, keyframes } from 'styled-components'
-import { StyledSpinner } from './Slot.styles'
+import React from "react";
+import { SLOT_ITEMS, SlotItem } from "./constants";
+import styled, { css, keyframes } from "styled-components";
+import { StyledSpinner } from "./Slot.styles";
 
 interface SlotProps {
-  revealed:boolean
-  good: boolean
-  index: number
-  item?: SlotItem
+  revealed: boolean;
+  good: boolean;
+  index: number;
+  item?: SlotItem;
 }
 
 const reveal = keyframes`
@@ -19,7 +19,7 @@ const reveal = keyframes`
     transform: translateY(0%);
     opacity: 1;
   }
-`
+`;
 
 const pulse = keyframes`
   0%, 30% {
@@ -28,51 +28,63 @@ const pulse = keyframes`
   10% {
     transform: scale(1.3)
   }
-`
+`;
 
-const StyledSlot = styled.div<{$good: boolean}>`
+const StyledSlot = styled.div<{ $good: boolean }>`
   width: 100px;
   aspect-ratio: 1/1.5;
   position: relative;
-  background: #4444FF11;
+  background: #4444ff11;
   overflow: hidden;
   border-radius: 10px;
   border: 2px solid #2d2d57;
-  transition: background .2s, border .2s, box-shadow .2s;
-  ${(props) => props.$good && css`
-    animation: reveal-glow 1s;
-  `}
-`
+  transition:
+    background 0.2s,
+    border 0.2s,
+    box-shadow 0.2s;
+  ${(props) =>
+    props.$good &&
+    css`
+      animation: reveal-glow 1s;
+    `}
+`;
 
-const Revealed = styled.div<{$revealed: boolean, $good: boolean}>`
+const Revealed = styled.div<{ $revealed: boolean; $good: boolean }>`
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   padding: 10px;
-  transition: opacity .2s, transform .3s ease;
+  transition:
+    opacity 0.2s,
+    transform 0.3s ease;
   transform: translateY(-100%);
   opacity: 0;
 
-  ${(props) => props.$revealed && css`
-    opacity: 1;
-    transform: translateY(0%);
-    animation: ${reveal} cubic-bezier(0.18, 0.89, 0.32, 1.28) .25s;
-  `}
+  ${(props) =>
+    props.$revealed &&
+    css`
+      opacity: 1;
+      transform: translateY(0%);
+      animation: ${reveal} cubic-bezier(0.18, 0.89, 0.32, 1.28) 0.25s;
+    `}
 
-  ${(props) => props.$good && css`
-    & > img {
-      animation: ${pulse} 2s .25s cubic-bezier(0.04, 1.14, 0.48, 1.63) infinite;
-    }
-  `}
-`
+  ${(props) =>
+    props.$good &&
+    css`
+      & > img {
+        animation: ${pulse} 2s 0.25s cubic-bezier(0.04, 1.14, 0.48, 1.63)
+          infinite;
+      }
+    `}
+`;
 
 export function Slot({ revealed, good, item, index }: SlotProps) {
-  const items = React.useMemo(() =>
-    [...SLOT_ITEMS].sort(() => Math.random() - .5)
-  , [],
-  )
+  const items = React.useMemo(
+    () => [...SLOT_ITEMS].sort(() => Math.random() - 0.5),
+    [],
+  );
   return (
     <StyledSlot $good={good}>
       <StyledSpinner data-spinning={!revealed}>
@@ -92,11 +104,11 @@ export function Slot({ revealed, good, item, index }: SlotProps) {
             <img
               className={"slotImage"}
               src={item.image}
-              style={{ animationDelay: index * .25 + 's' }}
+              style={{ animationDelay: index * 0.25 + "s" }}
             />
           </Revealed>
         </>
       )}
     </StyledSlot>
-  )
+  );
 }

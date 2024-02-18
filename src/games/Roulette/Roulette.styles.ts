@@ -1,9 +1,9 @@
-import styled, { css, keyframes } from 'styled-components'
+import styled, { css, keyframes } from "styled-components";
 
 const resultFlash = keyframes`
   from { background-color: white;}
   to { background-color: #292a307d;}
-`
+`;
 
 export const StyledResults = styled.div`
   border-radius: 10px;
@@ -27,12 +27,15 @@ export const StyledResults = styled.div`
     align-items: center;
     width: 60px;
     justify-content: center;
-    background: #FFFFFF11;
+    background: #ffffff11;
     animation: ${resultFlash} 1s;
   }
-`
+`;
 
-export const StyledBetButton = styled.div<{$highlighted?: boolean, $color?: 'black' | 'red'}>`
+export const StyledBetButton = styled.div<{
+  $highlighted?: boolean;
+  $color?: "black" | "red";
+}>`
   position: relative;
   border: none;
   border-radius: 5px;
@@ -43,22 +46,26 @@ export const StyledBetButton = styled.div<{$highlighted?: boolean, $color?: 'bla
   cursor: pointer;
   text-align: center;
 
-  ${(props) => props.$color === 'red' && css`
-    --background-color: #ff3d5e;
-    --border-color: #ff2b4e;
-  `}
+  ${(props) =>
+    props.$color === "red" &&
+    css`
+      --background-color: #ff3d5e;
+      --border-color: #ff2b4e;
+    `}
 
-  ${(props) => props.$color === 'black' && css`
-    --background-color: #1b1b25;
-    --border-color: #121218;
-  `}
+  ${(props) =>
+    props.$color === "black" &&
+    css`
+      --background-color: #1b1b25;
+      --border-color: #121218;
+    `}
 
   background-color: var(--background-color);
   box-shadow: 0 0 0 1px var(--border-color);
 
   &::after {
     content: " ";
-    transition: background .1s;
+    transition: background 0.1s;
     background: transparent;
     position: absolute;
     left: 0;
@@ -70,20 +77,22 @@ export const StyledBetButton = styled.div<{$highlighted?: boolean, $color?: 'bla
 
   &:hover::after {
     background: #9999ff44;
-    mix-blend-mode:screen;
+    mix-blend-mode: screen;
   }
-  ${(props) => props.$highlighted && css`
-    &::after {
-      background: #9999ff44;
-      mix-blend-mode:screen;
-    }
-  `}
-`
+  ${(props) =>
+    props.$highlighted &&
+    css`
+      &::after {
+        background: #9999ff44;
+        mix-blend-mode: screen;
+      }
+    `}
+`;
 
 export const StyledTable = styled.div`
   display: grid;
   gap: 10px;
-`
+`;
 
 export const ChipContainer = styled.div`
   position: absolute;
@@ -91,4 +100,4 @@ export const ChipContainer = styled.div`
   top: 0;
   right: 0;
   transform: translate(25%, -25%);
-`
+`;

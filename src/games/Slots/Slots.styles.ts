@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const StyledSlots = styled.div`
   perspective: 100px;
@@ -11,16 +11,18 @@ export const StyledSlots = styled.div`
   }
 
   @keyframes pulse {
-    0%, 30% {
-      transform: scale(1)
+    0%,
+    30% {
+      transform: scale(1);
     }
     10% {
-      transform: scale(1.3)
+      transform: scale(1.3);
     }
   }
 
   @keyframes reveal-glow {
-    0%, 30% {
+    0%,
+    30% {
       border-color: #2d2d57;
       background: #ffffff00;
     }
@@ -31,7 +33,8 @@ export const StyledSlots = styled.div`
   }
 
   @keyframes shine {
-    0%, 30% {
+    0%,
+    30% {
       background: #ffffff00;
     }
     10% {
@@ -40,7 +43,8 @@ export const StyledSlots = styled.div`
   }
 
   @keyframes result-flash {
-    25%, 75% {
+    25%,
+    75% {
       background-color: #ffec63;
       color: #333;
     }
@@ -103,4 +107,4 @@ export const StyledSlots = styled.div`
     max-width: 100%;
     max-height: 100%;
   }
-`
+`;

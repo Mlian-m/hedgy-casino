@@ -1,17 +1,25 @@
 // src/components/sections/Game/Game.tsx
 
-import { Container, Controls, IconButton, LoadingIndicator, Screen, SettingControls, Splash } from './Game.styles'
-import { GambaUi, useGambaAudioStore } from 'gamba-react-ui-v2'
+import {
+  Container,
+  Controls,
+  IconButton,
+  LoadingIndicator,
+  Screen,
+  SettingControls,
+  Splash,
+} from "./Game.styles";
+import { GambaUi, useGambaAudioStore } from "gamba-react-ui-v2";
 
-import { GAMES } from '../../../games'
-import { GameSlider } from '../Dashboard/Dashboard'
-import { Icon } from '../../Icon'
-import { Modal } from '../../Modal'
-import { ProvablyFairModal } from './ProvablyFairModal'
-import React from 'react'
-import RecentPlays from '../RecentPlays/RecentPlays'
-import { useGamba } from 'gamba-react-v2'
-import { useRouter } from 'next/router';
+import { GAMES } from "../../../games";
+import { GameSlider } from "../Dashboard/Dashboard";
+import { Icon } from "../../Icon";
+import { Modal } from "../../Modal";
+import { ProvablyFairModal } from "./ProvablyFairModal";
+import React from "react";
+import RecentPlays from "../RecentPlays/RecentPlays";
+import { useGamba } from "gamba-react-v2";
+import { useRouter } from "next/router";
 
 function CustomError() {
   return (
@@ -23,7 +31,7 @@ function CustomError() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
     </>
-  )
+  );
 }
 
 /**
@@ -32,11 +40,11 @@ function CustomError() {
  * Controls
  */
 function CustomRenderer() {
-  const gamba = useGamba()
-  const { game } = GambaUi.useGame()
-  const [info, setInfo] = React.useState(false)
-  const [provablyFair, setProvablyFair] = React.useState(false)
-  const audioStore = useGambaAudioStore()
+  const gamba = useGamba();
+  const { game } = GambaUi.useGame();
+  const [info, setInfo] = React.useState(false);
+  const [provablyFair, setProvablyFair] = React.useState(false);
+  const audioStore = useGambaAudioStore();
 
   const imagePath = `/games/${game.id}/logo.png`;
 
@@ -44,7 +52,11 @@ function CustomRenderer() {
     <>
       {info && (
         <Modal onClose={() => setInfo(false)}>
-          <img height="150px" src={imagePath} alt={`Splash for ${game.meta.name}`} />
+          <img
+            height="150px"
+            src={imagePath}
+            alt={`Splash for ${game.meta.name}`}
+          />
           <h1>{game.meta.name}</h1>
           <p>{game.meta.description}</p>
         </Modal>
@@ -54,20 +66,31 @@ function CustomRenderer() {
       )}
       <Container>
         <Splash>
-        <img height="150px" src={imagePath} alt={`Splash for ${game.meta.name}`} />
+          <img
+            height="150px"
+            src={imagePath}
+            alt={`Splash for ${game.meta.name}`}
+          />
         </Splash>
         <Screen>
           <GambaUi.PortalTarget target="error" />
           <GambaUi.PortalTarget target="screen" />
           <SettingControls>
-            <button onClick={() => audioStore.set((audioStore.masterGain + .25) % 1.25)}>
+            <button
+              onClick={() =>
+                audioStore.set((audioStore.masterGain + 0.25) % 1.25)
+              }
+            >
               Volume: {audioStore.masterGain * 100}%
             </button>
           </SettingControls>
         </Screen>
-        <LoadingIndicator key={Number(gamba.isPlaying)} $active={gamba.isPlaying} />
+        <LoadingIndicator
+          key={Number(gamba.isPlaying)}
+          $active={gamba.isPlaying}
+        />
         <Controls>
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: "flex" }}>
             <IconButton onClick={() => setInfo(true)}>
               <Icon.Info />
             </IconButton>
@@ -80,14 +103,14 @@ function CustomRenderer() {
         </Controls>
       </Container>
     </>
-  )
+  );
 }
 
 interface GameProps {
-  gameId: string
+  gameId: string;
 }
 
-export default function Game({ gameId } : GameProps) {
+export default function Game({ gameId }: GameProps) {
   const router = useRouter();
   const game = GAMES.find((x) => x.id === gameId);
 
@@ -105,5 +128,5 @@ export default function Game({ gameId } : GameProps) {
       <GameSlider />
       <RecentPlays />
     </>
-  )
+  );
 }

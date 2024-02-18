@@ -1,14 +1,14 @@
 // src/games/Flip/Coin.tsx
 
-import React, { useEffect, useRef } from 'react';
-import { useGLTF, useTexture } from '@react-three/drei';
+import React, { useEffect, useRef } from "react";
+import { useGLTF, useTexture } from "@react-three/drei";
 
-import { Group } from 'three';
-import { useFrame } from '@react-three/fiber';
+import { Group } from "three";
+import { useFrame } from "@react-three/fiber";
 
-const MODEL_COIN = '/games/flip/Coin.glb';
-const TEXTURE_HEADS = '/games/flip/heads.png';
-const TEXTURE_TAILS = '/games/flip/tails.png';
+const MODEL_COIN = "/games/flip/Coin.glb";
+const TEXTURE_HEADS = "/games/flip/heads.png";
+const TEXTURE_TAILS = "/games/flip/tails.png";
 
 function CoinModel() {
   // Use the `useGLTF` and `useTexture` hooks with the paths
@@ -53,8 +53,13 @@ export function Coin({ flipping, result }: CoinFlipProps) {
       if (flipping) {
         group.current.rotation.y += 25 * dt;
       } else {
-        const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
-        group.current.rotation.y += clamp((target.current - group.current.rotation.y) * 10 * dt, 0, 1);
+        const clamp = (value: number, min: number, max: number) =>
+          Math.min(Math.max(value, min), max);
+        group.current.rotation.y += clamp(
+          (target.current - group.current.rotation.y) * 10 * dt,
+          0,
+          1,
+        );
       }
       const scale = flipping ? 1.25 : 1;
       group.current.scale.y += (scale - group.current.scale.y) * 0.1;
@@ -62,7 +67,11 @@ export function Coin({ flipping, result }: CoinFlipProps) {
     }
   });
 
-  return <group ref={group}><CoinModel /></group>;
+  return (
+    <group ref={group}>
+      <CoinModel />
+    </group>
+  );
 }
 
 useGLTF.preload(MODEL_COIN);

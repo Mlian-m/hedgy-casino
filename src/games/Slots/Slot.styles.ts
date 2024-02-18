@@ -11,14 +11,14 @@ export const StyledSpinner = styled.div`
   }
 
   --num-items: 5;
-  --spin-speed: .6s;
+  --spin-speed: 0.6s;
 
   position: absolute;
   width: 100%;
   height: 100%;
 
-  transition: opacity .1s .1s ease;
-  animation: spinning var(--spin-speed) .1s linear infinite;
+  transition: opacity 0.1s 0.1s ease;
+  animation: spinning var(--spin-speed) 0.1s linear infinite;
   opacity: 0;
 
   &[data-spinning="true"] {
@@ -34,5 +34,4 @@ export const StyledSpinner = styled.div`
     position: relative;
     padding: 15px;
   }
-
-`
+`;

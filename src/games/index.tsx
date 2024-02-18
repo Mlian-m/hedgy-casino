@@ -74,5 +74,5 @@ export const GAMES: GameBundle[] = [
       background: "#1de87e",
     },
     app: dynamic(() => import("./Roulette")),
-  }
+  },
 ];
