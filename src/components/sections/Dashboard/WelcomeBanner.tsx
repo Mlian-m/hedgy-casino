@@ -10,13 +10,24 @@ export function WelcomeBanner() {
         <p>A fair, simple and decentralized casino on Solana.</p>
       </div>
       <div className="grid grid-cols-1 gap-2.5 m-4">
-        <button className="rounded-lg p-2 bg-white bg-opacity-90 hover:bg-white text-black transition-colors duration-200 ease-in-out cursor-pointer">
+        <button
+          onClick={() => window.open("https://explorer.gamba.so/")}
+          className="rounded-lg p-2 bg-white bg-opacity-90 hover:bg-white text-black transition-colors duration-200 ease-in-out cursor-pointer"
+        >
           🚀 Explore Transactions
         </button>
-        <button className="rounded-lg p-2.5 bg-white bg-opacity-90 hover:bg-white text-black transition-colors duration-200 ease-in-out cursor-pointer">
+        <button
+          onClick={() =>
+            window.open("https://github.com/BankkRoll/Gamba-V2-Next.js")
+          }
+          className="rounded-lg p-2.5 bg-white bg-opacity-90 hover:bg-white text-black transition-colors duration-200 ease-in-out cursor-pointer"
+        >
           👨‍💻 Build your own
         </button>
-        <button className="rounded-lg p-2.5 bg-white bg-opacity-90 hover:bg-white text-black transition-colors duration-200 ease-in-out cursor-pointer">
+        <button
+          onClick={() => window.open("https://gamba.so/docs")}
+          className="rounded-lg p-2.5 bg-white bg-opacity-90 hover:bg-white text-black transition-colors duration-200 ease-in-out cursor-pointer"
+        >
           💬 Docs
         </button>
       </div>

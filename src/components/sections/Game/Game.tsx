@@ -117,16 +117,20 @@ export default function Game({ gameId }: GameProps) {
   return (
     <>
       {game ? (
-        <GambaUi.Game
-          game={game}
-          errorFallback={<CustomError />}
-          children={<CustomRenderer />}
-        />
+        <div className="flex flex-col justify-center items-center mx-auto max-sm:max-w-sm max-sm:pt-10">
+          <GambaUi.Game
+            game={game}
+            errorFallback={<CustomError />}
+            children={<CustomRenderer />}
+          />
+        </div>
       ) : (
-        <h1>Game not found! 👎</h1>
+        <h1 className="text-center">Game not found! 👎</h1>
       )}
-      <GameSlider />
-      <RecentPlays />
+      <div className="flex flex-col justify-center items-center mx-auto max-sm:max-w-sm">
+        <GameSlider />
+        <RecentPlays />
+      </div>
     </>
   );
 }

@@ -59,7 +59,7 @@ export default function TokenSelect() {
       <GambaUi.Button onClick={click}>
         {selectedToken && (
           <StyledToken>
-            <TokenImage src={selectedToken.image} />
+            <TokenImage width={20} src={selectedToken.image} />
             <TokenValue amount={balance.balance} />
           </StyledToken>
         )}
@@ -67,7 +67,7 @@ export default function TokenSelect() {
       <Dropdown visible={visible}>
         {tokenList.map((x, i) => (
           <StyledTokenButton onClick={() => setToken(x.mint)} key={i}>
-            <TokenImage src={x.image} /> {x.symbol}
+            <TokenImage width={20} src={x.image} /> {x.symbol}
           </StyledTokenButton>
         ))}
       </Dropdown>
