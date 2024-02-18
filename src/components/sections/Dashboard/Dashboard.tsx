@@ -7,7 +7,6 @@ import { SlideSection } from "../../Slider";
 import { WelcomeBanner } from "./WelcomeBanner";
 
 export function GameSlider() {
-  // Using TailwindCSS for responsive design
   return (
     <>
       <div className="block md:hidden">
@@ -27,7 +26,7 @@ export function GameSlider() {
       <div className="hidden md:block">
         <div className="flex flex-wrap justify-center">
           {GAMES.map((game) => (
-            <div key={game.id} className="w-40 m-4 flex justify-center">
+            <div key={game.id} className="w-40 flex justify-center px-2 my-2">
               <GameCard game={game} />
             </div>
           ))}
@@ -39,7 +38,7 @@ export function GameSlider() {
 
 export function GameGrid() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+    <div className="grid grid-cols-4 max-sm:grid-cols-3 gap-4">
       {GAMES.map((game) => (
         <GameCard key={game.id} game={game} />
       ))}
