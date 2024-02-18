@@ -14,7 +14,7 @@ export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
 );
 
 // Appears in ShareModal
-export const PLATFORM_SHARABLE_URL = "v2-play.gamba.so";
+export const PLATFORM_SHARABLE_URL = "gamba-v2-nextjs.vercel.app";
 
 // List of tokens supported by this platform
 export const TOKENS: TokenMeta[] = [
