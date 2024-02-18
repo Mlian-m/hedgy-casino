@@ -1,40 +1,7 @@
 // src/components/Slider.tsx
 
-import { Icon } from "./Icon";
 import React from "react";
 import styled from "styled-components";
-
-const Container = styled.div`
-  position: relative;
-  & > button {
-    opacity: 0;
-  }
-  &:hover {
-    & > button {
-      opacity: 0.5;
-    }
-  }
-`;
-
-const SliderButton = styled.button`
-  all: unset;
-  position: absolute;
-  font-size: 24px;
-  left: 0px;
-  top: 0;
-  box-sizing: border-box;
-  z-index: 1;
-  height: 100%;
-  padding: 5px;
-  cursor: pointer;
-  background: var(--background-color);
-  transition: opacity 0.2s;
-  opacity: 0.5;
-  &:hover {
-    opacity: 1 !important;
-    background: var(--background-color);
-  }
-`;
 
 export const StyledSection = styled.div`
   position: relative;
@@ -60,65 +27,24 @@ export const StyledSection = styled.div`
   }
 `;
 
-const StyledContent = styled.div`
-  display: flex;
-  gap: 15px;
-  width: 100%;
-  overflow: scroll visible;
-  scroll-snap-type: x mandatory;
-  transition: height 0.25s ease;
-
-  &::-webkit-scrollbar {
-    height: 0em;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #cccccc33;
-  }
-
-  & > * {
-    scroll-snap-align: start;
-    flex-grow: 0;
-    flex-shrink: 0;
-  }
-`;
-
 export function SlideSection(props: React.PropsWithChildren) {
-  const ref = React.useRef<HTMLDivElement>(null!);
-  const leftArrow = React.useRef<HTMLButtonElement>(null!);
-  const rightArrow = React.useRef<HTMLButtonElement>(null!);
-
-  const scroll = (x: number) => {
-    const left = (ref.current.clientWidth / 2) * x;
-    ref.current.scrollBy({ left, behavior: "smooth" });
-  };
-
-  const _scroll = () => {
-    const target = ref.current;
-    leftArrow.current.style.display = target.scrollLeft > 10 ? "block" : "none";
-    rightArrow.current.style.display =
-      target.scrollLeft + target.clientWidth < target.scrollWidth - 10
-        ? "block"
-        : "none";
-  };
-
-  React.useEffect(() => _scroll(), []);
+  const ref = React.useRef<HTMLDivElement>(null);
 
   return (
-    <Container style={{ position: "relative" }}>
-      <SliderButton ref={leftArrow} onClick={() => scroll(-1)}>
-        <Icon.ArrowLeft />
-      </SliderButton>
-      <StyledContent onScroll={_scroll} ref={ref}>
-        {props.children}
-      </StyledContent>
-      <SliderButton
-        ref={rightArrow}
-        style={{ right: "0", left: "unset" }}
-        onClick={() => scroll(1)}
+    <div className="relative overflow-hidden mx-2 md:mx-4 lg:mx-6 xl:mx-8 2xl:mx-10">
+      <div
+        className="flex gap-2 sm:gap-4 md:gap-6 lg:gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory"
+        ref={ref}
       >
-        <Icon.ArrowRight />
-      </SliderButton>
-    </Container>
+        {React.Children.map(props.children, (child) => (
+          <div
+            className="snap-start shrink-0"
+            style={{ width: "auto", maxWidth: "100%" }}
+          >
+            {child}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

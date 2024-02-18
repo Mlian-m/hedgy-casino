@@ -7,16 +7,33 @@ import { SlideSection } from "../../Slider";
 import { WelcomeBanner } from "./WelcomeBanner";
 
 export function GameSlider() {
+  // Using TailwindCSS for responsive design
   return (
-    <SlideSection>
-      <div className="flex flex-wrap justify-center">
-        {GAMES.map((game) => (
-          <div key={game.id} className="w-40 flex justify-center">
-            <GameCard game={game} />
+    <>
+      <div className="block md:hidden">
+        <SlideSection>
+          <div className="max-w-sm flex gap-4 overflow-x-scroll scroll-smooth snap-x snap-mandatory py-2">
+            {GAMES.map((game) => (
+              <div
+                key={game.id}
+                className="snap-start shrink-0 w-40 flex justify-center"
+              >
+                <GameCard game={game} />
+              </div>
+            ))}
           </div>
-        ))}
+        </SlideSection>
       </div>
-    </SlideSection>
+      <div className="hidden md:block">
+        <div className="flex flex-wrap justify-center">
+          {GAMES.map((game) => (
+            <div key={game.id} className="w-40 m-4 flex justify-center">
+              <GameCard game={game} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 

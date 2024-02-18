@@ -27,7 +27,7 @@ function ConnectedButton() {
       <div style={{ position: "relative" }} ref={ref}>
         <GambaUi.Button onClick={() => setModal(true)}>
           <div style={{ display: "flex", gap: ".5em", alignItems: "center" }}>
-            <img src={wallet.wallet?.adapter.icon} height="20px" />
+            <img src={wallet.wallet?.adapter.icon} width={20} />
             {truncateString(address.toBase58(), 3)}
           </div>
         </GambaUi.Button>
