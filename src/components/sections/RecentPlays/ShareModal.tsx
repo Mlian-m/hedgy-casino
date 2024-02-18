@@ -120,8 +120,11 @@ export function ShareModal({
                   </div>
                 )}
               </div>
-              <div style={{ padding: "10px", textAlign: "center" }}>
-                <img src={imagePath} width="100px" />
+              <div
+                className="cursor-pointer"
+                style={{ padding: "10px", textAlign: "center" }}
+              >
+                <img onClick={gotoGame} src={imagePath} width="100px" />
               </div>
             </div>
             <div

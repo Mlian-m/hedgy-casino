@@ -117,7 +117,7 @@ export default function Game({ gameId }: GameProps) {
   return (
     <>
       {game ? (
-        <div className="flex flex-col justify-center items-center mx-auto max-sm:max-w-sm max-sm:pt-10">
+        <div className="flex flex-col justify-center items-center mx-auto max-w-6xl max-sm:max-w-sm pt-20">
           <GambaUi.Game
             game={game}
             errorFallback={<CustomError />}
@@ -127,7 +127,7 @@ export default function Game({ gameId }: GameProps) {
       ) : (
         <h1 className="text-center">Game not found! 👎</h1>
       )}
-      <div className="flex flex-col justify-center items-center mx-auto max-sm:max-w-sm">
+      <div className="flex flex-col justify-center items-center mx-auto max-w-6xl max-sm:max-w-sm">
         <GameSlider />
         <RecentPlays />
       </div>
