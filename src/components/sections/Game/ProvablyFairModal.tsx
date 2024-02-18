@@ -7,7 +7,7 @@ import { Icon } from '../../../components/Icon'
 import { Modal } from '../../../components/Modal'
 import React from 'react'
 
-export function ProvablyFairModal(props: {onClose: () => void}) {
+export function ProvablyFairModal(props: { onClose: () => void }) {
   const gamba = useGamba()
   const platform = React.useContext(GambaPlatformContext)
   const program = useGambaProgram()
@@ -43,7 +43,7 @@ export function ProvablyFairModal(props: {onClose: () => void}) {
           <div style={{ display: 'grid', gap: '10px', width: '100%', padding: '20px' }}>
             <div>Next RNG Seed (sha256)</div>
             <GambaUi.TextInput
-              value={gamba.nextRngSeedHashed}
+              value={gamba.nextRngSeedHashed || ''}
               disabled
             />
             <div>Client Seed</div>
