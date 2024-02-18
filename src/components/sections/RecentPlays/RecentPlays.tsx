@@ -106,7 +106,7 @@ export default function RecentPlays() {
           <div className="flex items-center gap-2">
             <RecentPlay event={tx} />
           </div>
-          <TimeDiff time={tx.time} suffix={md ? "ago" : ""} />
+          {TimeDiff({ time: tx.time, suffix: md ? "ago" : "" })} {/* Wrap TimeDiff in curly braces to invoke it */}
         </button>
       ))}
     </div>
