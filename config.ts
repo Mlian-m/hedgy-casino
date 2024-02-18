@@ -10,7 +10,7 @@ export const RPC_ENDPOINT =
 
 // Change this value to your Solana address
 export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
-  "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K"
+  "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K",
 );
 
 // Appears in ShareModal

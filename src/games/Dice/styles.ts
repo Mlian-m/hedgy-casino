@@ -7,7 +7,7 @@ export const Container = styled.div`
   user-select: none;
   width: min(100vw, 420px);
   font-size: 20px;
-`
+`;
 
 export const Stats = styled.div`
   display: grid;
@@ -20,7 +20,7 @@ export const Stats = styled.div`
       font-size: 14px;
     }
   }
-`
+`;
 
 export const RollUnder = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ export const RollUnder = styled.div`
       font-variant-numeric: tabular-nums;
     }
   }
-`
+`;
 
 export const Result = styled.div`
   @keyframes result-appear {
@@ -53,12 +53,12 @@ export const Result = styled.div`
   transform: translateX(-50%);
   position: absolute;
   top: -50px;
-  transition: left .3s ease;
+  transition: left 0.3s ease;
 
   & > div {
-    animation: result-appear .25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    animation: result-appear 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
     transform-origin: bottom;
-    background: #ffffffCC;
+    background: #ffffffcc;
     backdrop-filter: blur(50px);
     border-radius: 5px;
     padding: 5px;
@@ -76,7 +76,6 @@ export const Result = styled.div`
     margin-left: -10px;
     border-width: 10px 10px 0px 10px;
     border-style: solid;
-    border-color: #ffffffCC transparent transparent transparent;
+    border-color: #ffffffcc transparent transparent transparent;
   }
-
-`
+`;

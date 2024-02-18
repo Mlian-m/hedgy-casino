@@ -57,7 +57,7 @@ function Mines() {
     const remainingCells = GRID_SIZE - level;
     return (
       Number(
-        BigInt(remainingCells * BPS_PER_WHOLE) / BigInt(remainingCells - mines)
+        BigInt(remainingCells * BPS_PER_WHOLE) / BigInt(remainingCells - mines),
       ) / BPS_PER_WHOLE
     );
   };
@@ -74,7 +74,7 @@ function Mines() {
         const multiplier = getMultiplierForLevel(level);
         const remainingCells = GRID_SIZE - level;
         const bet = Array.from({ length: remainingCells }, (_, i) =>
-          i < mines ? 0 : multiplier
+          i < mines ? 0 : multiplier,
         );
 
         const profit = wager * (multiplier - 1);

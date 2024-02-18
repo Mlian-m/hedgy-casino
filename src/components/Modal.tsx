@@ -1,11 +1,11 @@
 // src/components/Modal.tsx
 
-import { Icon } from './Icon'
-import React from 'react'
-import styled from 'styled-components'
+import { Icon } from "./Icon";
+import React from "react";
+import styled from "styled-components";
 
 interface Props extends React.PropsWithChildren {
-  onClose?: () => void
+  onClose?: () => void;
 }
 
 const Container = styled.div`
@@ -14,12 +14,16 @@ const Container = styled.div`
   min-height: calc(100vh - 6rem);
   align-items: center;
   justify-content: center;
-`
+`;
 
 const Wrapper = styled.div`
   @keyframes wrapper-appear2 {
-    0% { transform: scale(.9); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   box-sizing: border-box;
@@ -34,14 +38,18 @@ const Wrapper = styled.div`
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
   flex: 1;
   padding-bottom: 20px;
-  animation: wrapper-appear2 .3s;
+  animation: wrapper-appear2 0.3s;
   color: white;
-`
+`;
 
 const StyledModal = styled.div`
   @keyframes appear {
-    0% { opacity: 0;}
-    100% { opacity: 1;}
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 
   position: fixed;
@@ -54,7 +62,7 @@ const StyledModal = styled.div`
   z-index: 100;
   overflow-y: auto;
   height: 100vh;
-  animation: appear .3s;
+  animation: appear 0.3s;
 
   & h1 {
     text-align: center;
@@ -75,8 +83,10 @@ const StyledModal = styled.div`
     top: 10px;
     border: none;
     z-index: 11;
-    opacity: .75;
-    transition: opacity .2s, background .2s;
+    opacity: 0.75;
+    transition:
+      opacity 0.2s,
+      background 0.2s;
     background: transparent;
     border-radius: 50%;
     width: 2em;
@@ -90,7 +100,7 @@ const StyledModal = styled.div`
       vertical-align: middle;
     }
   }
-`
+`;
 
 export function Modal({ children, onClose }: Props) {
   return (
@@ -106,5 +116,5 @@ export function Modal({ children, onClose }: Props) {
         </Wrapper>
       </Container>
     </StyledModal>
-  )
+  );
 }

@@ -1,12 +1,12 @@
 // src/components/sections/Header.tsx
 
-import React, { useState } from 'react';
-import { TokenValue, useCurrentPool, useUserBalance } from 'gamba-react-ui-v2';
+import React, { useState } from "react";
+import { TokenValue, useCurrentPool, useUserBalance } from "gamba-react-ui-v2";
 
-import Link from 'next/link';
-import { Modal } from '../Modal';
-import TokenSelect from './TokenSelect';
-import { UserButton } from './UserButton';
+import Link from "next/link";
+import { Modal } from "../Modal";
+import TokenSelect from "./TokenSelect";
+import { UserButton } from "./UserButton";
 
 export default function Header() {
   const pool = useCurrentPool();
@@ -20,11 +20,12 @@ export default function Header() {
         <Modal onClose={() => setBonusHelp(false)}>
           <h1>You have a bonus!</h1>
           <p>
-            You have{' '}
+            You have{" "}
             <b>
               <TokenValue amount={balance.bonusBalance} />
-            </b>{' '}
-            worth of free plays. This bonus will be applied automatically when you play.
+            </b>{" "}
+            worth of free plays. This bonus will be applied automatically when
+            you play.
           </p>
         </Modal>
       )}
@@ -32,7 +33,8 @@ export default function Header() {
         <Modal onClose={() => setJackpotHelp(false)}>
           <h1>Jackpot</h1>
           <p>
-            There&apos;s <TokenValue amount={pool.jackpotBalance} /> in the Jackpot.
+            There&apos;s <TokenValue amount={pool.jackpotBalance} /> in the
+            Jackpot.
           </p>
         </Modal>
       )}

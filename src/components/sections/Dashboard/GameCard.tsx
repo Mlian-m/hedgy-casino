@@ -1,11 +1,11 @@
 // src/components/sections/Dashboard/GameCard.tsx
 
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
-import { GameBundle } from 'gamba-react-ui-v2';
-import Link from 'next/link';
-import React from 'react';
-import { useRouter } from 'next/router';
+import { GameBundle } from "gamba-react-ui-v2";
+import Link from "next/link";
+import React from "react";
+import { useRouter } from "next/router";
 
 const tileAnimation = keyframes`
   0% {
@@ -16,15 +16,14 @@ const tileAnimation = keyframes`
   }
 `;
 
-
-const StyledGameCard = styled.a<{$small: boolean, $background: string}>`
+const StyledGameCard = styled.a<{ $small: boolean; $background: string }>`
   width: 100%;
 
   @media (min-width: 800px) {
     width: 100%;
   }
 
-  aspect-ratio: ${(props) => props.$small ? '1/.5' : '1/.6'};
+  aspect-ratio: ${(props) => (props.$small ? "1/.5" : "1/.6")};
   background-size: cover;
   border-radius: 10px;
 
@@ -32,7 +31,7 @@ const StyledGameCard = styled.a<{$small: boolean, $background: string}>`
   text-decoration: none;
   font-size: 24px;
 
-  transition: transform .2s ease;
+  transition: transform 0.2s ease;
   /* border-bottom: 2px solid #00000033; */
 
   & > .background {
@@ -45,7 +44,9 @@ const StyledGameCard = styled.a<{$small: boolean, $background: string}>`
     background-position: center;
     background-image: url(/stuff.png);
     background-repeat: repeat;
-    transition: transform .2s ease, opacity .3s;
+    transition:
+      transform 0.2s ease,
+      opacity 0.3s;
     animation: ${tileAnimation} 5s linear infinite;
     opacity: 0;
   }
@@ -59,8 +60,8 @@ const StyledGameCard = styled.a<{$small: boolean, $background: string}>`
     background-size: 90% auto;
     background-position: center;
     background-repeat: no-repeat;
-    transform: scale(.9);
-    transition: transform .2s ease;
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
   }
 
   &:hover {
@@ -70,7 +71,7 @@ const StyledGameCard = styled.a<{$small: boolean, $background: string}>`
     }
 
     .background {
-      opacity: .35;
+      opacity: 0.35;
     }
   }
 
@@ -107,21 +108,25 @@ const StyledGameCard = styled.a<{$small: boolean, $background: string}>`
     outline: #9564ff33 solid 5px;
     outline-offset: 0px;
   }
-`
+`;
 
 export function GameCard({ game }: { game: GameBundle }) {
   const router = useRouter();
-  const small = router.pathname !== '/';
+  const small = router.pathname !== "/";
 
-  // Construct the correct path for the game image based on your described structure
   const imagePath = `/games/${game.id}/logo.png`;
 
   return (
     <Link href={`/play/${game.id}`} passHref>
-      <StyledGameCard $small={small ?? false} $background={game.meta?.background}>
+      <StyledGameCard
+        $small={small ?? false}
+        $background={game.meta?.background}
+      >
         <div className="background" />
-        {/* Update the backgroundImage style to use the new imagePath */}
-        <div className="image" style={{ backgroundImage: `url(${imagePath})` }} />
+        <div
+          className="image"
+          style={{ backgroundImage: `url(${imagePath})` }}
+        />
         <div className="play">Play {game.meta.name}</div>
       </StyledGameCard>
     </Link>

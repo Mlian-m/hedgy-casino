@@ -1,8 +1,7 @@
 // src/games/Slots/constants.ts
 export const SOUND_LOSE = "/games/slots/lose.mp3";
 export const SOUND_PLAY = "/games/slots/insert.mp3";
-export const SOUND_REVEAL_LEGENDARY =
-  "/games/slots/reveal-legendary.mp3";
+export const SOUND_REVEAL_LEGENDARY = "/games/slots/reveal-legendary.mp3";
 export const SOUND_REVEAL = "/games/slots/reveal.mp3";
 export const SOUND_SPIN = "/games/slots/spin.mp3";
 export const SOUND_WIN = "/games/slots/win.mp3";

@@ -24,12 +24,12 @@ export function useRecentPlays() {
     (event) => {
       setEvents((events) => [event, ...events]);
     },
-    [router.pathname]
+    [router.pathname],
   );
 
   // Merge previous & new events
   return React.useMemo(
     () => [...newEvents, ...previousEvents],
-    [newEvents, previousEvents]
+    [newEvents, previousEvents],
   );
 }

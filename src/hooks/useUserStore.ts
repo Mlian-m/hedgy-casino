@@ -1,13 +1,13 @@
 // src/hooks/useUserStore.ts
 
-import { StoreApi, create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { StoreApi, create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface UserStore {
-  newcomer: boolean
+  newcomer: boolean;
   /** A list of games played. The first time a game is opened we display instructions. */
-  gamesPlayed: Set<string>
-  set: StoreApi<UserStore>['setState']
+  gamesPlayed: Set<string>;
+  set: StoreApi<UserStore>["setState"];
 }
 
 /**
@@ -17,12 +17,12 @@ export const useUserStore = create(
   persist<UserStore>(
     (set) => ({
       newcomer: true,
-      gamesPlayed: new Set,
+      gamesPlayed: new Set(),
       set,
     }),
     {
-      name: 'user',
+      name: "user",
       storage: createJSONStorage(() => sessionStorage),
     },
   ),
-)
+);
