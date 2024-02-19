@@ -13,6 +13,9 @@ export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
   "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K",
 );
 
+// Platform explorer. Appears in welcome banner
+export const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
+
 // Appears in ShareModal
 export const PLATFORM_SHARABLE_URL = "gamba-v2-nextjs.vercel.app";
 
