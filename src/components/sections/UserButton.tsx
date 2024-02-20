@@ -24,9 +24,9 @@ function ConnectedButton() {
           </GambaUi.Button>
         </Modal>
       )}
-      <div style={{ position: "relative" }} ref={ref}>
+      <div className="max-sm:text-xs whitespace-nowrap" ref={ref}>
         <GambaUi.Button onClick={() => setModal(true)}>
-          <div style={{ display: "flex", gap: ".5em", alignItems: "center" }}>
+          <div className="flex gap-2 items-center">
             <img src={wallet.wallet?.adapter.icon} width={20} />
             {truncateString(address.toBase58(), 3)}
           </div>

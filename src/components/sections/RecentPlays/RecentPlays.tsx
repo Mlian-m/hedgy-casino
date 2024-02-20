@@ -92,28 +92,24 @@ export default function RecentPlays() {
     <div className="w-full relative flex flex-col gap-2.5">
       <div className="mb-4 flex justify-center">
         <div className="flex items-center gap-4">
-          <span
-            className={`font-bold p-12 py-2 px-4 rounded cursor-pointer ${
-              platformOnly ? "text-white" : "text-gray-500"
-            }`}
+          <GambaUi.Button
             onClick={() => setPlatformOnly(true)}
+            main={platformOnly}
           >
             Platform Only
-          </span>
+          </GambaUi.Button>
 
           <GambaUi.Switch
             checked={!platformOnly}
             onChange={togglePlatformView}
           />
 
-          <span
-            className={`font-bold p-12 py-2 px-4 rounded cursor-pointer ${
-              !platformOnly ? "text-white" : "text-gray-500"
-            }`}
+          <GambaUi.Button
             onClick={() => setPlatformOnly(false)}
+            main={!platformOnly}
           >
             All Gamba Events
-          </span>
+          </GambaUi.Button>
         </div>
       </div>
 

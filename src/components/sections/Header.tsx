@@ -60,7 +60,7 @@ export default function Header() {
             </a>
           </Link>
         </div>
-        <div className="flex gap-2.5 items-center relative">
+        <div className="max-sm:text-xs max-sm:gap-1 flex gap-2.5 items-center relative">
           {pool.jackpotBalance > 0 && (
             <button
               onClick={() => setJackpotHelp(true)}

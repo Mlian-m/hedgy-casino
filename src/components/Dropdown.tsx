@@ -1,70 +1,44 @@
 // src/components/Dropdown.tsx
+import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 
-import styled, { css } from "styled-components";
+interface DropdownProps extends PropsWithChildren {
+  visible: boolean;
+  anchor?: "bottom" | "top";
+}
 
-import React from "react";
+export function Dropdown({ children, visible, anchor }: DropdownProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [dynamicAnchor, setDynamicAnchor] = useState<"top" | "bottom">(
+    "bottom",
+  );
 
-const Wrapper = styled.div<{ $visible: boolean; $anchor: "top" | "bottom" }>`
-  opacity: 0;
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s;
-  position: absolute;
-  visibility: hidden;
-  z-index: 1000;
-  right: 0;
-  color: white;
-  min-width: 100%;
-  white-space: nowrap;
-  ${(props) =>
-    props.$visible &&
-    css`
-      opacity: 1;
-      transform: translateY(0px) !important;
-      visibility: visible;
-    `}
-  ${(props) =>
-    props.$anchor === "top" &&
-    css`
-      top: 100%;
-      margin-top: 10px;
-      transform: translateY(-10px);
-    `}
-  ${(props) =>
-    props.$anchor === "bottom" &&
-    css`
-      bottom: 100%;
-      margin-bottom: 10px;
-      transform: translateY(10px);
-    `}
-  & > div {
-    display: grid;
-    background: #15151f;
-    border-radius: 10px;
-    overflow: hidden;
-    padding: 5px;
-    gap: 5px;
-  }
-`;
-
-export function Dropdown({
-  visible,
-  children,
-  anchor: _anchor,
-}: React.PropsWithChildren<{ visible: boolean; anchor?: "bottom" | "top" }>) {
-  const ref = React.useRef<HTMLDivElement>(null!);
-
-  const anchor = React.useMemo(() => {
-    if (_anchor) return _anchor;
-    if (!ref.current) return "bottom";
-    return ref.current.getBoundingClientRect().y > window.innerHeight / 2
-      ? "bottom"
-      : "top";
-  }, [children, visible, _anchor]);
+  useEffect(() => {
+    if (anchor) {
+      setDynamicAnchor(anchor);
+    } else if (ref.current) {
+      const isBottom =
+        ref.current.getBoundingClientRect().y > window.innerHeight / 2;
+      setDynamicAnchor(isBottom ? "top" : "bottom");
+    }
+  }, [visible, anchor]);
 
   return (
-    <Wrapper ref={ref} $anchor={anchor} $visible={visible}>
-      <div>{children}</div>
-    </Wrapper>
+    <div
+      ref={ref}
+      className={`absolute right-0 z-50 transition-opacity duration-200 ease-out ${
+        visible ? "opacity-100" : "opacity-0 invisible"
+      } ${dynamicAnchor === "top" ? "mt-2" : "mb-2"} min-w-full`}
+      style={{
+        transform: visible
+          ? "translateY(0)"
+          : dynamicAnchor === "top"
+            ? "translateY(-10px)"
+            : "translateY(10px)",
+      }}
+    >
+      <div className="grid bg-[#15151f] rounded-lg overflow-hidden p-1 gap-1">
+        {children}
+      </div>
+    </div>
   );
 }
