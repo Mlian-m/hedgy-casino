@@ -7,13 +7,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "clean": "rm -rf .next && rm -rf node_modules && rm -rf .turbo"
+    "clean": "rmdir /s /q .next && rmdir /s /q node_modules && rmdir /s /q .turbo"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.27.0",
     "@preact/signals-react": "^2.0.0",
     "@react-three/drei": "^9.89.0",
-    "@react-three/fiber": "^8.15.11",
+    "@react-three/fiber": "^8.15.16",
     "@solana/spl-token": "^0.3.8",
     "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/wallet-adapter-react-ui": "^0.9.34",

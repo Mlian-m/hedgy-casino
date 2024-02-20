@@ -31,7 +31,7 @@ export default function TokenSelect() {
     <div className="relative">
       <GambaUi.Button onClick={click}>
         {selectedToken && (
-          <div className="flex items-center gap-2.5">
+          <div className="max-sm:text-xs whitespace-nowrap flex items-center gap-2.5">
             <img
               className="w-5 h-5 rounded-full"
               src={selectedToken.image}

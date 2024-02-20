@@ -19,9 +19,13 @@ export function useRecentPlays(platformOnly = false) {
 
   useGambaEventListener(
     "GameSettled",
-    (event) => {
-      if (platformOnly && !event.data.creator.equals(PLATFORM_CREATOR_ADDRESS))
+    (event: GambaTransaction<"GameSettled">) => {
+      if (
+        platformOnly &&
+        !event.data.creator.equals(PLATFORM_CREATOR_ADDRESS)
+      ) {
         return;
+      }
       setEvents((events) => [event, ...events]);
     },
     [router.pathname, platformOnly],
