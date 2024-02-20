@@ -1,6 +1,6 @@
 # Gamba Demo
 
-![screencapture-localhost-3000-2024-02-19-18_19_11](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/403818c7-7192-4e1a-a456-1a85d965496c)
+![screencapture-localhost-3000-2024-02-19-19_16_09](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/3708bb52-e538-480e-b07f-f1c2453d2930)
 
 > This is a forked and rewritten repo from the [gamba platform](https://github.com/gamba-labs/platform).
 

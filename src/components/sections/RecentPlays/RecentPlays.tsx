@@ -1,9 +1,10 @@
 // src/components/sections/RecentPlays/RecentPlays.tsx
 
 import { BPS_PER_WHOLE, GambaTransaction } from "gamba-core-v2";
+import { GambaUi, TokenValue, useTokenMeta } from "gamba-react-ui-v2";
 import React, { useState } from "react";
-import { TokenValue, useTokenMeta } from "gamba-react-ui-v2";
 
+import { PLATFORM_EXPLORER_URL } from "../../../../config";
 import { ShareModal } from "./ShareModal";
 import { extractMetadata } from "@/utils/utils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -79,29 +80,58 @@ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
 }
 
 export default function RecentPlays() {
-  const events = useRecentPlays();
+  const [platformOnly, setPlatformOnly] = useState(true);
+  const events = useRecentPlays(platformOnly);
   const [selectedGame, setSelectedGame] =
     useState<GambaTransaction<"GameSettled"> | null>(null);
   const md = useMediaQuery("md");
 
+  const togglePlatformView = () => setPlatformOnly(!platformOnly);
+
   return (
     <div className="w-full relative flex flex-col gap-2.5">
+      <div className="mb-4 flex justify-center">
+        <div className="flex items-center gap-4">
+          <span
+            className={`font-bold p-12 py-2 px-4 rounded cursor-pointer ${
+              platformOnly ? "text-white" : "text-gray-500"
+            }`}
+            onClick={() => setPlatformOnly(true)}
+          >
+            Platform Only
+          </span>
+
+          <GambaUi.Switch
+            checked={!platformOnly}
+            onChange={togglePlatformView}
+          />
+
+          <span
+            className={`font-bold p-12 py-2 px-4 rounded cursor-pointer ${
+              !platformOnly ? "text-white" : "text-gray-500"
+            }`}
+            onClick={() => setPlatformOnly(false)}
+          >
+            All Gamba Events
+          </span>
+        </div>
+      </div>
+
       {selectedGame && (
         <ShareModal
           event={selectedGame}
           onClose={() => setSelectedGame(null)}
         />
       )}
-      {!events.length &&
-        Array.from({ length: 5 }).map((_, i) => (
+      {events.length === 0 &&
+        Array.from({ length: 5 }, (_, i) => (
           <div
             key={i}
-            className="h-10 w-full rounded-lg animate-Skeleton bg-gray-300"
-          />
+            className="h-10 w-full rounded-lg animate-pulse bg-gray-300"
+          ></div>
         ))}
       {events.map((tx, index) => (
         <button
-          // Using a combination of signature and index as a fallback key
           key={tx.signature + "-" + index}
           onClick={() => setSelectedGame(tx)}
           className="flex items-center gap-2 p-2.5 rounded-lg bg-[#0f121b] hover:bg-[#131724] justify-between"
@@ -112,6 +142,16 @@ export default function RecentPlays() {
           <TimeDiff time={tx.time} suffix={md ? "ago" : ""} />
         </button>
       ))}
+      <GambaUi.Button
+        main
+        onClick={() =>
+          window.open(
+            platformOnly ? PLATFORM_EXPLORER_URL : "https://explorer.gamba.so/",
+          )
+        }
+      >
+        {platformOnly ? "🚀 Platform Explorer" : "🚀 Gamba Explorer"}
+      </GambaUi.Button>
     </div>
   );
 }
