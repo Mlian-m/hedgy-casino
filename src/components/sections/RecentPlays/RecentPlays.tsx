@@ -127,7 +127,7 @@ export default function RecentPlays() {
         Array.from({ length: 5 }, (_, i) => (
           <div
             key={i}
-            className="h-10 w-full rounded-lg animate-pulse bg-gray-300"
+            className="h-10 w-full rounded-lg animate-Skeleton bg-gray-300"
           ></div>
         ))}
       {events.map((tx, index) => (
