@@ -92,12 +92,6 @@ body::-webkit-scrollbar-thumb {
   0% {
     opacity: 1;
   }
-
-  30%,
-  75% {
-    opacity: 1;
-  }
-
   100% {
     opacity: 0;
   }
@@ -121,10 +115,12 @@ body::-webkit-scrollbar-thumb {
     opacity: 1;
     background-color: rgba(255, 255, 255, 0.6);
   }
+
   50% {
     opacity: 0.5;
     background-color: rgba(255, 255, 255, 0.8);
   }
+
   100% {
     opacity: 1;
     background-color: rgba(255, 255, 255, 0.6);
@@ -139,4 +135,73 @@ body::-webkit-scrollbar-thumb {
 .sc-iBdnpw.gPLpOF img {
   width: 2rem !important;
   height: 2rem !important;
+}
+
+/* Dashbaord gamecard styles */
+@keyframes tileAnimation {
+  0% {
+    background-position: -100px 100px;
+  }
+
+  100% {
+    background-position: 100px -100px;
+  }
+}
+
+.game-card {
+  transition: transform 0.2s ease;
+  position: relative;
+  transform: scale(1);
+  max-height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.game-card:hover {
+  transform: scale(1.01);
+  outline: #9564ff33 solid 5px;
+  outline-offset: 0px;
+}
+
+.game-card .background {
+  transition:
+    transform 0.2s ease,
+    opacity 0.3s;
+  animation: tileAnimation 5s linear infinite;
+  opacity: 0;
+}
+
+.game-card:hover .background {
+  opacity: 0.35;
+}
+
+.game-card .image {
+  transition: transform 0.2s ease;
+  transform: scale(0.9);
+}
+
+.game-card:hover .image {
+  transform: scale(1);
+}
+
+.game-card .play {
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  backdrop-filter: blur(20px);
+}
+
+.game-card:hover .play {
+  opacity: 1;
+}
+
+/* wheel styles */
+.wheel-container {
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1;
+  margin: auto;
 }
