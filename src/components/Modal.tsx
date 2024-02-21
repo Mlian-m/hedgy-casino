@@ -1,6 +1,7 @@
 // src/components/Modal.tsx
-import { Icon } from "@/components/Icon";
 import React, { useEffect } from "react";
+
+import { Icon } from "@/components/Icon";
 
 interface Props extends React.PropsWithChildren {
   onClose?: () => void;
@@ -33,7 +34,7 @@ export function Modal({ children, onClose }: Props) {
           {onClose && (
             <button
               onClick={onClose}
-              className="z-50 absolute top-2.5 right-2.5 bg-transparent rounded-full p-2 hover:bg-white hover:bg-opacity-10 transition-opacity duration-200 ease-linear focus:outline-none min-w-[44px] min-h-[44px]"
+              className="w-10 h-10 z-50 absolute top-2.5 right-2.5 bg-transparent rounded-full p-2 hover:bg-white hover:bg-opacity-10 transition-opacity duration-200 ease-linear focus:outline-none min-w-[44px] min-h-[44px]"
             >
               <Icon.Close2 />
             </button>

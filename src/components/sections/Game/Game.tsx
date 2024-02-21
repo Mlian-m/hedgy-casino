@@ -8,12 +8,10 @@ import { GameCard } from "@/components/sections/Dashboard/GameCard";
 import { Icon } from "@/components/Icon";
 import { Modal } from "@/components/Modal";
 import { ProvablyFairModal } from "./ProvablyFairModal";
-import RecentPlays from "@/components/sections/RecentPlays/RecentPlays";
 import { SlideSection } from "@/components/Slider";
 import { useGamba } from "gamba-react-v2";
-import { useRouter } from "next/router";
 
-function GameSlider() {
+export function GameSlider() {
   return (
     <>
       <div className="block md:hidden">
@@ -43,7 +41,7 @@ function GameSlider() {
   );
 }
 
-function CustomError() {
+export function CustomError() {
   return (
     <>
       <GambaUi.Portal target="error">
@@ -61,7 +59,7 @@ function CustomError() {
  * Screen
  * Controls
  */
-function CustomRenderer() {
+export default function CustomRenderer() {
   const gamba = useGamba();
   const { game } = GambaUi.useGame();
   const [info, setInfo] = useState(false);
@@ -88,7 +86,7 @@ function CustomRenderer() {
       )}
       <div className="w-full relative grid gap-1">
         {showSplash && (
-          <div className="pointer-events-none absolute inset-0 flex justify-center items-center z-10 bg-[#0c0c11] text-6xl font-bold animate-[splashAnimation_1.5s_ease-out_forwards]">
+          <div className="pointer-events-none absolute inset-0 flex justify-center items-center z-10 bg-[#0c0c11] text-6xl font-bold animate-[splashAnimation_1s_ease-out_forwards]">
             <img
               height="150px"
               src={imagePath}
@@ -138,49 +136,6 @@ function CustomRenderer() {
             <GambaUi.PortalTarget target="play" />
           </div>
         </div>
-      </div>
-    </>
-  );
-}
-
-interface GameProps {
-  gameId: string;
-}
-
-export default function Game({ gameId }: GameProps) {
-  const router = useRouter();
-  const game = GAMES.find((x) => x.id === gameId);
-
-  return (
-    <>
-      {game ? (
-        <div className="flex flex-col justify-center items-center mx-auto max-w-6xl max-sm:max-w-sm pt-20">
-          <GambaUi.Game game={game} errorFallback={<CustomError />}>
-            <CustomRenderer />
-          </GambaUi.Game>
-        </div>
-      ) : (
-        <div className="bg-black animate-pulse mt-20 flex flex-col justify-center items-center mx-auto max-w-5xl px-10 py-20 rounded-lg shadow-xl">
-          <div className="flex flex-col justify-center items-center max-w-lg rounded-lg">
-            <video
-              src="/gamba.mp4"
-              className="w-full h-full"
-              autoPlay
-              muted
-              playsInline
-              loop
-            />
-            <p className="text-2xl text-white mt-5">
-              Loading or Invalid game ID...
-            </p>
-          </div>
-        </div>
-      )}
-      <div className="flex flex-col justify-center items-center mx-auto max-w-6xl max-sm:max-w-sm mb-4">
-        <div className="py-4">
-          <GameSlider />
-        </div>
-        <RecentPlays />
       </div>
     </>
   );

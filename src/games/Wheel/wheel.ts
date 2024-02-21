@@ -42,7 +42,6 @@ const glowAnimatedRing = (
 
 export const drawTicker = (app: PIXI.Application, radius: number): void => {
   glowAnimatedRing(app, radius);
-
   const ticker = new PIXI.Graphics();
   ticker.beginFill(0x0000ff);
   ticker.lineStyle(3, 0xffffff);
@@ -51,7 +50,7 @@ export const drawTicker = (app: PIXI.Application, radius: number): void => {
   app.stage.addChild(ticker as PIXI.DisplayObject);
 
   ticker.x = app.screen.width / 2;
-  ticker.y = app.screen.height / 2 - radius - 10;
+  ticker.y = app.screen.height / 2 - radius - 18;
 
   const reflection = new PIXI.Graphics();
   reflection.beginFill(0xffffff);
@@ -74,7 +73,7 @@ export const drawWheel = (
 
   const textStyle = new PIXI.TextStyle({
     fontFamily: "Arial",
-    fontSize: 52,
+    fontSize: 32,
     fontWeight: "bold",
     fill: ["#ffffff", "#00ccff"],
     stroke: "#000000",
@@ -110,8 +109,8 @@ export const drawWheel = (
     labelText.anchor.set(0.5);
     labelText.rotation = labelAngle + Math.PI / 2;
     labelText.position.set(
-      radius * 0.8 * Math.cos(labelAngle),
-      radius * 0.8 * Math.sin(labelAngle),
+      radius * 0.88 * Math.cos(labelAngle),
+      radius * 0.88 * Math.sin(labelAngle),
     );
     wheel.addChild(labelText as PIXI.DisplayObject);
   });

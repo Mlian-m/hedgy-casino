@@ -56,15 +56,21 @@ export const DEGEN_SEGMENT_COLORS = [
 ];
 
 // MEGA MODE
-export const MEGA_BET = [5, 0, 0, 0, 0, 5, 0, 0, 0, 0];
+export const MEGA_BET = [8, 0, 0, 0, 0, , 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0];
 
 export const MEGA_WHEEL_SEGMENTS = [
-  "5X",
+  "8X",
   "0X",
   "0X",
   "0X",
   "0X",
-  "5X",
+  "0X",
+  "0X",
+  "0X",
+  "8X",
+  "0X",
+  "0X",
+  "0X",
   "0X",
   "0X",
   "0X",
@@ -76,7 +82,13 @@ export const MEGA_SEGMENT_COLORS = [
   "#272238",
   "#272238",
   "#272238",
+  "#272238",
+  "#272238",
+  "#272238",
   "#77bbff",
+  "#272238",
+  "#272238",
+  "#272238",
   "#272238",
   "#272238",
   "#272238",

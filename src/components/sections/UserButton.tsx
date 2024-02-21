@@ -3,7 +3,7 @@
 import { GambaUi } from "gamba-react-ui-v2";
 import { Modal } from "../Modal";
 import React from "react";
-import { truncateString } from "../../utils/utils";
+import { truncateString } from "@/utils/utils";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletAddress } from "gamba-react-v2";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
