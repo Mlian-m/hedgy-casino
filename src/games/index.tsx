@@ -40,7 +40,7 @@ export const GAMES: GameBundle[] = [
       name: "HiLo",
       image: "/games/hilo.png",
       description: `HiLo is a game of foresight and luck, challenging players to guess whether the next card will be higher or lower. Make consecutive correct guesses to increase your winnings, and decide when to cash out for maximum rewards.`,
-      background: "#77bbff",
+      background: "#ff4f4f",
     },
     props: { logo: "/logo.svg" },
     app: dynamic(() => import("./HiLo")),
@@ -78,7 +78,7 @@ export const GAMES: GameBundle[] = [
   {
     id: "wheel",
     meta: {
-      background: "#ff4f4f",
+      background: "#77bbff",
       image: "/games/wheel.png",
       name: "Wheel",
       description: `Wheel is a classic game of chance and luck. Spin the wheel and bet on where the wheel will land. With the power of chance and luck, Wheel offers a fun and engaging gaming experience.`,
