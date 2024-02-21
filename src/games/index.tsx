@@ -75,4 +75,14 @@ export const GAMES: GameBundle[] = [
     },
     app: dynamic(() => import("./Plinko")),
   },
+  {
+    id: "wheel",
+    meta: {
+      background: "#ff4f4f",
+      image: "/games/wheel.png",
+      name: "Wheel",
+      description: `Wheel is a classic game of chance and luck. Spin the wheel and bet on where the wheel will land. With the power of chance and luck, Wheel offers a fun and engaging gaming experience.`,
+    },
+    app: dynamic(() => import("./Wheel"), { ssr: false }),
+  },
 ];

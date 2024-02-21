@@ -114,7 +114,10 @@ export function ShareModal({
             main
             size="small"
             onClick={() =>
-              window.open(`https://v2.gamba.so/tx/${event.signature}`, "_blank")
+              window.open(
+                `https://explorer.gamba.so/tx/${event.signature}`,
+                "_blank",
+              )
             }
           >
             Verify

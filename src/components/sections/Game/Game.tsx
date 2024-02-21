@@ -10,13 +10,13 @@ import {
   Splash,
 } from "./Game.styles";
 import { GambaUi, useGambaAudioStore } from "gamba-react-ui-v2";
+import React, { useEffect, useState } from "react";
 
 import { GAMES } from "@/games";
 import { GameCard } from "@/components/sections/Dashboard/GameCard";
 import { Icon } from "@/components/Icon";
 import { Modal } from "@/components/Modal";
 import { ProvablyFairModal } from "./ProvablyFairModal";
-import React from "react";
 import RecentPlays from "@/components/sections/RecentPlays/RecentPlays";
 import { SlideSection } from "@/components/Slider";
 import { useGamba } from "gamba-react-v2";
@@ -143,7 +143,32 @@ interface GameProps {
 
 export default function Game({ gameId }: GameProps) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(!router.isReady);
+  }, [router.isReady]);
+
   const game = GAMES.find((x) => x.id === gameId);
+
+  if (isLoading) {
+    // Loading state
+    return (
+      <div className="bg-black animate-pulse mt-20 flex flex-col justify-center items-center mx-auto max-w-5xl px-10 py-20 rounded-lg shadow-xl">
+        <div className="flex flex-col justify-center items-center max-w-lg rounded-lg">
+          <video
+            src="/gamba.mp4"
+            className="w-full h-full"
+            autoPlay
+            muted
+            playsInline
+            loop
+          />
+          <p className="text-2xl text-white mt-5">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -154,12 +179,15 @@ export default function Game({ gameId }: GameProps) {
           </GambaUi.Game>
         </div>
       ) : (
-        <div className="mt-20 flex flex-col justify-center items-center mx-auto max-w-5xl px-10 py-20 rounded-lg shadow-xl">
-          <div className="p-10 rounded-lg">
-            <img
-              src="/gamba.svg"
-              alt="Loading..."
-              className="w-48 h-48 animate-pulse"
+        <div className="bg-black animate-pulse mt-20 flex flex-col justify-center items-center mx-auto max-w-5xl px-10 py-20 rounded-lg shadow-xl">
+          <div className="flex flex-col justify-center items-center max-w-lg rounded-lg">
+            <video
+              src="/gamba.mp4"
+              className="w-full h-full"
+              autoPlay
+              muted
+              playsInline
+              loop
             />
             <p className="text-2xl text-white mt-5">Invalid game ID...</p>
           </div>

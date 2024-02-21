@@ -38,8 +38,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               creator={PLATFORM_CREATOR_ADDRESS}
               games={GAMES}
               tokens={TOKENS}
-              defaultCreatorFee={0.025} // 2.5%
-              defaultJackpotFee={0.025} // 2.5%
+              defaultCreatorFee={0.05} // 5%
+              defaultJackpotFee={0.05} // 5%
             >
               <Component {...pageProps} />
               <Toaster position="top-right" />
