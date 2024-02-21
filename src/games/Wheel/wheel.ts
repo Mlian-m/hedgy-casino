@@ -1,4 +1,7 @@
 // src/games/Wheel/wheel.ts
+/*
+ * Author: BankkRoll
+ */
 import * as PIXI from "pixi.js";
 
 export const radius = 200;
@@ -7,46 +10,28 @@ const glowAnimatedRing = (
   app: PIXI.Application,
   radius: number,
   thickness: number = 5,
-  colors: number[] = [0x3366ff, 0x0000ff, 0x272238]
+  colors: number[] = [0x3366ff, 0x0000ff, 0x272238],
 ): (() => void) => {
   const ringsContainer = new PIXI.Container();
   ringsContainer.x = app.screen.width / 2;
   ringsContainer.y = app.screen.height / 2;
-  app.stage.addChild(ringsContainer);
+  app.stage.addChild(ringsContainer as PIXI.DisplayObject);
 
   const baseRing = new PIXI.Graphics();
   baseRing.lineStyle(thickness, 0xffffff);
   baseRing.drawCircle(0, 0, radius);
-  ringsContainer.addChild(baseRing);
-
-  const tickerFunctions: PIXI.TickerCallback<unknown>[] = [];
+  ringsContainer.addChild(baseRing as PIXI.DisplayObject);
 
   colors.forEach((color, index) => {
     const ring = new PIXI.Graphics();
     ring.lineStyle(thickness, color);
     const ringRadius = radius + thickness * 2 * (index + 1);
     ring.drawCircle(0, 0, ringRadius);
-    ringsContainer.addChild(ring);
-
-    const ball = new PIXI.Graphics();
-    ball.beginFill(color);
-    ball.drawCircle(0, 0, thickness);
-    ringsContainer.addChild(ball);
-
-    let angle = 0;
-    const updateFunction = () => {
-      angle += 0.02 * (index + 1) * (index % 2 === 0 ? 1 : -1);
-      ball.x = ringRadius * Math.cos(angle);
-      ball.y = ringRadius * Math.sin(angle);
-    };
-
-    app.ticker.add(updateFunction);
-    tickerFunctions.push(updateFunction);
+    ringsContainer.addChild(ring as PIXI.DisplayObject);
   });
 
   return () => {
-    tickerFunctions.forEach((fn) => app.ticker.remove(fn));
-    app.stage.removeChild(ringsContainer);
+    app.stage.removeChild(ringsContainer as PIXI.DisplayObject);
     ringsContainer.destroy({
       children: true,
       texture: true,
@@ -56,26 +41,17 @@ const glowAnimatedRing = (
 };
 
 export const drawTicker = (app: PIXI.Application, radius: number): void => {
-  const cleanup = glowAnimatedRing(app, radius);
+  glowAnimatedRing(app, radius);
 
   const ticker = new PIXI.Graphics();
   ticker.beginFill(0x0000ff);
   ticker.lineStyle(3, 0xffffff);
   ticker.drawPolygon([-25, 0, 25, 0, 0, 40]);
   ticker.endFill();
-
-  const tickerShadow = new PIXI.Graphics();
-  tickerShadow.beginFill(0x000000, 0.5);
-  tickerShadow.drawPolygon([-32, 0, 32, 0, 0, 52]);
-  tickerShadow.endFill();
-
-  tickerShadow.x = app.screen.width / 2 - 1;
-  tickerShadow.y = app.screen.height / 2 - radius - 11;
-  app.stage.addChild(tickerShadow as PIXI.DisplayObject);
+  app.stage.addChild(ticker as PIXI.DisplayObject);
 
   ticker.x = app.screen.width / 2;
   ticker.y = app.screen.height / 2 - radius - 10;
-  app.stage.addChild(ticker as PIXI.DisplayObject);
 
   const reflection = new PIXI.Graphics();
   reflection.beginFill(0xffffff);
@@ -90,7 +66,7 @@ export const drawTicker = (app: PIXI.Application, radius: number): void => {
 export const drawWheel = (
   wheel: PIXI.Container,
   segments: string[],
-  segmentColors: string[]
+  segmentColors: string[],
 ): void => {
   wheel.removeChildren();
 
@@ -123,11 +99,10 @@ export const drawWheel = (
         0,
         radius,
         index * segmentAngle * (Math.PI / 180),
-        (index + 1) * segmentAngle * (Math.PI / 180)
+        (index + 1) * segmentAngle * (Math.PI / 180),
       )
       .closePath();
     gradient.endFill();
-
     wheel.addChild(gradient as PIXI.DisplayObject);
 
     const labelAngle = (index + 0.5) * segmentAngle * (Math.PI / 180);
@@ -136,9 +111,8 @@ export const drawWheel = (
     labelText.rotation = labelAngle + Math.PI / 2;
     labelText.position.set(
       radius * 0.8 * Math.cos(labelAngle),
-      radius * 0.8 * Math.sin(labelAngle)
+      radius * 0.8 * Math.sin(labelAngle),
     );
-
     wheel.addChild(labelText as PIXI.DisplayObject);
   });
 };

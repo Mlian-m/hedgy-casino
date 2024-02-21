@@ -1,5 +1,7 @@
-"use client";
 // src/games/Wheel/index.tsx
+/*
+ * Author: BankkRoll
+ */
 
 import * as PIXI from "pixi.js";
 
@@ -10,9 +12,9 @@ import {
   REGULAR_BET,
   REGULAR_SEGMENT_COLORS,
   REGULAR_WHEEL_SEGMENTS,
-  SBF_BET,
-  SBF_SEGMENT_COLORS,
-  SBF_WHEEL_SEGMENTS,
+  MEGA_BET,
+  MEGA_SEGMENT_COLORS,
+  MEGA_WHEEL_SEGMENTS,
   SOUND_LOSE,
   SOUND_SPIN,
   SOUND_WIN,
@@ -26,7 +28,7 @@ import { drawTicker, drawWheel, radius } from "./wheel";
 const WheelGame = () => {
   const [wager, setWager] = useWagerInput();
   const [spinning, setSpinning] = useState(false);
-  const [gameMode, setGameMode] = useState("regular");
+  const [gameMode, setGameMode] = useState<string>("regular");
   const wheelContainerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<PIXI.Application | null>(null);
   const game = GambaUi.useGame();
@@ -73,8 +75,8 @@ const WheelGame = () => {
       case "degen":
         drawWheel(wheel, DEGEN_WHEEL_SEGMENTS, DEGEN_SEGMENT_COLORS);
         break;
-      case "sbf":
-        drawWheel(wheel, SBF_WHEEL_SEGMENTS, SBF_SEGMENT_COLORS);
+      case "mega":
+        drawWheel(wheel, MEGA_WHEEL_SEGMENTS, MEGA_SEGMENT_COLORS);
         break;
       default:
         drawWheel(wheel, REGULAR_WHEEL_SEGMENTS, REGULAR_SEGMENT_COLORS);
@@ -104,9 +106,9 @@ const WheelGame = () => {
         bet = DEGEN_BET;
         segments = DEGEN_WHEEL_SEGMENTS;
         break;
-      case "sbf":
-        bet = SBF_BET;
-        segments = SBF_WHEEL_SEGMENTS;
+      case "mega":
+        bet = MEGA_BET;
+        segments = MEGA_WHEEL_SEGMENTS;
         break;
       default:
         bet = REGULAR_BET;
@@ -148,9 +150,9 @@ const WheelGame = () => {
     });
   }, [game, sounds, wager, gameMode]);
 
-  // TODO: SBF mode needs some working doesnt seem to hit correctly each time
-  // const gameModeOptions: string[] = ["regular", "degen", "sbf"];
-  const gameModeOptions: string[] = ["regular", "degen"];
+  // TODO: MEGA mode needs some working doesnt seem to hit correctly each time
+  // const gameModeOptions: string[] = ["regular", "degen", "mega"];
+  const gameModeOptions: string[] = ["regular", "degen", "mega"];
 
   return (
     <>
@@ -166,7 +168,9 @@ const WheelGame = () => {
           options={gameModeOptions}
           value={gameMode}
           onChange={setGameMode}
-          label={(value) => value.charAt(0).toUpperCase() + value.slice(1)}
+          label={(value: string) =>
+            value.charAt(0).toUpperCase() + value.slice(1)
+          }
         />
         <GambaUi.PlayButton onClick={spinWheel} disabled={spinning}>
           {spinning ? "Spinning..." : "Spin"}

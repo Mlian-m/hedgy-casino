@@ -112,7 +112,7 @@ function CustomRenderer() {
         <div
           className={`relative h-1 w-full overflow-hidden rounded-lg after:content-[' '] after:absolute after:w-[25%] after:h-full after:bg-[#9564ff] after:transition-opacity duration-500 ${
             gamba.isPlaying
-              ? "after:animate-[loadingAnimation_0.5s_ease-infinite]"
+              ? " animate-[loadingAnimation_1.5s_infinite] after:opacity-100"
               : "after:opacity-0"
           }`}
           key={Number(gamba.isPlaying)}
