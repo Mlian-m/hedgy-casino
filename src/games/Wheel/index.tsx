@@ -53,9 +53,11 @@ const WheelGame = () => {
     drawTicker(app, radius);
 
     if (wheelContainerRef.current) {
-      wheelContainerRef.current.appendChild(app.view);
-      app.view.style.width = "100%";
-      app.view.style.height = "100%";
+      wheelContainerRef.current.appendChild(app.view as unknown as Node);
+      if (app.view && app.view.style) {
+        app.view.style.width = "100%";
+        app.view.style.height = "100%";
+      }
     }
 
     return () =>
@@ -164,7 +166,7 @@ const WheelGame = () => {
           options={gameModeOptions}
           value={gameMode}
           onChange={setGameMode}
-          label={(value) => value.charAt(0).toUpperCase() + value.slice(1)} // Capitalize the first letter of each option for display
+          label={(value) => value.charAt(0).toUpperCase() + value.slice(1)}
         />
         <GambaUi.PlayButton onClick={spinWheel} disabled={spinning}>
           {spinning ? "Spinning..." : "Spin"}
