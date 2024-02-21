@@ -45,6 +45,7 @@ const WheelGame = () => {
       autoDensity: true,
     });
     appRef.current = app;
+
     const wheel = new PIXI.Container();
     wheel.position.set(app.screen.width / 2, app.screen.height / 2);
     app.stage.addChild(wheel as PIXI.DisplayObject);
@@ -52,7 +53,9 @@ const WheelGame = () => {
     drawTicker(app, radius);
 
     if (wheelContainerRef.current) {
-      wheelContainerRef.current.appendChild(app.view as unknown as Node);
+      wheelContainerRef.current.appendChild(app.view);
+      app.view.style.width = "100%";
+      app.view.style.height = "100%";
     }
 
     return () =>

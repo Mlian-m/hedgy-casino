@@ -105,8 +105,10 @@ export const drawWheel = (
     const startAngle = index * segmentAngle * (Math.PI / 180);
     const endAngle = (index + 1) * segmentAngle * (Math.PI / 180);
 
+    const colorNumber = parseInt(segmentColors[index].replace(/^#/, ""), 16);
+
     const gradient = new PIXI.Graphics();
-    gradient.beginFill(PIXI.utils.string2hex(segmentColors[index]));
+    gradient.beginFill(colorNumber);
     gradient.lineStyle(2, 0xffffff, 1);
     gradient.moveTo(0, 0).arc(0, 0, radius, startAngle, endAngle).closePath();
     gradient.endFill();
