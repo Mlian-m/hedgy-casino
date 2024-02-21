@@ -128,7 +128,7 @@ export const drawWheel = (
       .closePath();
     gradient.endFill();
 
-    wheel.addChild(gradient);
+    wheel.addChild(gradient as PIXI.DisplayObject);
 
     const labelAngle = (index + 0.5) * segmentAngle * (Math.PI / 180);
     const labelText = new PIXI.Text(segment, textStyle);
@@ -139,6 +139,6 @@ export const drawWheel = (
       radius * 0.8 * Math.sin(labelAngle)
     );
 
-    wheel.addChild(labelText);
+    wheel.addChild(labelText as PIXI.DisplayObject);
   });
 };
