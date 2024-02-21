@@ -2,7 +2,7 @@
 
 import { BPS_PER_WHOLE, GambaTransaction } from "gamba-core-v2";
 import { GambaUi, TokenValue, useTokenMeta } from "gamba-react-ui-v2";
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 import { PLATFORM_EXPLORER_URL } from "../../../../config";
 import { ShareModal } from "./ShareModal";
@@ -42,11 +42,13 @@ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
     return null;
   }
 
-  const imagePath = `/games/${game.id}/logo.png`;
-
   return (
     <>
-      <img src={imagePath} alt={`Splash for ${game.meta.name}`} width={64} />
+      <img
+        src={`/games/${game.id}/logo.png`}
+        alt={`Splash for ${game.meta.name}`}
+        width={64}
+      />
       <div className="text-[#a079ff]">
         {data.user.toBase58().substring(0, 4)}...
       </div>

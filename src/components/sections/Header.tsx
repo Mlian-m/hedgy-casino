@@ -55,9 +55,9 @@ export default function Header() {
       <div className="flex items-center justify-between w-full p-2.5 bg-black fixed top-0 left-0 z-50 backdrop-blur-[20px]">
         <div className="flex gap-5 items-center">
           <Link href="/" passHref>
-            <a className="h-9 m-0 cursor-pointer">
+            <div className="h-9 m-0 cursor-pointer">
               <img alt="Gamba logo" src="/logo.svg" className="h-full" />
-            </a>
+            </div>
           </Link>
         </div>
         <div className="max-sm:text-xs max-sm:gap-1 flex gap-2.5 items-center relative">

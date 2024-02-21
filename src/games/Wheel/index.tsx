@@ -9,23 +9,27 @@ import {
   DEGEN_BET,
   DEGEN_SEGMENT_COLORS,
   DEGEN_WHEEL_SEGMENTS,
-  REGULAR_BET,
-  REGULAR_SEGMENT_COLORS,
-  REGULAR_WHEEL_SEGMENTS,
   MEGA_BET,
   MEGA_SEGMENT_COLORS,
   MEGA_WHEEL_SEGMENTS,
+  REGULAR_BET,
+  REGULAR_SEGMENT_COLORS,
+  REGULAR_WHEEL_SEGMENTS,
   SOUND_LOSE,
   SOUND_SPIN,
   SOUND_WIN,
 } from "./game";
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-
-import { gsap } from "gsap";
 import { drawTicker, drawWheel, radius } from "./wheel";
 
-const WheelGame = () => {
+import { gsap } from "gsap";
+
+interface WheelGameProps {
+  gameId: string;
+}
+
+const WheelGame = ({ gameId }: WheelGameProps) => {
   const [wager, setWager] = useWagerInput();
   const [spinning, setSpinning] = useState(false);
   const [gameMode, setGameMode] = useState<string>("regular");
@@ -150,15 +154,13 @@ const WheelGame = () => {
     });
   }, [game, sounds, wager, gameMode]);
 
-  // TODO: MEGA mode needs some working doesnt seem to hit correctly each time
-  // const gameModeOptions: string[] = ["regular", "degen", "mega"];
   const gameModeOptions: string[] = ["regular", "degen", "mega"];
 
   return (
     <>
       <GambaUi.Portal target="screen">
         <div className="flex flex-col justify-center items-center">
-          <div ref={wheelContainerRef} />
+          <div ref={wheelContainerRef} key={gameId} />
         </div>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">

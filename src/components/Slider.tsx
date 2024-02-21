@@ -2,7 +2,6 @@
 
 import React, { useRef } from "react";
 
-// Refactored SlideSection using Tailwind CSS classes
 export function SlideSection(props: React.PropsWithChildren) {
   const ref = useRef<HTMLDivElement>(null);
 
