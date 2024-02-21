@@ -145,7 +145,7 @@ const WheelGame = () => {
 
   // TODO: SBF mode needs some working doesnt seem to hit correctly each time
   // const gameModeOptions: string[] = ["regular", "degen", "sbf"];
-  const gameModeOptions: string[] = ["regular", "degen", "sbf"];
+  const gameModeOptions: string[] = ["regular", "degen"];
 
   return (
     <>
