@@ -116,7 +116,7 @@ function CustomRenderer() {
               : "after:opacity-0"
           }`}
           key={Number(gamba.isPlaying)}
-          $active={gamba.isPlaying}
+          data-active={gamba.isPlaying}
         />
         <div className="w-full bg-[#1A1B28] p-2 sm:p-5 text-white rounded-lg flex flex-wrap gap-2 sm:gap-5 items-center justify-center sm:flex-row">
           <div className="flex gap-2 justify-center">
