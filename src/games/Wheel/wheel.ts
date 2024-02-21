@@ -4,48 +4,60 @@ import * as PIXI from "pixi.js";
 export const radius = 200;
 
 const glowAnimatedRing = (
-  app: {
-    screen: { width: number; height: number };
-    stage: { addChild: (arg0: any) => void };
-    ticker: PIXI.Ticker;
-  },
+  app: PIXI.Application,
   radius: number,
   thickness: number = 5,
-  colors: number[] = [0x3366ff, 0x0000ff, 0x272238],
-) => {
+  colors: number[] = [0x3366ff, 0x0000ff, 0x272238]
+): (() => void) => {
   const ringsContainer = new PIXI.Container();
   ringsContainer.x = app.screen.width / 2;
   ringsContainer.y = app.screen.height / 2;
-  app.stage.addChild(ringsContainer as PIXI.DisplayObject);
+  app.stage.addChild(ringsContainer);
 
   const baseRing = new PIXI.Graphics();
   baseRing.lineStyle(thickness, 0xffffff);
   baseRing.drawCircle(0, 0, radius);
-  ringsContainer.addChild(baseRing as PIXI.DisplayObject);
+  ringsContainer.addChild(baseRing);
+
+  const tickerFunctions: PIXI.TickerCallback<unknown>[] = [];
 
   colors.forEach((color, index) => {
     const ring = new PIXI.Graphics();
     ring.lineStyle(thickness, color);
     const ringRadius = radius + thickness * 2 * (index + 1);
     ring.drawCircle(0, 0, ringRadius);
-    ringsContainer.addChild(ring as PIXI.DisplayObject);
+    ringsContainer.addChild(ring);
 
     const ball = new PIXI.Graphics();
     ball.beginFill(color);
     ball.drawCircle(0, 0, thickness);
-    ringsContainer.addChild(ball as PIXI.DisplayObject);
+    ringsContainer.addChild(ball);
 
     let angle = 0;
-    app.ticker.add(() => {
+    const updateFunction = () => {
       angle += 0.02 * (index + 1) * (index % 2 === 0 ? 1 : -1);
       ball.x = ringRadius * Math.cos(angle);
       ball.y = ringRadius * Math.sin(angle);
-    });
+    };
+
+    app.ticker.add(updateFunction);
+    tickerFunctions.push(updateFunction);
   });
+
+  return () => {
+    tickerFunctions.forEach((fn) => app.ticker.remove(fn));
+    app.stage.removeChild(ringsContainer);
+    ringsContainer.destroy({
+      children: true,
+      texture: true,
+      baseTexture: true,
+    });
+  };
 };
 
-export const drawTicker = (app: PIXI.Application, radius: number) => {
-  glowAnimatedRing(app, radius);
+export const drawTicker = (app: PIXI.Application, radius: number): void => {
+  const cleanup = glowAnimatedRing(app, radius);
+
   const ticker = new PIXI.Graphics();
   ticker.beginFill(0x0000ff);
   ticker.lineStyle(3, 0xffffff);
@@ -78,12 +90,9 @@ export const drawTicker = (app: PIXI.Application, radius: number) => {
 export const drawWheel = (
   wheel: PIXI.Container,
   segments: string[],
-  segmentColors: string[],
-) => {
+  segmentColors: string[]
+): void => {
   wheel.removeChildren();
-
-  const segmentGraphics = new PIXI.Graphics();
-  wheel.addChild(segmentGraphics as PIXI.DisplayObject);
 
   const segmentAngle = 360 / segments.length;
 
@@ -102,32 +111,34 @@ export const drawWheel = (
   });
 
   segments.forEach((segment, index) => {
-    const startAngle = index * segmentAngle * (Math.PI / 180);
-    const endAngle = (index + 1) * segmentAngle * (Math.PI / 180);
-
     const colorNumber = parseInt(segmentColors[index].replace(/^#/, ""), 16);
 
     const gradient = new PIXI.Graphics();
     gradient.beginFill(colorNumber);
     gradient.lineStyle(2, 0xffffff, 1);
-    gradient.moveTo(0, 0).arc(0, 0, radius, startAngle, endAngle).closePath();
+    gradient
+      .moveTo(0, 0)
+      .arc(
+        0,
+        0,
+        radius,
+        index * segmentAngle * (Math.PI / 180),
+        (index + 1) * segmentAngle * (Math.PI / 180)
+      )
+      .closePath();
     gradient.endFill();
 
-    gradient.name = segment;
+    wheel.addChild(gradient);
 
-    wheel.addChild(gradient as PIXI.DisplayObject);
-
-    const labelAngle = startAngle + (endAngle - startAngle) / 2;
-    const labelRadius = radius * 0.8;
-
+    const labelAngle = (index + 0.5) * segmentAngle * (Math.PI / 180);
     const labelText = new PIXI.Text(segment, textStyle);
-    labelText.anchor.set(0.5, 0.5);
+    labelText.anchor.set(0.5);
     labelText.rotation = labelAngle + Math.PI / 2;
     labelText.position.set(
-      labelRadius * Math.cos(labelAngle),
-      labelRadius * Math.sin(labelAngle),
+      radius * 0.8 * Math.cos(labelAngle),
+      radius * 0.8 * Math.sin(labelAngle)
     );
 
-    wheel.addChild(labelText as PIXI.DisplayObject);
+    wheel.addChild(labelText);
   });
 };
