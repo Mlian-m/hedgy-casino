@@ -81,7 +81,7 @@ export const GAMES: GameBundle[] = [
       background: "#77bbff",
       image: "/games/wheel.png",
       name: "Wheel",
-      description: `Wheel is a classic game of chance and luck. Spin the wheel and bet on where the wheel will land. With the power of chance and luck, Wheel offers a fun and engaging gaming experience.`,
+      description: `Wheel is a classic game of chance and luck. Spin the wheel and land on a multiplyer to win. With the power of chance and luck, Wheel offers a fun and engaging gaming experience.`,
     },
     app: dynamic(() => import("./Wheel"), { ssr: false }),
   },
