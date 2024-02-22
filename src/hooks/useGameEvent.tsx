@@ -3,7 +3,6 @@ import { BPS_PER_WHOLE, GambaTransaction } from "gamba-core-v2";
 import { TokenValue, useTokenMeta } from "gamba-react-ui-v2";
 
 import { GAMES } from "@/games";
-import { PublicKey } from "@solana/web3.js";
 import React from "react";
 import { extractMetadata } from "@/utils/utils";
 import { toast } from "sonner";
