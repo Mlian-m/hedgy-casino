@@ -14,28 +14,15 @@ import { useGamba } from "gamba-react-v2";
 export function GameSlider() {
   return (
     <>
-      <div className="block md:hidden">
-        <SlideSection>
-          <div className="max-w-[100svw] flex gap-4 overflow-x-scroll scroll-smooth snap-x snap-mandatory py-2">
-            {GAMES.map((game) => (
-              <div
-                key={game.id}
-                className="snap-start shrink-0 w-40 flex justify-center"
-              >
-                <GameCard game={game} />
-              </div>
-            ))}
+      <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-center">
+        {GAMES.map((game) => (
+          <div
+            key={game.id}
+            className="w-48 md:w-64 p-2 flex justify-center md:my-2"
+          >
+            <GameCard game={game} />
           </div>
-        </SlideSection>
-      </div>
-      <div className="hidden md:block">
-        <div className="flex flex-wrap justify-center">
-          {GAMES.map((game) => (
-            <div key={game.id} className="w-36 flex justify-center my-2">
-              <GameCard game={game} />
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
     </>
   );

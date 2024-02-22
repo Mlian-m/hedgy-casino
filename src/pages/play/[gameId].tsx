@@ -8,7 +8,6 @@ import { GAMES } from "@/games";
 import { GambaUi } from "gamba-react-ui-v2";
 import Header from "@/components/sections/Header";
 import React from "react";
-import RecentPlays from "@/components/sections/RecentPlays/RecentPlays";
 import { useRouter } from "next/router";
 
 interface GameProps {

@@ -25,7 +25,7 @@ export function Dropdown({ children, visible, anchor }: DropdownProps) {
   return (
     <div
       ref={ref}
-      className={`absolute right-0 z-50 transition-opacity duration-200 ease-out ${
+      className={`absolute min-w-36 right-0 z-50 transition-opacity duration-200 ease-out ${
         visible ? "opacity-100" : "opacity-0 invisible"
       } ${dynamicAnchor === "top" ? "mt-2" : "mb-2"} min-w-full`}
       style={{

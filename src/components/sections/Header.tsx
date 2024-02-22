@@ -64,7 +64,7 @@ export default function Header() {
           {pool.jackpotBalance > 0 && (
             <button
               onClick={() => setJackpotHelp(true)}
-              className="all-unset cursor-pointer text-[#003c00] rounded-lg bg-[#03ffa4] px-2.5 py-0.5 text-xs uppercase font-bold transition-colors duration-200 hover:bg-white"
+              className="hidden md:flex all-unset cursor-pointer text-[#003c00] rounded-lg bg-[#03ffa4] px-2.5 py-0.5 text-xs uppercase font-bold transition-colors duration-200 hover:bg-white"
             >
               <TokenValue amount={pool.jackpotBalance} />
             </button>
@@ -72,7 +72,7 @@ export default function Header() {
           {balance.bonusBalance > 0 && (
             <button
               onClick={() => setBonusHelp(true)}
-              className="all-unset cursor-pointer text-[#003c00] rounded-lg bg-[#03ffa4] px-2.5 py-0.5 text-xs uppercase font-bold transition-colors duration-200 hover:bg-white"
+              className="hidden md:flex all-unset cursor-pointer text-[#003c00] rounded-lg bg-[#03ffa4] px-2.5 py-0.5 text-xs uppercase font-bold transition-colors duration-200 hover:bg-white"
             >
               +<TokenValue amount={balance.bonusBalance} />
             </button>

@@ -6,7 +6,12 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { PLATFORM_CREATOR_ADDRESS, RPC_ENDPOINT, TOKENS } from "../../config";
+import {
+  LIVE_EVENT_TOAST,
+  PLATFORM_CREATOR_ADDRESS,
+  RPC_ENDPOINT,
+  TOKENS,
+} from "../../config";
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
@@ -16,6 +21,7 @@ import { AppProps } from "next/app";
 import { GAMES } from "../games";
 import { GambaPlatformProvider } from "gamba-react-ui-v2";
 import { GambaProvider } from "gamba-react-v2";
+import GameToast from "@/hooks/useGameEvent";
 import React from "react";
 import { Toaster } from "sonner";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
@@ -49,6 +55,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                   style: { background: "#15151f" },
                 }}
               />
+              {LIVE_EVENT_TOAST && <GameToast />}
             </GambaPlatformProvider>
           </GambaProvider>
         </WalletModalProvider>

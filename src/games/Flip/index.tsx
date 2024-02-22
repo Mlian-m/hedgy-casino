@@ -2,10 +2,12 @@
 
 import { Coin, TEXTURE_HEADS, TEXTURE_TAILS } from "./Coin";
 import { GambaUi, useCurrentToken, useSound } from "gamba-react-ui-v2";
+import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { Canvas } from "@react-three/fiber";
 import { Effect } from "./Effect";
 import React from "react";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
 
 const SIDES = {
@@ -63,8 +65,10 @@ function Flip() {
 
       if (win) {
         sounds.play("win");
+        toastWin(toast);
       } else {
         sounds.play("lose");
+        toastLose(toast);
       }
     } finally {
       setFlipping(false);

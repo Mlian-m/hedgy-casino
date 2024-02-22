@@ -25,8 +25,10 @@ import {
   SOUND_PLAY,
   SOUND_WIN,
 } from "./constants";
+import { toastLose, toastWin } from "@/utils/toastResults";
 
 import React from "react";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
 
 const BPS_PER_WHOLE = 10000;
@@ -161,8 +163,10 @@ export default function HiLo(props: HiLoConfig) {
       setProfit(result.payout);
       if (win) {
         sounds.play("win");
+        toastWin(toast);
       } else {
         sounds.play("lose");
+        toastLose(toast);
       }
     }, 300);
   };

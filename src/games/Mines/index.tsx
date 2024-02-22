@@ -26,9 +26,11 @@ import {
   useWagerInput,
 } from "gamba-react-ui-v2";
 import { generateGrid, revealAllMines, revealGold } from "./utils";
+import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { BPS_PER_WHOLE } from "gamba-core-v2";
 import React from "react";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
 
 function Mines() {
@@ -137,6 +139,7 @@ function Mines() {
         setStarted(false);
         setGrid(revealAllMines(grid, cellIndex, mines));
         sounds.play("explode");
+        toastLose(toast);
         return;
       }
 
@@ -149,9 +152,11 @@ function Mines() {
         sounds.play("win", {
           playbackRate: Math.pow(PITCH_INCREASE_FACTOR, currentLevel),
         });
+        toastWin(toast);
       } else {
         // No more squares
         sounds.play("win", { playbackRate: 0.9 });
+        toastWin(toast);
         sounds.play("finish");
       }
     } finally {

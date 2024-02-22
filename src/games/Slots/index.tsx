@@ -1,4 +1,3 @@
-import { GameResult } from "gamba-core-v2";
 import {
   EffectTest,
   GambaUi,
@@ -7,11 +6,6 @@ import {
   useSound,
   useWagerInput,
 } from "gamba-react-ui-v2";
-import { useGamba } from "gamba-react-v2";
-import React from "react";
-import { ItemPreview } from "./ItemPreview";
-import { Slot } from "./Slot";
-import { StyledSlots } from "./Slots.styles";
 import {
   FINAL_DELAY,
   LEGENDARY_THRESHOLD,
@@ -28,6 +22,15 @@ import {
   SlotItem,
 } from "./constants";
 import { generateBetArray, getSlotCombination } from "./utils";
+import { toastLose, toastWin } from "@/utils/toastResults";
+
+import { GameResult } from "gamba-core-v2";
+import { ItemPreview } from "./ItemPreview";
+import React from "react";
+import { Slot } from "./Slot";
+import { StyledSlots } from "./Slots.styles";
+import { toast } from "sonner";
+import { useGamba } from "gamba-react-v2";
 
 const Messages: React.FC<{ messages: string[] }> = ({ messages }) => {
   const [messageIndex, setMessageIndex] = React.useState(0);
@@ -91,8 +94,10 @@ export default function Slots() {
         if (allSame) {
           setGood(true);
           sounds.play("win");
+          toastWin(toast);
         } else {
           sounds.play("lose");
+          toastLose(toast);
         }
       }, FINAL_DELAY);
     }

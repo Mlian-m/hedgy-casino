@@ -7,7 +7,7 @@ import React, { useMemo, useState } from "react";
 import { PLATFORM_EXPLORER_URL } from "../../../../config";
 import { ShareModal } from "./ShareModal";
 import { extractMetadata } from "@/utils/utils";
-import { useRecentPlays } from "./useRecentPlays";
+import { useRecentPlays } from "../../../hooks/useRecentPlays";
 
 function TimeDiff({ time, suffix = "ago" }: { time: number; suffix?: string }) {
   const diff = Date.now() - time;
