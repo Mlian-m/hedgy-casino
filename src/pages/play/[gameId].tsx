@@ -6,9 +6,7 @@ import CustomRenderer, {
 
 import { GAMES } from "@/games";
 import { GambaUi } from "gamba-react-ui-v2";
-import GameToast from "@/hooks/useGameEvent";
 import Header from "@/components/sections/Header";
-import { LIVE_EVENT_TOAST } from "../../../config";
 import React from "react";
 import { useRouter } from "next/router";
 
@@ -62,7 +60,6 @@ const GamePage: React.FC = () => {
     <>
       <Header />
       <Game gameId={gameId as string} key={gameId as string} />
-      {LIVE_EVENT_TOAST && <GameToast />}
     </>
   );
 };
