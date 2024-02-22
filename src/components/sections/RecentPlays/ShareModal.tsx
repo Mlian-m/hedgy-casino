@@ -8,7 +8,7 @@ import { Modal } from "@/components/Modal";
 import { PLATFORM_SHARABLE_URL } from "../../../../config";
 import { extractMetadata } from "@/utils/utils";
 import html2canvas from "html2canvas";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { useRouter } from "next/router";
 
 const canvasToClipboard = async (canvas: HTMLCanvasElement) => {
@@ -71,47 +71,63 @@ export function ShareModal({
 
   return (
     <Modal onClose={() => onClose()}>
-      <div className="grid gap-2.5 p-5 pb-0 w-full">
+      <div className="grid gap-2.5 pb-0 w-full">
         <div className="rounded-lg overflow-hidden">
-          <div ref={ref} className="bg-[#121217]">
-            <div className="grid grid-cols-[auto_1fr_auto] gap-1.5 items-center p-2.5">
-              <img src={tokenMeta.image} className="rounded-full h-10" />
-              <div
-                className={`text-xl p-2.5 ${
-                  percentChange >= 0 ? "text-[#9bffad]" : "text-[#ff4f4f]"
-                }`}
-              >
-                <div className="font-bold">
-                  {profit >= 0 ? "+" : "-"}
-                  <TokenValue
-                    exact
-                    amount={Math.abs(profit)}
-                    mint={event.data.tokenMint}
+          <div
+            ref={ref}
+            className="bg-gradient-to-br from-blue-900 to-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500"
+          >
+            <div className="p-5 bg-black bg-opacity-40">
+              <div className="grid grid-cols-2 items-center gap-4">
+                <div className="col-span-1">
+                  <img
+                    src={imagePath}
+                    alt="Game Image"
+                    className="h-full w-full"
                   />
                 </div>
-                {profit >= 0 && (
-                  <div className="text-base">
-                    {profit >= 0 ? "+" : "-"}
-                    {(Math.abs(percentChange) * 100).toFixed(2)}%
+
+                <div className="flex justify-between items-center gap-4">
+                  <div className="flex flex-col whitespace-nowrap">
+                    <div
+                      className={`flex items-center gap-2 text-2xl font-bold ${
+                        percentChange >= 0 ? "text-green-500" : "text-red-500"
+                      } transition-colors duration-300`}
+                    >
+                      {profit >= 0 ? "+" : "-"}
+                      <TokenValue
+                        exact
+                        amount={Math.abs(profit)}
+                        mint={event.data.tokenMint}
+                      />
+                      <img
+                        src={tokenMeta.image}
+                        alt="Token Image"
+                        className="rounded-full border-2 border-gray-700 shadow-sm h-6 w-6"
+                      />
+                    </div>
+                    <div
+                      className={`text-base font-medium ${
+                        percentChange >= 0 ? "text-green-400" : "text-red-400"
+                      } transition-colors duration-300`}
+                    >
+                      {profit >= 0 ? "+" : "-"}
+                      {(Math.abs(percentChange) * 100).toFixed(2)}%
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
-              <div
-                className="cursor-pointer p-2.5 text-center"
-                onClick={gotoGame}
-              >
-                <img src={imagePath} className="w-24" />
+              <div className="mt-4 whitespace-nowrap items-center bg-black bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg p-3 flex md:gap-2">
+                <img src="/gamba.svg" alt="Platform Icon" className="h-8 w-8" />
+                <span className="text-white text-md md:text-lg italic">
+                  play on {PLATFORM_SHARABLE_URL}
+                </span>
               </div>
-            </div>
-            <div className="bg-[#00000033] text-[#ffffff99] italic flex items-center gap-2.5 p-2">
-              <img src="/gamba.svg" className="w-6 h-6" />
-              <div>play on {PLATFORM_SHARABLE_URL}</div>
             </div>
           </div>
         </div>
         <div className="flex gap-2">
           <GambaUi.Button
-            main
             size="small"
             onClick={() =>
               window.open(
@@ -122,15 +138,10 @@ export function ShareModal({
           >
             Verify
           </GambaUi.Button>
-          <GambaUi.Button main size="small" onClick={gotoGame}>
+          <GambaUi.Button size="small" onClick={gotoGame}>
             Play {game?.meta?.name}
           </GambaUi.Button>
-          <GambaUi.Button
-            main
-            size="small"
-            disabled={copying}
-            onClick={copyImage}
-          >
+          <GambaUi.Button size="small" disabled={copying} onClick={copyImage}>
             Share
           </GambaUi.Button>
         </div>

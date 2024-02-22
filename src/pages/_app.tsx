@@ -17,7 +17,7 @@ import { GAMES } from "../games";
 import { GambaPlatformProvider } from "gamba-react-ui-v2";
 import { GambaProvider } from "gamba-react-v2";
 import React from "react";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -42,7 +42,13 @@ function MyApp({ Component, pageProps }: AppProps) {
               defaultJackpotFee={0.05} // 5%
             >
               <Component {...pageProps} />
-              <Toaster position="top-right" />
+              <Toaster
+                position="bottom-right"
+                richColors
+                toastOptions={{
+                  style: { background: "#15151f" },
+                }}
+              />
             </GambaPlatformProvider>
           </GambaProvider>
         </WalletModalProvider>

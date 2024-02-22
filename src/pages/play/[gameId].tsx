@@ -48,7 +48,6 @@ const Game: React.FC<GameProps> = ({ gameId }) => {
         <div className="py-4">
           <GameSlider />
         </div>
-        <RecentPlays />
       </div>
     </>
   );
