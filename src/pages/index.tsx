@@ -1,7 +1,9 @@
 // src/pages/index.tsx
 import Dashboard from "@/components/sections/Dashboard/Dashboard";
+import GameToast from "@/hooks/useGameEvent";
 import Head from "next/head";
 import Header from "@/components/sections/Header";
+import { LIVE_EVENT_TOAST } from "../../config";
 import React from "react";
 import RecentPlays from "@/components/sections/RecentPlays/RecentPlays";
 
@@ -49,6 +51,7 @@ export default function HomePage() {
           content="https://gamba-v2-nextjs.vercel.app/logo.svg"
         />
       </Head>
+      {LIVE_EVENT_TOAST && <GameToast />}
       <Header />
       <div className="relative mx-auto flex flex-col gap-5 max-sm:pt-20 md:pt-20 pb-10 px-2.5 transition-all duration-250 ease-in-out sm:px-5 sm:pt-5 md:max-w-6xl">
         <Dashboard />
