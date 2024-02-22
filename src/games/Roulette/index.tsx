@@ -1,4 +1,4 @@
-import { computed } from "@preact/signals-react";
+import { CHIPS, SOUND_LOSE, SOUND_PLAY, SOUND_WIN } from "./constants";
 import {
   GambaUi,
   TokenValue,
@@ -7,13 +7,6 @@ import {
   useSound,
   useUserBalance,
 } from "gamba-react-ui-v2";
-import { useGamba } from "gamba-react-v2";
-import React from "react";
-import styled from "styled-components";
-import { Chip } from "./Chip";
-import { StyledResults } from "./Roulette.styles";
-import { Table } from "./Table";
-import { CHIPS, SOUND_LOSE, SOUND_PLAY, SOUND_WIN } from "./constants";
 import {
   addResult,
   bet,
@@ -22,6 +15,16 @@ import {
   selectedChip,
   totalChipValue,
 } from "./signals";
+import { toastLose, toastWin } from "@/utils/toastResults";
+
+import { Chip } from "./Chip";
+import React from "react";
+import { StyledResults } from "./Roulette.styles";
+import { Table } from "./Table";
+import { computed } from "@preact/signals-react";
+import styled from "styled-components";
+import { toast } from "sonner";
+import { useGamba } from "gamba-react-v2";
 
 const Wrapper = styled.div`
   display: grid;
@@ -117,8 +120,10 @@ export default function Roulette() {
     addResult(result.resultIndex);
     if (result.payout > 0) {
       sounds.play("win");
+      toastWin(toast);
     } else {
       sounds.play("lose");
+      toastLose(toast);
     }
   };
 

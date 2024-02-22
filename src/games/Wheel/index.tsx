@@ -15,15 +15,14 @@ import {
   REGULAR_BET,
   REGULAR_SEGMENT_COLORS,
   REGULAR_WHEEL_SEGMENTS,
-  SOUND_LOSE,
-  SOUND_SPIN,
-  SOUND_WIN,
 } from "./game";
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { drawTicker, drawWheel, radius } from "./wheel";
+import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { gsap } from "gsap";
+import { toast } from "sonner";
 
 interface WheelGameProps {
   gameId: string;
@@ -37,9 +36,9 @@ const WheelGame = ({ gameId }: WheelGameProps) => {
   const appRef = useRef<PIXI.Application | null>(null);
   const game = GambaUi.useGame();
   const sounds = useSound({
-    spin: SOUND_SPIN,
-    win: SOUND_WIN,
-    lose: SOUND_LOSE,
+    spin: "/games/wheel/spinning.mp3",
+    win: "/games/wheel/win.mp3",
+    lose: "/games/wheel/lose.mp3",
   });
 
   useEffect(() => {
@@ -147,8 +146,10 @@ const WheelGame = ({ gameId }: WheelGameProps) => {
 
         if (isWin) {
           sounds.play("win");
+          toastWin(toast);
         } else {
           sounds.play("lose");
+          toastLose(toast);
         }
       },
     });

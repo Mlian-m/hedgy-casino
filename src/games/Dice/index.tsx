@@ -8,10 +8,12 @@ import {
   useSound,
   useWagerInput,
 } from "gamba-react-ui-v2";
+import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { BPS_PER_WHOLE } from "gamba-core-v2";
 import React from "react";
 import Slider from "./Slider";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
 
 const SOUND_PLAY = "/games/dice/play.mp3";
@@ -85,8 +87,10 @@ export default function Dice() {
 
     if (result.resultIndex < rollUnderIndex) {
       sounds.play("win");
+      toastWin(toast);
     } else {
       sounds.play("lose");
+      toastLose(toast);
     }
   };
 

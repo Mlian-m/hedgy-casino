@@ -1,3 +1,4 @@
+// src/components/sections/TokenSelect.tsx
 import {
   GambaPlatformContext,
   GambaUi,
@@ -6,10 +7,10 @@ import {
   useTokenList,
   useUserBalance,
 } from "gamba-react-ui-v2";
+import React, { useContext, useState } from "react";
 
 import { Dropdown } from "@/components/Dropdown";
 import { PublicKey } from "@solana/web3.js";
-import React, { useContext, useState } from "react";
 
 export default function TokenSelect() {
   const [visible, setVisible] = useState(false);
@@ -31,7 +32,7 @@ export default function TokenSelect() {
     <div className="relative">
       <GambaUi.Button onClick={click}>
         {selectedToken && (
-          <div className="max-sm:text-xs whitespace-nowrap flex items-center gap-2.5">
+          <div className="min-w-32 max-sm:text-xs whitespace-nowrap flex items-center gap-2.5">
             <img
               className="w-5 h-5 rounded-full"
               src={selectedToken.image}
