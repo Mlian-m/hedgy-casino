@@ -30,7 +30,7 @@
     "pixi.js": "^7.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hot-toast": "^2.4.1",
+    "sonner": "^1.4.0",
     "styled-components": "^6.0.8",
     "three": "^0.158.0",
     "zustand": "^4.4.1"

@@ -16,7 +16,7 @@ export function GameSlider() {
     <>
       <div className="block md:hidden">
         <SlideSection>
-          <div className="max-w-sm flex gap-4 overflow-x-scroll scroll-smooth snap-x snap-mandatory py-2">
+          <div className="max-w-[100svw] flex gap-4 overflow-x-scroll scroll-smooth snap-x snap-mandatory py-2">
             {GAMES.map((game) => (
               <div
                 key={game.id}
@@ -31,7 +31,7 @@ export function GameSlider() {
       <div className="hidden md:block">
         <div className="flex flex-wrap justify-center">
           {GAMES.map((game) => (
-            <div key={game.id} className="w-40 flex justify-center px-2 my-2">
+            <div key={game.id} className="w-36 flex justify-center my-2">
               <GameCard game={game} />
             </div>
           ))}
