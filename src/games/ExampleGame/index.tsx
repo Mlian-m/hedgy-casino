@@ -3,12 +3,15 @@
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 
 import React from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 export default function ExampleGame() {
   const _hue = React.useRef(0);
   const [wager, setWager] = useWagerInput();
   const game = GambaUi.useGame();
-
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
   const SOUND = "/games/Dice/play.mp3";
   const sound = useSound({ test: SOUND });
 
@@ -24,6 +27,14 @@ export default function ExampleGame() {
     });
     const result = await game.result();
     console.log(result);
+  };
+
+  const connect = () => {
+    if (wallet.wallet) {
+      wallet.connect();
+    } else {
+      walletModal.setVisible(true);
+    }
   };
 
   return (
@@ -69,9 +80,15 @@ export default function ExampleGame() {
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
         <GambaUi.Button onClick={click}>Useless button</GambaUi.Button>
-        <GambaUi.PlayButton onClick={play}>
-          Double Or nothing
-        </GambaUi.PlayButton>
+        {wallet.connected ? (
+          <GambaUi.PlayButton onClick={play}>
+            Double or Nothing
+          </GambaUi.PlayButton>
+        ) : (
+          <GambaUi.Button main onClick={connect}>
+            Play
+          </GambaUi.Button>
+        )}
       </GambaUi.Portal>
     </>
   );

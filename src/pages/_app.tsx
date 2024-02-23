@@ -18,6 +18,7 @@ import {
 } from "@solana/wallet-adapter-wallets";
 
 import { AppProps } from "next/app";
+import Footer from "@/components/sections/Footer";
 import { GAMES } from "../games";
 import { GambaPlatformProvider } from "gamba-react-ui-v2";
 import { GambaProvider } from "gamba-react-v2";
@@ -25,12 +26,15 @@ import GameToast from "@/hooks/useGameEvent";
 import React from "react";
 import { Toaster } from "sonner";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import { useDisclaimer } from "@/hooks/useDisclaimer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const wallets = React.useMemo(
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
     [],
   );
+
+  const { showDisclaimer, DisclaimerModal } = useDisclaimer();
 
   return (
     <ConnectionProvider
@@ -48,6 +52,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               defaultJackpotFee={0.05} // 5%
             >
               <Component {...pageProps} />
+              <Footer />
               <Toaster
                 position="bottom-right"
                 richColors
@@ -56,6 +61,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 }}
               />
               {LIVE_EVENT_TOAST && <GameToast />}
+              {showDisclaimer && <DisclaimerModal />}
             </GambaPlatformProvider>
           </GambaProvider>
         </WalletModalProvider>

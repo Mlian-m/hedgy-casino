@@ -15,7 +15,6 @@ import {
   selectedChip,
   totalChipValue,
 } from "./signals";
-import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { Chip } from "./Chip";
 import React from "react";
@@ -23,8 +22,9 @@ import { StyledResults } from "./Roulette.styles";
 import { Table } from "./Table";
 import { computed } from "@preact/signals-react";
 import styled from "styled-components";
-import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const Wrapper = styled.div`
   display: grid;
@@ -96,6 +96,16 @@ export default function Roulette() {
   const pool = useCurrentPool();
   const balance = useUserBalance();
   const gamba = useGamba();
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
+
+  const connect = () => {
+    if (wallet.wallet) {
+      wallet.connect();
+    } else {
+      walletModal.setVisible(true);
+    }
+  };
 
   const sounds = useSound({
     win: SOUND_WIN,
@@ -120,10 +130,8 @@ export default function Roulette() {
     addResult(result.resultIndex);
     if (result.payout > 0) {
       sounds.play("win");
-      toastWin(toast);
     } else {
       sounds.play("lose");
-      toastLose(toast);
     }
   };
 
@@ -156,12 +164,18 @@ export default function Roulette() {
         >
           Clear
         </GambaUi.Button>
-        <GambaUi.PlayButton
-          disabled={!wager || balanceExceeded || maxPayoutExceeded}
-          onClick={play}
-        >
-          Spin
-        </GambaUi.PlayButton>
+        {wallet.connected ? (
+          <GambaUi.PlayButton
+            disabled={!wager || balanceExceeded || maxPayoutExceeded}
+            onClick={play}
+          >
+            Spin
+          </GambaUi.PlayButton>
+        ) : (
+          <GambaUi.Button main onClick={connect}>
+            Play
+          </GambaUi.Button>
+        )}
       </GambaUi.Portal>
     </>
   );

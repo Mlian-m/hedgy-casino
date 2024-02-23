@@ -62,6 +62,14 @@ body::-webkit-scrollbar-thumb {
   background-color: #9564ff;
 }
 
+.modal::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background-color: #9564ff;
+}
+
 .wallet-adapter-button.wallet-adapter-button-trigger {
   height: 40px;
   line-height: 40px;
@@ -136,6 +144,9 @@ body::-webkit-scrollbar-thumb {
 .sc-iBdnpw.gPLpOF img {
   width: 2rem !important;
   height: 2rem !important;
+}
+.sc-kFCroH.bHGbMa {
+  width: 2rem !important;
 }
 
 /* Dashbaord gamecard styles */

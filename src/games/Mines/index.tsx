@@ -26,12 +26,12 @@ import {
   useWagerInput,
 } from "gamba-react-ui-v2";
 import { generateGrid, revealAllMines, revealGold } from "./utils";
-import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { BPS_PER_WHOLE } from "gamba-core-v2";
 import React from "react";
-import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 function Mines() {
   const game = GambaUi.useGame();
@@ -43,6 +43,17 @@ function Mines() {
     step: SOUND_STEP,
     explode: SOUND_EXPLODE,
   });
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
+
+  const connect = () => {
+    if (wallet.wallet) {
+      wallet.connect();
+    } else {
+      walletModal.setVisible(true);
+    }
+  };
+
   const pool = useCurrentPool();
 
   const [grid, setGrid] = React.useState(generateGrid(GRID_SIZE));
@@ -139,7 +150,6 @@ function Mines() {
         setStarted(false);
         setGrid(revealAllMines(grid, cellIndex, mines));
         sounds.play("explode");
-        toastLose(toast);
         return;
       }
 
@@ -152,11 +162,9 @@ function Mines() {
         sounds.play("win", {
           playbackRate: Math.pow(PITCH_INCREASE_FACTOR, currentLevel),
         });
-        toastWin(toast);
       } else {
         // No more squares
         sounds.play("win", { playbackRate: 0.9 });
-        toastWin(toast);
         sounds.play("finish");
       }
     } finally {
@@ -231,7 +239,13 @@ function Mines() {
               onChange={setMines}
               label={(mines) => <>{mines} Mines</>}
             />
-            <GambaUi.PlayButton onClick={start}>Start</GambaUi.PlayButton>
+            {wallet.connected ? (
+              <GambaUi.PlayButton onClick={start}>Start</GambaUi.PlayButton>
+            ) : (
+              <GambaUi.Button main onClick={connect}>
+                Play
+              </GambaUi.Button>
+            )}
           </>
         ) : (
           <GambaUi.Button onClick={endGame}>

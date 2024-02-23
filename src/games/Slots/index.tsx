@@ -22,15 +22,15 @@ import {
   SlotItem,
 } from "./constants";
 import { generateBetArray, getSlotCombination } from "./utils";
-import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { GameResult } from "gamba-core-v2";
 import { ItemPreview } from "./ItemPreview";
 import React from "react";
 import { Slot } from "./Slot";
 import { StyledSlots } from "./Slots.styles";
-import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const Messages: React.FC<{ messages: string[] }> = ({ messages }) => {
   const [messageIndex, setMessageIndex] = React.useState(0);
@@ -55,6 +55,17 @@ export default function Slots() {
   const [combination, setCombination] = React.useState(
     Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0]),
   );
+
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
+
+  const connect = () => {
+    if (wallet.wallet) {
+      wallet.connect();
+    } else {
+      walletModal.setVisible(true);
+    }
+  };
 
   const sounds = useSound({
     win: SOUND_WIN,
@@ -94,10 +105,8 @@ export default function Slots() {
         if (allSame) {
           setGood(true);
           sounds.play("win");
-          toastWin(toast);
         } else {
           sounds.play("lose");
-          toastLose(toast);
         }
       }, FINAL_DELAY);
     }
@@ -187,9 +196,16 @@ export default function Slots() {
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <GambaUi.PlayButton disabled={!valid} onClick={play}>
-          Spin
-        </GambaUi.PlayButton>
+
+        {wallet.connected ? (
+          <GambaUi.PlayButton disabled={!valid} onClick={play}>
+            Spin
+          </GambaUi.PlayButton>
+        ) : (
+          <GambaUi.Button main onClick={connect}>
+            Spin
+          </GambaUi.Button>
+        )}
       </GambaUi.Portal>
     </>
   );

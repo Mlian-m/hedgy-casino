@@ -10,6 +10,7 @@ import { Modal } from "@/components/Modal";
 import { ProvablyFairModal } from "./ProvablyFairModal";
 import { SlideSection } from "@/components/Slider";
 import { useGamba } from "gamba-react-v2";
+import { useUserStore } from "@/hooks/useUserStore";
 
 export function GameSlider() {
   return (
@@ -54,6 +55,18 @@ export default function CustomRenderer() {
   const [showSplash, setShowSplash] = useState(true);
   const audioStore = useGambaAudioStore();
   const imagePath = `/games/${game.id}/logo.png`;
+  const { newcomer, gamesPlayed, set } = useUserStore();
+
+  useEffect(() => {
+    if (newcomer || !gamesPlayed.includes(game.id)) {
+      setInfo(true);
+
+      set((state) => ({
+        newcomer: false,
+        gamesPlayed: [...state.gamesPlayed, game.id],
+      }));
+    }
+  }, [game.id, gamesPlayed, newcomer, set]);
 
   return (
     <>
@@ -103,7 +116,7 @@ export default function CustomRenderer() {
           key={Number(gamba.isPlaying)}
           data-active={gamba.isPlaying}
         />
-        <div className="w-full bg-[#1A1B28] p-2 sm:p-5 text-white rounded-lg flex flex-wrap gap-2 sm:gap-5 items-center justify-center sm:flex-row">
+        <div className="w-full bg-[#1A1B28] p-2 sm:p-5 text-white rounded-lg flex flex-wrap gap-2 sm:gap-5 items-start sm:flex-row">
           <div className="flex gap-2 justify-center">
             <button
               className="p-2 text-white bg-transparent hover:bg-[#ffffff22] rounded-lg cursor-pointer focus:outline-none"

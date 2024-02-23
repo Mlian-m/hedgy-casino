@@ -4,9 +4,10 @@ import { StoreApi, create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface UserStore {
+  agreedToTerms: boolean;
   newcomer: boolean;
   /** A list of games played. The first time a game is opened we display instructions. */
-  gamesPlayed: Set<string>;
+  gamesPlayed: string[];
   set: StoreApi<UserStore>["setState"];
 }
 
@@ -16,8 +17,9 @@ export interface UserStore {
 export const useUserStore = create(
   persist<UserStore>(
     (set) => ({
+      agreedToTerms: false,
       newcomer: true,
-      gamesPlayed: new Set(),
+      gamesPlayed: [],
       set,
     }),
     {

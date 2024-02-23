@@ -25,11 +25,11 @@ import {
   SOUND_PLAY,
   SOUND_WIN,
 } from "./constants";
-import { toastLose, toastWin } from "@/utils/toastResults";
 
 import React from "react";
-import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const BPS_PER_WHOLE = 10000;
 
@@ -101,6 +101,17 @@ export default function HiLo(props: HiLoConfig) {
   const addCard = (rank: number) =>
     setCards((cards) => [...cards, card(rank)].slice(-MAX_CARD_SHOWN));
 
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
+
+  const connect = () => {
+    if (wallet.wallet) {
+      wallet.connect();
+    } else {
+      walletModal.setVisible(true);
+    }
+  };
+
   const sounds = useSound({
     card: SOUND_CARD,
     win: SOUND_WIN,
@@ -163,10 +174,8 @@ export default function HiLo(props: HiLoConfig) {
       setProfit(result.payout);
       if (win) {
         sounds.play("win");
-        toastWin(toast);
       } else {
         sounds.play("lose");
-        toastLose(toast);
       }
     }, 300);
   };
@@ -258,12 +267,18 @@ export default function HiLo(props: HiLoConfig) {
               value={initialWager}
               onChange={setInitialWager}
             />
-            <GambaUi.PlayButton
-              disabled={!option || initialWager > maxWagerForBet}
-              onClick={play}
-            >
-              Deal card
-            </GambaUi.PlayButton>
+            {wallet.connected ? (
+              <GambaUi.PlayButton
+                disabled={!option || initialWager > maxWagerForBet}
+                onClick={play}
+              >
+                Deal card
+              </GambaUi.PlayButton>
+            ) : (
+              <GambaUi.Button main onClick={connect}>
+                Play
+              </GambaUi.Button>
+            )}
             {initialWager > maxWagerForBet && (
               <GambaUi.Button onClick={() => setInitialWager(maxWagerForBet)}>
                 Set max
