@@ -81,7 +81,7 @@ export default function Limbo() {
         ? targetMultiplier + Math.random() * targetMultiplier * 0.2
         : 1 + Math.random() * (targetMultiplier - 1);
 
-      setTimeout(() => startAnimation(1, endMultiplier, winCondition), 1000);
+      setTimeout(() => startAnimation(1, endMultiplier, winCondition), 500);
       setPlaying(false);
     } catch (error) {
       console.log(error);
@@ -122,19 +122,27 @@ export default function Limbo() {
             display: "flex",
             alignItems: "center",
             position: "relative",
+            height: "40px",
           }}
         >
-          <GambaUi.TextInput
+          <label style={{ position: "absolute", right: "40px", top: "-10px" }}>
+            Target
+          </label>
+          <input
             id="targetMultiplier"
-            type="number"
             placeholder="Target Multiplier"
-            value={String(targetMultiplier)}
-            onChange={handleMultiplierChange}
-            style={{ width: "50px", marginLeft: "10px" }}
+            type="range"
             min={1}
             max={100}
             step={1}
+            value={String(targetMultiplier)}
+            onChange={(e) => handleMultiplierChange(e.target.value)}
           />
+          <label
+            style={{ position: "absolute", right: "40px", bottom: "-10px" }}
+          >
+            {targetMultiplier}.00X
+          </label>
         </div>
         {wallet.connected ? (
           <GambaUi.PlayButton onClick={play} disabled={playing}>
