@@ -19,27 +19,33 @@ import {
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { drawTicker, drawWheel, radius } from "./wheel";
-import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { gsap } from "gsap";
-import { toast } from "sonner";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
-interface WheelGameProps {
-  gameId: string;
-}
-
-const WheelGame = ({ gameId }: WheelGameProps) => {
+export default function WheelGame() {
   const [wager, setWager] = useWagerInput();
   const [spinning, setSpinning] = useState(false);
   const [gameMode, setGameMode] = useState<string>("regular");
   const wheelContainerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<PIXI.Application | null>(null);
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
   const game = GambaUi.useGame();
   const sounds = useSound({
     spin: "/games/wheel/spinning.mp3",
     win: "/games/wheel/win.mp3",
     lose: "/games/wheel/lose.mp3",
   });
+
+  const connect = () => {
+    if (wallet.wallet) {
+      wallet.connect();
+    } else {
+      walletModal.setVisible(true);
+    }
+  };
 
   useEffect(() => {
     const app = new PIXI.Application({
@@ -88,71 +94,74 @@ const WheelGame = ({ gameId }: WheelGameProps) => {
   }, [gameMode]);
 
   const spinWheel = useCallback(async () => {
-    if (!appRef.current) return;
+    try {
+      if (!appRef.current) return;
 
-    if (!appRef.current) {
-      console.error("PIXI Application is not initialized.");
-      return;
+      if (!appRef.current) {
+        console.error("PIXI Application is not initialized.");
+        return;
+      }
+      const wheel = appRef.current.stage.children[0] as PIXI.Container;
+      if (!wheel) {
+        console.error("Wheel is not found in the PIXI application.");
+        return;
+      }
+
+      wheel.rotation %= 2 * Math.PI;
+
+      let bet: number[];
+      let segments: string[];
+      switch (gameMode) {
+        case "degen":
+          bet = DEGEN_BET;
+          segments = DEGEN_WHEEL_SEGMENTS;
+          break;
+        case "mega":
+          bet = MEGA_BET;
+          segments = MEGA_WHEEL_SEGMENTS;
+          break;
+        default:
+          bet = REGULAR_BET;
+          segments = REGULAR_WHEEL_SEGMENTS;
+      }
+
+      await game.play({ wager, bet });
+      setSpinning(true);
+      const result = await game.result();
+      sounds.play("spin", { playbackRate: 0.5 });
+
+      const segmentAngle = 360 / segments.length;
+      const halfSegmentOffset = segmentAngle / 2;
+      const finalAngleAdjustment = 360 * 5;
+      const finalRotationAngle = -(
+        finalAngleAdjustment +
+        result.resultIndex * segmentAngle +
+        halfSegmentOffset -
+        90
+      );
+
+      gsap.to(wheel, {
+        rotation: finalRotationAngle * (Math.PI / 180),
+        duration: 8,
+        ease: "power2.out",
+        yoyo: true,
+        onComplete: () => {
+          setSpinning(false);
+          const winningSegmentValue = segments[result.resultIndex];
+
+          const isWin = winningSegmentValue !== "0X";
+
+          if (isWin) {
+            sounds.play("win");
+          } else {
+            sounds.play("lose");
+          }
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      setSpinning(false);
     }
-    const wheel = appRef.current.stage.children[0] as PIXI.Container;
-    if (!wheel) {
-      console.error("Wheel is not found in the PIXI application.");
-      return;
-    }
-
-    wheel.rotation %= 2 * Math.PI;
-
-    let bet: number[];
-    let segments: string[];
-    switch (gameMode) {
-      case "degen":
-        bet = DEGEN_BET;
-        segments = DEGEN_WHEEL_SEGMENTS;
-        break;
-      case "mega":
-        bet = MEGA_BET;
-        segments = MEGA_WHEEL_SEGMENTS;
-        break;
-      default:
-        bet = REGULAR_BET;
-        segments = REGULAR_WHEEL_SEGMENTS;
-    }
-
-    await game.play({ wager, bet });
-    setSpinning(true);
-    const result = await game.result();
-    sounds.play("spin", { playbackRate: 0.5 });
-
-    const segmentAngle = 360 / segments.length;
-    const halfSegmentOffset = segmentAngle / 2;
-    const finalAngleAdjustment = 360 * 5;
-    const finalRotationAngle = -(
-      finalAngleAdjustment +
-      result.resultIndex * segmentAngle +
-      halfSegmentOffset -
-      90
-    );
-
-    gsap.to(wheel, {
-      rotation: finalRotationAngle * (Math.PI / 180),
-      duration: 8,
-      ease: "power2.out",
-      yoyo: true,
-      onComplete: () => {
-        setSpinning(false);
-        const winningSegmentValue = segments[result.resultIndex];
-
-        const isWin = winningSegmentValue !== "0X";
-
-        if (isWin) {
-          sounds.play("win");
-          toastWin(toast);
-        } else {
-          sounds.play("lose");
-          toastLose(toast);
-        }
-      },
-    });
   }, [game, sounds, wager, gameMode]);
 
   const gameModeOptions: string[] = ["regular", "degen", "mega"];
@@ -161,7 +170,7 @@ const WheelGame = ({ gameId }: WheelGameProps) => {
     <>
       <GambaUi.Portal target="screen">
         <div className="flex flex-col justify-center items-center">
-          <div ref={wheelContainerRef} key={gameId} />
+          <div ref={wheelContainerRef} />
         </div>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
@@ -175,12 +184,16 @@ const WheelGame = ({ gameId }: WheelGameProps) => {
             value.charAt(0).toUpperCase() + value.slice(1)
           }
         />
-        <GambaUi.PlayButton onClick={spinWheel} disabled={spinning}>
-          {spinning ? "Spinning..." : "Spin"}
-        </GambaUi.PlayButton>
+        {wallet.connected ? (
+          <GambaUi.PlayButton onClick={spinWheel} disabled={spinning}>
+            {spinning ? "Spinning..." : "Spin"}
+          </GambaUi.PlayButton>
+        ) : (
+          <GambaUi.Button main onClick={connect}>
+            Spin
+          </GambaUi.Button>
+        )}
       </GambaUi.Portal>
     </>
   );
-};
-
-export default WheelGame;
+}

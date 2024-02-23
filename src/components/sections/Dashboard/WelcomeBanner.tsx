@@ -1,6 +1,4 @@
 // src/components/sections/Dashboard/WelcomeBanner.tsx
-
-import { PLATFORM_EXPLORER_URL } from "../../../../config";
 import React from "react";
 
 export function WelcomeBanner() {
@@ -16,10 +14,10 @@ export function WelcomeBanner() {
       </div>
       <div className="whitespace-nowrap grid grid-cols-2 grid-rows-2 gap-2 mt-5 md:flex md:flex-col md:mt-0 md:justify-start">
         <button
-          onClick={() => window.open(PLATFORM_EXPLORER_URL)}
+          onClick={() => window.open("https://explorer.gamba.so/create")}
           className="rounded-lg p-3 bg-white hover:bg-gray-200 hover:-translate-y-0.5 transform text-black transition-all duration-200 ease-in-out cursor-pointer shadow-lg hover:shadow-xl"
         >
-          🚀 Platform Explorer
+          🚀 Create Pool
         </button>
         <button
           onClick={() =>

@@ -8,13 +8,13 @@ import {
   useSound,
   useWagerInput,
 } from "gamba-react-ui-v2";
-import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { BPS_PER_WHOLE } from "gamba-core-v2";
 import React from "react";
 import Slider from "./Slider";
-import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const SOUND_PLAY = "/games/dice/play.mp3";
 const SOUND_LOSE = "/games/dice/lose.mp3";
@@ -54,6 +54,16 @@ export default function Dice() {
     lose: SOUND_LOSE,
     tick: SOUND_TICK,
   });
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
+
+  const connect = () => {
+    if (wallet.wallet) {
+      wallet.connect();
+    } else {
+      walletModal.setVisible(true);
+    }
+  };
 
   const multiplier =
     Number(BigInt(DICE_SIDES * BPS_PER_WHOLE) / BigInt(rollUnderIndex)) /
@@ -87,10 +97,8 @@ export default function Dice() {
 
     if (result.resultIndex < rollUnderIndex) {
       sounds.play("win");
-      toastWin(toast);
     } else {
       sounds.play("lose");
-      toastLose(toast);
     }
   };
 
@@ -150,7 +158,13 @@ export default function Dice() {
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <GambaUi.PlayButton onClick={play}>Roll</GambaUi.PlayButton>
+        {wallet.connected ? (
+          <GambaUi.PlayButton onClick={play}>Roll</GambaUi.PlayButton>
+        ) : (
+          <GambaUi.Button main onClick={connect}>
+            Play
+          </GambaUi.Button>
+        )}
       </GambaUi.Portal>
     </>
   );

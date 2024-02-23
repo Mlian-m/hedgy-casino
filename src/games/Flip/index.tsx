@@ -2,13 +2,13 @@
 
 import { Coin, TEXTURE_HEADS, TEXTURE_TAILS } from "./Coin";
 import { GambaUi, useCurrentToken, useSound } from "gamba-react-ui-v2";
-import { toastLose, toastWin } from "@/utils/toastResults";
 
 import { Canvas } from "@react-three/fiber";
 import { Effect } from "./Effect";
 import React from "react";
-import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const SIDES = {
   heads: [2, 0],
@@ -29,6 +29,17 @@ function Flip() {
   const [win, setWin] = React.useState(false);
   const [resultIndex, setResultIndex] = React.useState(0);
   const [side, setSide] = React.useState<Side>("heads");
+
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
+
+  const connect = () => {
+    if (wallet.wallet) {
+      wallet.connect();
+    } else {
+      walletModal.setVisible(true);
+    }
+  };
 
   const WAGER_OPTIONS = [1, 5, 10, 50, 100].map((x) => x * token.baseWager);
 
@@ -65,10 +76,8 @@ function Flip() {
 
       if (win) {
         sounds.play("win");
-        toastWin(toast);
       } else {
         sounds.play("lose");
-        toastLose(toast);
       }
     } finally {
       setFlipping(false);
@@ -130,7 +139,13 @@ function Flip() {
             </div>
           </div>
         </GambaUi.Button>
-        <GambaUi.PlayButton onClick={play}>Flip</GambaUi.PlayButton>
+        {wallet.connected ? (
+          <GambaUi.PlayButton onClick={play}>Flip</GambaUi.PlayButton>
+        ) : (
+          <GambaUi.Button main onClick={connect}>
+            Play
+          </GambaUi.Button>
+        )}
       </GambaUi.Portal>
     </>
   );

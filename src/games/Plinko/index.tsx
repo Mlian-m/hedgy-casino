@@ -12,6 +12,8 @@ import {
 
 import React from "react";
 import { useGamba } from "gamba-react-v2";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 function usePlinko(props: PlinkoProps, deps: React.DependencyList) {
   const [plinko, set] = React.useState<PlinkoGame>(null!);
@@ -52,6 +54,16 @@ export default function Plinko() {
     win: WIN,
     fall: FALL,
   });
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
+
+  const connect = () => {
+    if (wallet.wallet) {
+      wallet.connect();
+    } else {
+      walletModal.setVisible(true);
+    }
+  };
 
   const pegAnimations = React.useRef<Record<number, number>>({});
   const bucketAnimations = React.useRef<Record<number, number>>({});
@@ -248,7 +260,13 @@ export default function Plinko() {
           onChange={setDegen}
         />
 
-        <GambaUi.PlayButton onClick={() => play()}>Play</GambaUi.PlayButton>
+        {wallet.connected ? (
+          <GambaUi.PlayButton onClick={() => play()}>Play</GambaUi.PlayButton>
+        ) : (
+          <GambaUi.Button main onClick={connect}>
+            Play
+          </GambaUi.Button>
+        )}
       </GambaUi.Portal>
     </>
   );

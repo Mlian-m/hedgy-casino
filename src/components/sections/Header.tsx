@@ -38,8 +38,17 @@ export default function Header() {
         <Modal onClose={() => setJackpotHelp(false)}>
           <h1>Jackpot</h1>
           <p>
-            There&apos;s <TokenValue amount={pool.jackpotBalance} /> in the
-            Jackpot.
+            There&apos;s{" "}
+            <strong className="text-purple-400">
+              <TokenValue amount={pool.jackpotBalance} />
+            </strong>{" "}
+            in the Jackpot.
+          </p>
+          <p>
+            The Jackpot is a prize pool that grows with every bet made. As the
+            Jackpot grows, so does your chance of winning. Once a winner is
+            selected, the value of the Jackpot resets and grows from there until
+            a new winner is selected.
           </p>
           <GambaUi.Button main>
             <a
@@ -52,7 +61,7 @@ export default function Header() {
           </GambaUi.Button>
         </Modal>
       )}
-      <div className="flex items-center justify-between w-full p-2.5 bg-black fixed top-0 left-0 z-50 backdrop-blur-[20px]">
+      <div className="flex items-center justify-between w-full p-2.5 bg-gray-900 fixed top-0 left-0 z-50 backdrop-blur-[20px]">
         <div className="flex gap-5 items-center">
           <Link href="/" passHref>
             <div className="h-9 m-0 cursor-pointer">
