@@ -132,7 +132,7 @@ export default function Limbo() {
             id="targetMultiplier"
             placeholder="Target Multiplier"
             type="range"
-            min={1}
+            min={2}
             max={100}
             step={1}
             value={String(targetMultiplier)}
