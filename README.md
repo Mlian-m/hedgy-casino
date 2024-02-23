@@ -1,6 +1,6 @@
 # Gamba Demo
 
-![screencapture-localhost-3000-2024-02-19-19_16_09](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/3708bb52-e538-480e-b07f-f1c2453d2930)
+![screencapture-localhost-3000-2024-02-23-02_23_01](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/e8610916-e998-4398-8668-0b30dd98638b)
 
 > This is a forked and rewritten repo from the [gamba platform](https://github.com/gamba-labs/platform).
 
@@ -31,7 +31,7 @@ To get started with the Gamba Demo, follow these steps:
    npm install
    ```
 
-3. **Configure Environment Variables**
+3. **Configure the Config and Environment Variables**
 
    Rename the `.env.example` file to `.env` and update the variables to match your environment.
 
@@ -39,17 +39,35 @@ To get started with the Gamba Demo, follow these steps:
    NEXT_PUBLIC_RPC_ENDPOINT=<Your RPC Endpoint>
    ```
 
+   Edit the [config.ts](./config.ts) and replace PLATFORM_CREATOR_ADDRESS, PLATFORM_SHARABLE_URL, and LIVE_EVENT_TOAST you can toggle all events
+
+   ```
+     // Solana address you wish to receive fees
+     export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
+     "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K",
+     );
+
+    // Platform URL - Appears in ShareModal
+    export const PLATFORM_SHARABLE_URL = "gamba-v2-nextjs.vercel.app";
+
+    // Toggle all live events acrossed gamba toast
+    export const LIVE_EVENT_TOAST = true;
+   ```
+
 4. **Run the Application**
 
-   Start the development server:
+Start the development server:
 
-   ```
-   npm run dev
-   ```
+```
 
-   Visit `http://localhost:3000` in your browser to view the app.
+npm run dev
+
+```
+
+Visit `http://localhost:3000` in your browser to view the app.
 
 ## Additional Information
 
 - **Contributing**: We welcome contributions! If you have improvements or fixes, please submit a pull request and include details about your changes.
 - **Acknowledgments**: Special thanks to the original [gamba platform](https://github.com/gamba-labs/platform) for the inspiration behind this project.
+```
