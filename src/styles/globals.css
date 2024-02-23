@@ -24,6 +24,14 @@
   --gamba-ui-input-background-hover: #11111d;
 }
 
+.gambaButton {
+  background-color: var(--gamba-ui-button-main-background);
+  color: var(--text-color);
+}
+.gambaButton:hover {
+  background-color: var(--gamba-ui-button-main-background-hover);
+}
+
 body,
 input,
 button,
