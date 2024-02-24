@@ -15,7 +15,6 @@ export default function Keno() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [drawnNumbers, setDrawnNumbers] = useState<number[]>([]);
-  const [revealIndex, setRevealIndex] = useState<number>(0);
   const [revealedBlocks, setRevealedBlocks] = useState(new Set());
   const [gameWon, setGameWon] = useState<boolean | null>(null);
   const game = GambaUi.useGame();
@@ -45,11 +44,14 @@ export default function Keno() {
 
   const resetGame = () => {
     setSelectedNumbers([]);
+    setRevealedBlocks(new Set());
     setDrawnNumbers([]);
     setGameWon(null);
   };
 
   const play = async () => {
+    setRevealedBlocks(new Set());
+    setGameWon(null);
     setIsPlaying(true);
     try {
       await game.play({
@@ -71,27 +73,28 @@ export default function Keno() {
     }
   };
 
-  const revealDrawnNumbers = async (drawnNumbers: any[], win: boolean) => {
-    drawnNumbers.forEach((number: unknown, index: number) => {
-      setTimeout(() => {
-        setRevealedBlocks((prev) => new Set(prev).add(number));
-        sounds.play("reveal");
+  const revealDrawnNumbers = async (drawnNumbers: number[], win: boolean) => {
+    for (let i = 0; i < drawnNumbers.length; i++) {
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          setRevealedBlocks((prev) => new Set(prev).add(drawnNumbers[i]));
+          sounds.play("reveal");
 
-        if (index === drawnNumbers.length - 1) {
-          setTimeout(() => {
-            win ? sounds.play("win") : sounds.play("lose");
-          }, 1000);
-        }
-      }, index * 1000);
-    });
+          resolve(true);
+        }, 200);
+      });
+    }
+
+    setTimeout(() => {
+      win ? sounds.play("win") : sounds.play("lose");
+    }, drawnNumbers.length);
   };
 
   const simulateDrawnNumbers = (win: boolean, selected: number[]): number[] => {
     if (win) {
-      return [
-        ...selected.slice(0, 1),
-        ...generateRandomNumbers(9, selected, GRID_SIZE),
-      ];
+      const remaining = GRID_SIZE - 1;
+      const randomNumbers = generateRandomNumbers(9, selected, GRID_SIZE);
+      return [...randomNumbers, ...selected.slice(0, 1)];
     } else {
       return generateRandomNumbers(10, selected, GRID_SIZE);
     }
@@ -132,19 +135,22 @@ export default function Keno() {
               {Array.from({ length: GRID_SIZE }, (_, i) => i + 1).map(
                 (number) => (
                   <CellButton
+                    disabled={
+                      isPlaying ||
+                      revealedBlocks.has(number) ||
+                      selectedNumbers.length >= MAX_SELECTION ||
+                      gameWon !== null
+                    }
                     key={number}
                     selected={selectedNumbers.includes(number)}
-                    $revealed={
-                      drawnNumbers.includes(number) &&
-                      drawnNumbers.indexOf(number) < revealIndex
-                    }
+                    $revealed={revealedBlocks.has(number)}
                     $revealedWin={
                       selectedNumbers.includes(number) &&
-                      drawnNumbers.includes(number)
+                      revealedBlocks.has(number)
                     }
                     $revealedLoss={
                       !selectedNumbers.includes(number) &&
-                      drawnNumbers.includes(number)
+                      revealedBlocks.has(number)
                     }
                     onClick={() => toggleNumberSelection(number)}
                   >
@@ -155,8 +161,11 @@ export default function Keno() {
             </Grid>
           </Container>
           <p style={{ textAlign: "center" }}>
-            {MAX_SELECTION} Numbers Max. You Can Select{" "}
-            {MAX_SELECTION - selectedNumbers.length} More Numbers.
+            {gameWon === true
+              ? "Clear the board to play again."
+              : gameWon === false
+                ? "Clear the board to play again."
+                : null}
           </p>
         </GambaUi.Responsive>
       </GambaUi.Portal>
@@ -168,7 +177,9 @@ export default function Keno() {
               Clear
             </GambaUi.PlayButton>
             <GambaUi.PlayButton
-              disabled={selectedNumbers.length === 0 || isPlaying}
+              disabled={
+                selectedNumbers.length === 0 || isPlaying || gameWon !== null
+              }
               onClick={play}
             >
               Play
