@@ -101,7 +101,7 @@ export const GAMES: GameBundle[] = [
       background: "#317aff",
       name: "Keno",
       image: "/games/logo.png",
-      description: `Pick your lucky numbers and place your bets! Once the draw happens, watch closely to see if your numbers match the winning ones. Go for fewer numbers for a chance at bigger wins, or play it safe with more numbers for better odds of winning smaller prizes.`,
+      description: `Select up to 10 blocks and place your bets! Once the draw happens, watch closely to see if your numbers match the winning ones. Fewer numbers for a chance at bigger wins, or more numbers for better odds of winning smaller prizes.`,
     },
     app: dynamic(() => import("./Keno")),
   },

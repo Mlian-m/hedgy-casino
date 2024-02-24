@@ -92,11 +92,23 @@ export default function Keno() {
 
   const simulateDrawnNumbers = (win: boolean, selected: number[]): number[] => {
     if (win) {
-      const remaining = GRID_SIZE - 1;
-      const randomNumbers = generateRandomNumbers(9, selected, GRID_SIZE);
-      return [...randomNumbers, ...selected.slice(0, 1)];
+      const remainingNumbers = generateRandomNumbers(
+        GRID_SIZE - 1,
+        selected,
+        GRID_SIZE,
+      );
+      shuffleArray(remainingNumbers);
+      const winningNumbers = remainingNumbers.slice(0, 9);
+      return [...winningNumbers, selected[0]];
     } else {
       return generateRandomNumbers(10, selected, GRID_SIZE);
+    }
+  };
+
+  const shuffleArray = (array: any[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
   };
 
@@ -138,7 +150,8 @@ export default function Keno() {
                     disabled={
                       isPlaying ||
                       revealedBlocks.has(number) ||
-                      selectedNumbers.length >= MAX_SELECTION ||
+                      (selectedNumbers.length >= MAX_SELECTION &&
+                        !selectedNumbers.includes(number)) ||
                       gameWon !== null
                     }
                     key={number}
