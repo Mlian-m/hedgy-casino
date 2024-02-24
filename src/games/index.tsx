@@ -95,4 +95,14 @@ export const GAMES: GameBundle[] = [
     },
     app: dynamic(() => import("./Limbo")),
   },
+  {
+    id: "keno",
+    meta: {
+      background: "#317aff",
+      name: "Keno",
+      image: "/games/logo.png",
+      description: `Pick your lucky numbers and place your bets! Once the draw happens, watch closely to see if your numbers match the winning ones. Go for fewer numbers for a chance at bigger wins, or play it safe with more numbers for better odds of winning smaller prizes.`,
+    },
+    app: dynamic(() => import("./Keno")),
+  },
 ];

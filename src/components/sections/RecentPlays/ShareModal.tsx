@@ -119,7 +119,7 @@ export function ShareModal({
               </div>
               <div className="mt-4 whitespace-nowrap items-center bg-black bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg p-3 flex md:gap-2">
                 <img src="/gamba.svg" alt="Platform Icon" className="h-8 w-8" />
-                <span className="text-white text-md md:text-lg italic">
+                <span className="text-white text-md md:text-lg">
                   play on {PLATFORM_SHARABLE_URL}
                 </span>
               </div>
