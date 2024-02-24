@@ -84,6 +84,5 @@ export const CellButton = styled.button<{
 
   &:disabled {
     cursor: not-allowed;
-    background-color: #cccccc;
   }
 `;
