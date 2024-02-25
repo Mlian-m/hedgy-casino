@@ -1,7 +1,7 @@
 // src/pages/index.tsx
 import Dashboard from "@/components/sections/Dashboard/Dashboard";
 import Head from "next/head";
-import Header from "@/components/sections/Header";
+import Header from "@/components/layout/Header";
 import React from "react";
 import RecentPlays from "@/components/sections/RecentPlays/RecentPlays";
 

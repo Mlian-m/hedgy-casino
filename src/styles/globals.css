@@ -28,6 +28,7 @@
   background-color: var(--gamba-ui-button-main-background);
   color: var(--text-color);
 }
+
 .gambaButton:hover {
   background-color: var(--gamba-ui-button-main-background-hover);
 }
@@ -116,13 +117,11 @@ body::-webkit-scrollbar-thumb {
 
 @keyframes loadingAnimation {
   0% {
-    left: 0%;
-    transform: translateX(-100%);
+    transform: translateX(-125%);
   }
 
   100% {
-    left: 100%;
-    transform: translateX(50%);
+    transform: translateX(100%);
   }
 }
 
@@ -153,6 +152,7 @@ body::-webkit-scrollbar-thumb {
   width: 2rem !important;
   height: 2rem !important;
 }
+
 .sc-kFCroH.bHGbMa {
   width: 2rem !important;
 }

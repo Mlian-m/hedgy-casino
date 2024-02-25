@@ -6,7 +6,7 @@ import CustomRenderer, {
 
 import { GAMES } from "@/games";
 import { GambaUi } from "gamba-react-ui-v2";
-import Header from "@/components/sections/Header";
+import Header from "@/components/layout/Header";
 import React from "react";
 import { useRouter } from "next/router";
 
