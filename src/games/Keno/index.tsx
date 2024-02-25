@@ -127,14 +127,27 @@ export default function Keno() {
     return nums;
   };
 
-  const generateBetArray = (selectionCount: number) => {
+  const generateBetArray = (selectionCount: number): number[] => {
     const validSelectionCount = Math.min(selectionCount, 10);
-    const betPerSelection =
-      validSelectionCount > 0 ? 40 / validSelectionCount : 0;
-    const betArray = new Array(40).fill(0);
-    for (let i = 0; i < validSelectionCount; i++) {
-      betArray[i] = betPerSelection;
+    const totalBetUnits = 40;
+
+    if (validSelectionCount === 0) {
+      return new Array(40).fill(0);
     }
+
+    const baseBetPerSelection = Math.floor(totalBetUnits / validSelectionCount);
+    const remainder = totalBetUnits % validSelectionCount;
+
+    const betArray = new Array(validSelectionCount).fill(baseBetPerSelection);
+
+    for (let i = 0; i < remainder; i++) {
+      betArray[i] += 1;
+    }
+
+    for (let i = validSelectionCount; i < 40; i++) {
+      betArray.push(0);
+    }
+
     return betArray;
   };
 

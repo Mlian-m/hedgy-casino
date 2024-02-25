@@ -18,7 +18,7 @@ import {
 } from "@solana/wallet-adapter-wallets";
 
 import { AppProps } from "next/app";
-import Footer from "@/components/sections/Footer";
+import Footer from "@/components/layout/Footer";
 import { GAMES } from "../games";
 import { GambaPlatformProvider } from "gamba-react-ui-v2";
 import { GambaProvider } from "gamba-react-v2";
