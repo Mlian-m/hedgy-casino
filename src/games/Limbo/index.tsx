@@ -1,3 +1,8 @@
+// src/games/Limbo/index.tsx
+/*
+ * Author: BankkRoll
+ */
+
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import React, { useState } from "react";
 
@@ -71,6 +76,7 @@ export default function Limbo() {
         bet: new Array(targetMultiplier)
           .fill(0)
           .map((_, index) => (index === 0 ? targetMultiplier : 0)),
+        metadata: ["Bankkmatic Games (https://x.com/bankkroll_eth)"],
       });
       const result = await game.result();
 

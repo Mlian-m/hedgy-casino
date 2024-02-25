@@ -27,7 +27,10 @@ export function useDisclaimer() {
   const DisclaimerModal = () => {
     return (
       <Modal onClose={handleDisclaimerClose}>
-        <div className="modal items-start text-left p-6 overflow-y-auto max-h-[60vh]">
+        <div
+          className="modal items-start text-left p-4 overflow-y-auto max-h-[60vh]"
+          style={{ maxHeight: "400px" }}
+        >
           <ol className="list-decimal list-inside space-y-4">
             <li className="text-lg">
               <span className="font-bold">1. Age Requirement:</span> Must be at

@@ -1,5 +1,7 @@
 // src/games/Keno/index.tsx
-
+/*
+ * Author: BankkRoll
+ */
 import { CellButton, Container, Grid } from "./keno.styles";
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import React, { useEffect, useState } from "react";
@@ -57,6 +59,7 @@ export default function Keno() {
       await game.play({
         wager,
         bet: generateBetArray(selectedNumbers.length),
+        metadata: ["Bankkmatic Games (https://x.com/bankkroll_eth)"],
       });
 
       const gameResult = await game.result();

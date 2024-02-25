@@ -1,6 +1,6 @@
-# Gamba Demo
+# Gamba Nextjs
 
-![screencapture-localhost-3000-2024-02-23-02_23_01](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/e8610916-e998-4398-8668-0b30dd98638b)
+![screencapture-localhost-3000-2024-02-25-12_46_48](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/c7c8d0d4-459b-4cc6-a31e-da2ac84b4306)
 
 > This is a forked and rewritten repo from the [gamba platform](https://github.com/gamba-labs/platform).
 
@@ -59,9 +59,7 @@ To get started with the Gamba Demo, follow these steps:
 Start the development server:
 
 ```
-
 npm run dev
-
 ```
 
 Visit `http://localhost:3000` in your browser to view the app.
@@ -70,4 +68,7 @@ Visit `http://localhost:3000` in your browser to view the app.
 
 - **Contributing**: We welcome contributions! If you have improvements or fixes, please submit a pull request and include details about your changes.
 - **Acknowledgments**: Special thanks to the original [gamba platform](https://github.com/gamba-labs/platform) for the inspiration behind this project.
-```
+
+### License
+
+This project is licensed under the [MIT License](LICENSE).
