@@ -48,7 +48,7 @@ To get started with the Gamba Demo, follow these steps:
      );
 
     // Platform URL - Appears in ShareModal
-    export const PLATFORM_SHARABLE_URL = "gamba-v2-nextjs.vercel.app";
+    export const PLATFORM_SHARABLE_URL = "play-gamba.vercel.app";
 
     // Toggle all live events acrossed gamba toast
     export const LIVE_EVENT_TOAST = true;
