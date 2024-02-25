@@ -125,7 +125,11 @@ export default function WheelGame() {
           segments = REGULAR_WHEEL_SEGMENTS;
       }
 
-      await game.play({ wager, bet });
+      await game.play({
+        wager,
+        bet,
+        metadata: ["Bankkmatic Games (https://x.com/bankkroll_eth)"],
+      });
       setSpinning(true);
       const result = await game.result();
       sounds.play("spin", { playbackRate: 0.5 });

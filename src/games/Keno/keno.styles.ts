@@ -1,5 +1,7 @@
 // src/games/Keno/keno.styles.ts
-
+/*
+ * Author: BankkRoll
+ */
 import styled, { css, keyframes } from "styled-components";
 
 export const Container = styled.div`
