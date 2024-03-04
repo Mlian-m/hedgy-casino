@@ -10,12 +10,7 @@ import {
   LIVE_EVENT_TOAST,
   PLATFORM_CREATOR_ADDRESS,
   RPC_ENDPOINT,
-  TOKENS,
 } from "../../config";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
 
 import { AppProps } from "next/app";
 import Footer from "@/components/layout/Footer";
@@ -29,11 +24,6 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { useDisclaimer } from "@/hooks/useDisclaimer";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const wallets = React.useMemo(
-    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
-    [],
-  );
-
   const { showDisclaimer, DisclaimerModal } = useDisclaimer();
 
   return (
@@ -41,13 +31,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       endpoint={RPC_ENDPOINT}
       config={{ commitment: "processed" }}
     >
-      <WalletProvider autoConnect wallets={wallets}>
+      <WalletProvider autoConnect wallets={[]}>
         <WalletModalProvider>
           <GambaProvider>
             <GambaPlatformProvider
               creator={PLATFORM_CREATOR_ADDRESS}
               games={GAMES}
-              tokens={TOKENS}
               defaultCreatorFee={0.05} // 5%
               defaultJackpotFee={0.01} // 1%
             >

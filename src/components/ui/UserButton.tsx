@@ -18,7 +18,9 @@ function ConnectedButton() {
     <>
       {modal && (
         <Modal onClose={() => setModal(false)}>
-          <h1>{truncateString(address.toBase58(), 6, 3)}</h1>
+          <h1 className="min-w-64">
+            {truncateString(address.toBase58(), 8, 8)}
+          </h1>
           <GambaUi.Button onClick={() => wallet.disconnect()}>
             Disconnect
           </GambaUi.Button>

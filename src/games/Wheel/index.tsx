@@ -173,9 +173,11 @@ export default function WheelGame() {
   return (
     <>
       <GambaUi.Portal target="screen">
-        <div className="flex flex-col justify-center items-center">
-          <div ref={wheelContainerRef} />
-        </div>
+        <GambaUi.Responsive>
+          <div className="flex flex-col justify-center items-center">
+            <div ref={wheelContainerRef} />
+          </div>
+        </GambaUi.Responsive>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
