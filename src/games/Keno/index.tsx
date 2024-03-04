@@ -26,6 +26,7 @@ export default function Keno() {
     reveal: "/games/keno/reveal.mp3",
     win: "/games/keno/win.mp3",
     lose: "/games/keno/lose.mp3",
+    ping: "/games/keno/ping.mp3",
   });
 
   const connect = () => {
@@ -41,6 +42,7 @@ export default function Keno() {
       setSelectedNumbers(selectedNumbers.filter((n) => n !== number));
     } else if (selectedNumbers.length < MAX_SELECTION) {
       setSelectedNumbers([...selectedNumbers, number]);
+      sounds.play("ping");
     }
   };
 

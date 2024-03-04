@@ -1,3 +1,4 @@
+// src/components/layout/Footer.tsx
 export default function Footer() {
   return (
     <footer className="bg-black rounded-t-2xl shadow dark:bg-gray-900">
@@ -56,7 +57,7 @@ export default function Footer() {
         </div>
         <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
         <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
-          © 2023 Made with ❤️ by{" "}
+          © 2024 Made with ❤️ by{" "}
           <a
             href="https://twitter.com/bankkroll_eth"
             className="hover:underline"
