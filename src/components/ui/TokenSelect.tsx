@@ -27,7 +27,6 @@ export default function TokenSelect() {
     setVisible(!visible);
   };
 
-  // Convert TOKENS object to an array of its values
   const tokensArray = Object.values(TOKENS);
 
   return (

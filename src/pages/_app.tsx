@@ -6,7 +6,12 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { LIVE_EVENT_TOAST, PLATFORM_CREATOR_ADDRESS } from "../../config";
+import {
+  LIVE_EVENT_TOAST,
+  PLATFORM_CREATOR_ADDRESS,
+  PLATFORM_CREATOR_FEE,
+  PLATFORM_JACKPOT_FEE,
+} from "../../config";
 
 import { AppProps } from "next/app";
 import Footer from "@/components/layout/Footer";
@@ -36,8 +41,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             <GambaPlatformProvider
               creator={PLATFORM_CREATOR_ADDRESS}
               games={GAMES}
-              defaultCreatorFee={0.05} // 5%
-              defaultJackpotFee={0.01} // 1%
+              defaultCreatorFee={PLATFORM_CREATOR_FEE}
+              defaultJackpotFee={PLATFORM_JACKPOT_FEE}
             >
               <Component {...pageProps} />
               <Footer />
