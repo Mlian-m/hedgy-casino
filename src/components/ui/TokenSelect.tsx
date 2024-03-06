@@ -1,4 +1,4 @@
-// src/components/ui/TokenSelect.tsx
+// components/ui/TokenSelect.tsx
 import {
   GambaPlatformContext,
   GambaUi,
@@ -27,6 +27,9 @@ export default function TokenSelect() {
     setVisible(!visible);
   };
 
+  // Convert TOKENS object to an array of its values
+  const tokensArray = Object.values(TOKENS);
+
   return (
     <div className="relative">
       <GambaUi.Button onClick={click}>
@@ -42,7 +45,7 @@ export default function TokenSelect() {
         )}
       </GambaUi.Button>
       <Dropdown visible={visible}>
-        {TOKENS.map((token, index) => (
+        {tokensArray.map((token, index) => (
           <button
             key={index}
             className="flex items-center gap-2.5 px-2.5 py-2 hover:bg-gray-800 rounded-lg w-full text-left"
