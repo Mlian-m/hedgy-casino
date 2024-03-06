@@ -10,7 +10,7 @@ Simply provide your own wallet address to the `<Gamba />` provider and start col
 
 ## Rewritten in Next.js
 
-This version of the Gamba Demo has been rewritten using Next.js instead of Vite for improved performance and functionality.
+This version of the Gamba Demo has been rewritten using Next.js instead of Vite.
 
 ## Quick Setup
 
@@ -39,19 +39,28 @@ To get started with the Gamba Demo, follow these steps:
    NEXT_PUBLIC_RPC_ENDPOINT=<Your RPC Endpoint>
    ```
 
-   Edit the [config.ts](./config.ts) and replace PLATFORM_CREATOR_ADDRESS, PLATFORM_SHARABLE_URL, and LIVE_EVENT_TOAST you can toggle all events
+   Edit the [config.ts](./config.ts) and configure all your info
 
    ```
-     // Solana address you wish to receive fees
-     export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
-     "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K",
-     );
+      // Solana address you wish to receive fees
+      export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
+        "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K",
+      );
 
-    // Platform URL - Appears in ShareModal
-    export const PLATFORM_SHARABLE_URL = "play-gamba.vercel.app";
+      // Creator fee (in %)
+      export const PLATFORM_CREATOR_FEE = 0.05; // 5% (5/100 = 0.05)
 
-    // Toggle all live events acrossed gamba toast
-    export const LIVE_EVENT_TOAST = true;
+      // Jackpot fee (in %)
+      export const PLATFORM_JACKPOT_FEE = 0.01; // 1% (1/100 = 0.01)
+
+      // Platform URL - Appears in ShareModal
+      export const PLATFORM_SHARABLE_URL = "play-gamba.vercel.app";
+
+      // Toggle all live events acrossed gamba toast (true = on, false = off)
+      export const LIVE_EVENT_TOAST = true;
+
+      // Platform explorer URL - Appears in welcome banner (can be changed for if you have cusotm explorer)
+      export const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
    ```
 
    To add a custom token to your platform, Update/Add the following section with your custom token's details:
