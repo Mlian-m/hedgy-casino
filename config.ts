@@ -1,12 +1,19 @@
 // config.ts
 
 import { PublicKey } from "@solana/web3.js";
+import { TokenMetadata } from "./types";
 import { useTokenMeta } from "gamba-react-ui-v2";
 
 // Solana address you wish to receive fees
 export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
   "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K",
 );
+
+// Creator fee (in %)
+export const PLATFORM_CREATOR_FEE = 0.05; // 5% (5/100 = 0.05)
+
+// Jackpot fee (in %)
+export const PLATFORM_JACKPOT_FEE = 0.01; // 1% (1/100 = 0.01)
 
 // Platform URL - Appears in ShareModal
 export const PLATFORM_SHARABLE_URL = "play-gamba.vercel.app";
@@ -17,8 +24,8 @@ export const LIVE_EVENT_TOAST = true;
 // Platform explorer URL - Appears in welcome banner (can be changed for if you have cusotm explorer)
 export const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
 
-// List of tokens supported by this platform 
-export const TOKENS = {
+// List of tokens supported by this platform
+export const TOKENS: Record<string, TokenMetadata> = {
   // SOL
   So11111111111111111111111111111111111111112: {
     mint: new PublicKey("So11111111111111111111111111111111111111112"),
@@ -74,7 +81,7 @@ export const TOKENS = {
 // Fallback handler to utilize the tokens dictionary for metadata lookup
 useTokenMeta.setFallbackHandler((mint) => {
   const mintAddress = mint.toString();
-  const token = TOKENS[mintAddress as keyof typeof TOKENS];
+  const token = TOKENS[mintAddress];
   if (token) {
     return {
       ...token,
