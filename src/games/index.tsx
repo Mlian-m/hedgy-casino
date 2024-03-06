@@ -1,7 +1,17 @@
 // src/games/index.tsx
 
+import Dice from "./Dice";
+import Flip from "./Flip";
 import { GameBundle } from "gamba-react-ui-v2";
+import HiLo from "./HiLo";
+import Keno from "./Keno";
+import Limbo from "./Limbo";
+import Mines from "./Mines";
+import Plinko from "./Plinko";
+import Roulette from "./Roulette";
+import Slots from "./Slots";
 import dynamic from "next/dynamic";
+const Wheel = dynamic(() => import("./Wheel"), { ssr: false });
 
 export const GAMES: GameBundle[] = [
   {
@@ -10,9 +20,9 @@ export const GAMES: GameBundle[] = [
       background: "#ff6490",
       name: "Dice",
       image: "/games/logo.png",
-      description: `Dice challenges players to predict the outcome of a roll with a unique twist. Select a number and aim to roll below it to win. Adjusting your choice affects potential payouts, balancing risk and reward for an engaging experience.`,
+      description: `Dice offers an exhilarating challenge where players must forecast the outcome of a roll with a unique twist. By selecting a number, participants aim to roll below it to clinch victory. The dynamic nature of the game allows for adjustments in choices, directly influencing potential payouts and skillfully balancing risk and reward, ensuring an immersive and stimulating gaming experience.`,
     },
-    app: dynamic(() => import("./Dice")),
+    app: Dice,
   },
   {
     id: "slots",
@@ -20,9 +30,9 @@ export const GAMES: GameBundle[] = [
       background: "#5465ff",
       name: "Slots",
       image: "/games/logo.png",
-      description: `Slots is the quintessential game of luck and anticipation. Spin the reels and match symbols to win, with potential rewards displayed upfront. A fair and exciting game, Slots offers a classic casino experience tailored for digital enjoyment.`,
+      description: `Slots stands as the epitome of chance and anticipation, offering players a captivating journey through its reels. Engage in the timeless thrill of spinning symbols to align and unlock potential rewards, prominently displayed upfront. With its meticulously crafted interface, Slots delivers a fair and riveting casino experience, meticulously tailored for digital enthusiasts, promising moments of pure excitement and suspense.`,
     },
-    app: dynamic(() => import("./Slots")),
+    app: Slots,
   },
   {
     id: "flip",
@@ -30,9 +40,9 @@ export const GAMES: GameBundle[] = [
       background: "#ffe694",
       name: "Flip",
       image: "/games/logo.png",
-      description: `Flip offers a straightforward yet thrilling gamble: choose Heads or Tails and double your money or lose it all. This simple, high-stakes game tests your luck and decision-making with every flip of the coin.`,
+      description: `Flip presents a compelling blend of simplicity and high-stakes excitement, where players face the tantalizing gamble of choosing between Heads or Tails. Every flip of the coin serves as a decisive moment, offering the potential to double one's fortune or lose it all. This straightforward yet adrenaline-inducing game tests players' luck and strategic decision-making prowess, ensuring an electrifying and immersive gaming session.`,
     },
-    app: dynamic(() => import("./Flip")),
+    app: Flip,
   },
   {
     id: "hilo",
@@ -40,10 +50,10 @@ export const GAMES: GameBundle[] = [
       background: "#ff4f4f",
       name: "HiLo",
       image: "/games/logo.png",
-      description: `HiLo is a game of foresight and luck, challenging players to guess whether the next card will be higher or lower. Make consecutive correct guesses to increase your winnings, and decide when to cash out for maximum rewards.`,
+      description: `HiLo invites players into a world of foresight and chance, where every decision holds the power to unlock untold riches. Embark on a journey of prediction as you forecast whether the next card will ascend or descend in value. Master the art of consecutive correct guesses to amplify winnings, strategically deciding when to cash out for maximum rewards, making each session an exhilarating test of skill and intuition.`,
     },
     props: { logo: "/logo.svg" },
-    app: dynamic(() => import("./HiLo")),
+    app: HiLo,
   },
   {
     id: "mines",
@@ -51,9 +61,9 @@ export const GAMES: GameBundle[] = [
       background: "#8376ff",
       name: "Mines",
       image: "/games/logo.png",
-      description: `Mines is a strategic game of risk and reward. Uncover squares to find hidden treasures, but beware of mines that could end your game instantly. With every square, the stakes get higher, offering a thrilling experience for daring players.`,
+      description: `Mines emerges as a strategic masterpiece, where players navigate a perilous landscape in search of hidden treasures. Uncover squares with caution, as lurking mines threaten to abruptly end your quest. With each revelation, the stakes escalate, offering daring players a heart-pounding experience filled with suspense and calculated risk, ensuring an immersive and unforgettable gaming adventure.`,
     },
-    app: dynamic(() => import("./Mines")),
+    app: Mines,
   },
   {
     id: "roulette",
@@ -61,9 +71,9 @@ export const GAMES: GameBundle[] = [
       background: "#1de87e",
       name: "Roulette",
       image: "/games/logo.png",
-      description: `Roulette brings the classic wheel-spinning game to life with a digital twist. Bet on where the ball will land and watch as the wheel decides your fate. With straightforward rules and the chance for big wins, Roulette is a timeless game of chance.`,
+      description: `Roulette breathes new life into the timeless tradition of wheel-spinning, blending elegance with digital innovation. Place your bets and witness the mesmerizing spectacle of the wheel as it determines your fate. With its straightforward yet captivating gameplay and the allure of substantial wins, Roulette stands as a testament to the thrill of chance and fortune, promising endless excitement and anticipation.`,
     },
-    app: dynamic(() => import("./Roulette")),
+    app: Roulette,
   },
   {
     id: "plinko",
@@ -71,9 +81,9 @@ export const GAMES: GameBundle[] = [
       background: "#7272ff",
       name: "Plinko",
       image: "/games/logo.png",
-      description: `Plinko is played by dropping chips down a pegged board where they randomly fall into slots with varying win amounts. Each drop is a mix of anticipation and strategy, making Plinko an endlessly entertaining game of chance.`,
+      description: `Plinko transforms the act of dropping chips into an art form, where anticipation and strategy converge to create an endlessly entertaining spectacle. Witness the tension mount with each chip's descent down the pegged board, as they randomly find their place among slots boasting varying win amounts. Each drop offers a delicate balance between luck and skill, making Plinko a captivating odyssey of chance and strategy. ⚠️ Under development. Results shown might be incorrect. ⚠️`,
     },
-    app: dynamic(() => import("./Plinko")),
+    app: Plinko,
   },
   {
     id: "wheel",
@@ -81,9 +91,9 @@ export const GAMES: GameBundle[] = [
       background: "#77bbff",
       name: "Wheel",
       image: "/games/logo.png",
-      description: `Wheel involves spinning a wheel to land on a multiplier that determines your win. Simply place your bet and spin the wheel. The segment on which the wheel stops decides your multiplier and winnings. It's an engaging game of chance with straightforward gameplay.`,
+      description: `Wheel invites players to embark on a captivating journey of chance and anticipation. Take a spin and behold as the wheel determines your fate, with each segment promising a multiplier that could lead to substantial winnings. With its engaging and straightforward gameplay, Wheel offers an immersive experience that is both thrilling and rewarding, promising endless moments of excitement and suspense. ⚠️ Under development. Wheel may not appear please refresh page. ⚠️`,
     },
-    app: dynamic(() => import("./Wheel"), { ssr: false }),
+    app: Wheel,
   },
   {
     id: "limbo",
@@ -91,9 +101,9 @@ export const GAMES: GameBundle[] = [
       background: "#ff7d7d",
       name: "Limbo",
       image: "/games/logo.png",
-      description: `To play Limbo, set a target multiplier and place your bet. If the outcome surpasses your set multiplier, you win. The game challenges you to balance ambition with the risk of setting a high target. Limbo tests your strategy and luck, pushing for higher multipliers for bigger wins.`,
+      description: `Limbo challenges players to walk the fine line between ambition and caution, where every decision shapes their destiny. Set a target multiplier and place your bet, daring to defy the odds. As the stakes rise, so does the adrenaline, pushing players to test their strategy and intuition in pursuit of monumental victories, ensuring an immersive and adrenaline-fueled gaming experience.`,
     },
-    app: dynamic(() => import("./Limbo")),
+    app: Limbo,
   },
   {
     id: "keno",
@@ -101,8 +111,8 @@ export const GAMES: GameBundle[] = [
       background: "#317aff",
       name: "Keno",
       image: "/games/logo.png",
-      description: `Select up to 10 blocks and place your bets! Once the draw happens, watch closely to see if your numbers match the winning ones. Fewer numbers for a chance at bigger wins, or more numbers for better odds of winning smaller prizes.`,
+      description: `Keno beckons players into a world of strategic decision-making and anticipation, where every choice holds the potential for untold riches. Select up to 10 blocks and place your bets, eagerly awaiting the draw that will determine your fate. Whether opting for fewer numbers and the allure of substantial wins or more numbers for increased odds of success, Keno promises a riveting experience filled with excitement and possibility.`,
     },
-    app: dynamic(() => import("./Keno")),
+    app: Keno,
   },
 ];

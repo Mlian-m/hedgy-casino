@@ -54,6 +54,36 @@ To get started with the Gamba Demo, follow these steps:
     export const LIVE_EVENT_TOAST = true;
    ```
 
+   Also create Custom Token and the handler for the custom token fi you want to add a custom token
+
+```
+  // Custom Token:
+  // {
+  //   mint: new PublicKey(""),
+  //   symbol: "",
+  //   name: "",
+  //   image: "",
+  //   decimals: 0,
+  //   baseWager: 0,
+  // },
+```
+
+```
+  // Custom Token
+  // if (
+  //   mint.equals(new PublicKey(""))
+  // ) {
+  //   return {
+  //     mint: new PublicKey(""),
+  //     symbol: "",
+  //     name: "",
+  //     image: "",
+  //     decimals: 0,
+  //     baseWager: 0,
+  //   };
+  // }
+```
+
 4. **Run the Application**
 
 Start the development server:

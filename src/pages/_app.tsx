@@ -9,7 +9,6 @@ import {
 import {
   LIVE_EVENT_TOAST,
   PLATFORM_CREATOR_ADDRESS,
-  RPC_ENDPOINT,
 } from "../../config";
 
 import { AppProps } from "next/app";
@@ -25,6 +24,7 @@ import { useDisclaimer } from "@/hooks/useDisclaimer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { showDisclaimer, DisclaimerModal } = useDisclaimer();
+  const RPC_ENDPOINT = process.env.NEXT_PUBLIC_RPC_ENDPOINT ?? "https://api.mainnet-beta.solana.com";
 
   return (
     <ConnectionProvider
