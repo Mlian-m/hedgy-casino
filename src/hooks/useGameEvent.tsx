@@ -116,9 +116,8 @@ const GameToast = () => {
     // const allowedCreator = "SpecificCreatorPublicKey";
     // const eventCreatorPublicKeyString = event.data.creator.toBase58();
 
-    // Swap the line below to add the filter
+    // - Swap the line below to add the filter
     // if (game && (allowedCreator.includes(eventCreatorPublicKeyString)) ) {
-
     if (game) {
       const connectedUserPublicKeyString = publicKey?.toString();
       const eventUserPublicKeyString = event.data.user.toBase58();

@@ -62,7 +62,7 @@ export default function Footer() {
             href="https://twitter.com/bankkroll_eth"
             className="hover:underline"
           >
-            Bankk™
+            Bankk
           </a>
         </span>
       </div>

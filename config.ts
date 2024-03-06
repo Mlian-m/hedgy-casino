@@ -14,10 +14,6 @@ export const PLATFORM_SHARABLE_URL = "play-gamba.vercel.app";
 // Toggle all live events acrossed gamba toast
 export const LIVE_EVENT_TOAST = true;
 
-// RPC - Can be configured in .env
-export const RPC_ENDPOINT =
-  process.env.NEXT_PUBLIC_RPC_ENDPOINT ?? "https://api.mainnet-beta.solana.com";
-
 // Platform explorer URL - Appears in welcome banner
 export const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
 
@@ -62,6 +58,15 @@ export const TOKENS = [
     decimals: 9,
     baseWager: 1e9,
   },
+  // Custom Token:
+  // {
+  //   mint: new PublicKey(""),
+  //   symbol: "",
+  //   name: "",
+  //   image: "",
+  //   decimals: 0,
+  //   baseWager: 0,
+  // },
 ];
 
 // handler for TOKENS
@@ -124,6 +129,20 @@ useTokenMeta.setFallbackHandler((mint) => {
       baseWager: 1 * 1e9,
     };
   }
+
+  // Custom Token
+  // if (
+  //   mint.equals(new PublicKey(""))
+  // ) {
+  //   return {
+  //     mint: new PublicKey(""),
+  //     symbol: "",
+  //     name: "",
+  //     image: "",
+  //     decimals: 0,
+  //     baseWager: 0,
+  //   };
+  // }
 
   return undefined;
 });

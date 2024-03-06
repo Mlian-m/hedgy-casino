@@ -1,4 +1,5 @@
 // src/pages/play/[gameId].tsx
+
 import CustomRenderer, {
   CustomError,
   GameSlider,

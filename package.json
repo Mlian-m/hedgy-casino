@@ -8,7 +8,8 @@
     "devSSL": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
-    "clean": "rmdir /s /q .next && rmdir /s /q node_modules && rmdir /s /q .turbo"
+    "format": "prettier --write .",
+    "clean": "rmdir /s /q .next && rmdir /s /q node_modules"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.27.0",
