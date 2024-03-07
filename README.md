@@ -63,17 +63,20 @@ To get started with the Gamba Demo, follow these steps:
       export const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
    ```
 
-   To add a custom token to your platform, Update/Add the following section with your custom token's details:
+   To add a custom token to your platform, Update/Add to the following section with your custom token's details:
 
    ```
-      "000000000000000000000000000000000000000000": {
-         mint: new PublicKey("000000000000000000000000000000000"),
-         symbol: "TOKEN_SYMBOL",
-         name: "Token Name",
-         image: "URL_to_Token_Image",
-         decimals: Token_Decimals,
-         baseWager: Base_Wager_Amount,
-        },
+   // List of tokens supported by this platform
+      export const TOKENS: Record<string, TokenMetadata> = {
+         "000000000000000000000000000000000000000000": {
+            mint: new PublicKey("000000000000000000000000000000000"),
+            symbol: "TOKEN_SYMBOL",
+            name: "Token Name",
+            image: "URL_to_Token_Image",
+            decimals: Token_Decimals,
+            baseWager: Base_Wager_Amount,
+         }
+      };
    ```
 
 4. **Run the Application**
