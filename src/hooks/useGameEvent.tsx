@@ -3,6 +3,7 @@ import { BPS_PER_WHOLE, GambaTransaction } from "gamba-core-v2";
 import { TokenValue, useTokenMeta } from "gamba-react-ui-v2";
 
 import Link from "next/link";
+import { PLATFORM_CREATOR_ADDRESS } from "../../config";
 import React from "react";
 import { extractMetadata } from "@/utils/utils";
 import { toast } from "sonner";
@@ -111,9 +112,9 @@ const GameToast = () => {
 
     // - Filter events by a specific creator
     // - To enable filtering by a specific creator, uncomment the following lines and
-    // - Replace 'SpecificCreatorPublicKey' with the public key of the creator you wish to allow.
+    // - this will auto filter your events from your platform only.
 
-    // const allowedCreator = "SpecificCreatorPublicKey";
+    // const allowedCreator = PLATFORM_CREATOR_ADDRESS;
     // const eventCreatorPublicKeyString = event.data.creator.toBase58();
 
     // - Swap the line below to add the filter
