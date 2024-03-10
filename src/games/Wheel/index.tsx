@@ -18,9 +18,10 @@ import {
 } from "./game";
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { drawTicker, drawWheel, radius } from "./wheel";
+import { drawWheel, radius } from "./wheel";
 
 import { gsap } from "gsap";
+import useCustomPlay from "@/hooks/useCustomPlay";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
@@ -33,6 +34,8 @@ export default function WheelGame() {
   const walletModal = useWalletModal();
   const wallet = useWallet();
   const game = GambaUi.useGame();
+  const gambaBPlay = useCustomPlay("Wheel");
+
   const sounds = useSound({
     spin: "/games/wheel/spinning.mp3",
     win: "/games/wheel/win.mp3",
@@ -61,7 +64,6 @@ export default function WheelGame() {
     wheel.position.set(app.screen.width / 2, app.screen.height / 2);
     app.stage.addChild(wheel as PIXI.DisplayObject);
     drawWheel(wheel, REGULAR_WHEEL_SEGMENTS, REGULAR_SEGMENT_COLORS);
-    drawTicker(app, radius);
 
     if (wheelContainerRef.current) {
       wheelContainerRef.current.appendChild(app.view as unknown as Node);
@@ -125,11 +127,7 @@ export default function WheelGame() {
           segments = REGULAR_WHEEL_SEGMENTS;
       }
 
-      await game.play({
-        wager,
-        bet,
-        metadata: ["Bankkmatic Games (https://x.com/bankkroll_eth)"],
-      });
+      await gambaBPlay(wager, bet);
       setSpinning(true);
       const result = await game.result();
       sounds.play("spin", { playbackRate: 0.5 });
@@ -178,6 +176,27 @@ export default function WheelGame() {
             <div ref={wheelContainerRef} />
           </div>
         </GambaUi.Responsive>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "4px",
+            right: "4px",
+            zIndex: 1000,
+          }}
+        >
+          <a
+            href="https://x.com/bankkroll_eth"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: "14px",
+              color: "#fff",
+              padding: "10px",
+            }}
+          >
+            BankmaticGames
+          </a>
+        </div>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />

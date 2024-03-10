@@ -6,13 +6,14 @@
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import React, { useState } from "react";
 
+import useCustomPlay from "@/hooks/useCustomPlay";
 import { useGamba } from "gamba-react-v2";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 export default function Limbo() {
-  const gamba = useGamba();
   const game = GambaUi.useGame();
+  const gambaBPlay = useCustomPlay("Limbo");
   const [wager, setWager] = useWagerInput();
   const [targetMultiplier, setTargetMultiplier] = useState<number>(20);
   const [resultMultiplier, setResultMultiplier] = useState<number>(1);
@@ -73,13 +74,12 @@ export default function Limbo() {
       setResultMultiplier(1);
       setTextColor("#FFFFFF");
 
-      await game.play({
+      await gambaBPlay(
         wager,
-        bet: new Array(targetMultiplier)
+        new Array(targetMultiplier)
           .fill(0)
           .map((_, index) => (index === 0 ? targetMultiplier : 0)),
-        metadata: ["Bankkmatic Games (https://x.com/bankkroll_eth)"],
-      });
+      );
       const result = await game.result();
 
       const winCondition = result.multiplier >= targetMultiplier;
@@ -123,6 +123,27 @@ export default function Limbo() {
             </div>
           </div>
         </GambaUi.Responsive>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "4px",
+            right: "4px",
+            zIndex: 1000,
+          }}
+        >
+          <a
+            href="https://x.com/bankkroll_eth"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: "14px",
+              color: "#fff",
+              padding: "10px",
+            }}
+          >
+            BankmaticGames
+          </a>
+        </div>
       </GambaUi.Portal>
 
       <GambaUi.Portal target="controls">
