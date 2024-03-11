@@ -1,68 +1,48 @@
-// src/hooks/useRecentPlays.ts
+// src/components/sections/RecentPlays/useRecentPlays.ts
 
 import React, { useMemo, useState } from "react";
-import {
-  useGambaEventListener,
-  useGambaEvents,
-  useWalletAddress,
-} from "gamba-react-v2";
+import { useGambaEventListener, useGambaEvents } from "gamba-react-v2";
 
 import { GambaTransaction } from "gamba-core-v2";
 import { PLATFORM_CREATOR_ADDRESS } from "../../config";
 import { useRouter } from "next/router";
 
-interface Params {
-  showAllPlatforms?: boolean;
-}
-
-export function useRecentPlays(params: Params = {}) {
-  const { showAllPlatforms = false } = params;
+export function useRecentPlays(platformOnly = false) {
   const router = useRouter();
-  const userAddress = useWalletAddress();
 
-  // Fetch previous events
-  const previousEvents = useGambaEvents("GameSettled", {
-    address: !showAllPlatforms ? PLATFORM_CREATOR_ADDRESS : undefined,
-  });
+  const eventFilter = platformOnly ? { address: PLATFORM_CREATOR_ADDRESS } : {};
+  const previousEvents = useGambaEvents("GameSettled", eventFilter);
 
   const [newEvents, setNewEvents] = useState<GambaTransaction<"GameSettled">[]>(
     [],
   );
 
-  // Listen for new events
   useGambaEventListener(
     "GameSettled",
-    (event) => {
-      // Ignore events that occurred on another platform
+    (event: GambaTransaction<"GameSettled">) => {
       if (
-        !showAllPlatforms &&
+        platformOnly &&
         !event.data.creator.equals(PLATFORM_CREATOR_ADDRESS)
-      )
+      ) {
         return;
+      }
 
-      // Set a delay on games with suspenseful reveal
-      const delay =
-        event.data.user.equals(userAddress) &&
-        ["plinko", "slots", "wheel", "limbo", "keno"].some((x) =>
-          router.pathname.includes(x),
-        )
-          ? 3000
-          : 1;
+      const eventExists = newEvents.some(
+        (e) => e.signature === event.signature,
+      );
 
-      setTimeout(() => {
+      if (!eventExists) {
         setNewEvents((prevEvents) => [event, ...prevEvents]);
-      }, delay);
+      }
     },
-    [router.pathname, userAddress, showAllPlatforms],
+    [router.pathname, platformOnly],
   );
 
-  // Merge previous & new events
   const combinedEvents = useMemo(() => {
     const allEvents = [...newEvents, ...previousEvents];
-    const uniqueEvents = Array.from(
-      new Set(allEvents.map((event) => event.signature)),
-    ).map(
-      (signature) => allEvents.find((event) => event.signature === signature)!,
+    const uniqueEvents = allEvents.filter(
+      (event, index, self) =>
+        index === self.findIndex((e) => e.signature === event.signature),
     );
     return uniqueEvents.sort((a, b) => b.time - a.time);
   }, [newEvents, previousEvents]);
