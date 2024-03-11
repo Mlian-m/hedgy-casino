@@ -60,20 +60,14 @@ export default function RecentPlays() {
           onClose={() => setSelectedGame(null)}
         />
       )}
-      {events.length === 0 &&
-        Array.from({ length: 5 }, (_, i) => (
-          <div
-            key={i}
-            className="h-10 w-full rounded-lg animate-Skeleton bg-gray-300"
-          ></div>
-        ))}
-      {loading &&
-        Array.from({ length: 5 }, (_, i) => (
-          <div
-            key={i}
-            className="h-10 w-full rounded-lg animate-Skeleton bg-gray-300"
-          ></div>
-        ))}
+      {events.length === 0 ||
+        (loading &&
+          Array.from({ length: 5 }, (_, i) => (
+            <div
+              key={i}
+              className="h-10 w-full rounded-lg animate-Skeleton bg-gray-300"
+            ></div>
+          )))}
       {!loading &&
         events.map((tx, index) => (
           <button
