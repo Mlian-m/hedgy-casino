@@ -56,15 +56,6 @@ export const TOKENS: Record<string, TokenMetadata> = {
     decimals: 5,
     baseWager: 2000000e5,
   },
-  // TSTCOIN
-  "8CofuxeTuXjrZSMahW9wYkedVoNcvwua6aJeM1UhxuLh": {
-    mint: new PublicKey("8CofuxeTuXjrZSMahW9wYkedVoNcvwua6aJeM1UhxuLh"),
-    symbol: "TSTCOIN",
-    name: "TESTERCOIN",
-    image: "https://i.ibb.co/SvfbhLy/imageedit-37-6175591894.png",
-    decimals: 9,
-    baseWager: 1e9,
-  },
   // You can easily add more tokens here
   //
   // "000000000000000000000000000000000000000000": {
