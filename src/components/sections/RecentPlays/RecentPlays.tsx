@@ -1,5 +1,3 @@
-// src/components/sections/RecentPlays/RecentPlays.tsx
-
 import { BPS_PER_WHOLE, GambaTransaction } from "gamba-core-v2";
 import { GambaUi, TokenValue, useTokenMeta } from "gamba-react-ui-v2";
 import React, { useMemo, useState } from "react";
@@ -79,7 +77,7 @@ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
 
 export default function RecentPlays() {
   const [platformOnly, setPlatformOnly] = useState(true);
-  const events = useRecentPlays(platformOnly);
+  const events = useRecentPlays({ showAllPlatforms: !platformOnly });
   const [selectedGame, setSelectedGame] =
     useState<GambaTransaction<"GameSettled"> | null>(null);
 

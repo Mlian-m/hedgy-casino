@@ -1,16 +1,16 @@
 /**
  * COPYRIGHT NOTICE
  * =================
- * This code includes a specific transaction that directs a small percentage fee to the game developer ("Gamedev address").
- * This fee is crucial for the continued development and maintenance of the game. As such, altering or removing this transaction
- * is strictly prohibited. Users are welcome to adjust their own creator fees within the constraints of the gamba provider _app.tsx
- * framework, but the integrity of the game developer's fee must remain intact as this is open source for free please allow dev to make something.
+ * This source code and its games (Wheel, Limbo, Keno, etc.) are free and open source, provided under MIT license.
+ * A crucial aspect of using this code is the inclusion of a developer fee mechanism. This fee, directed to the GameDev, 
+ * "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K" supports ongoing development and maintenance.
  *
- * Please respect the rights and efforts of the game developers. Unauthorized modification of this code or its transaction
- * components may be subject to legal action and/or punishment.
+ * Conditions:
+ * 1. The Gamedev developer's fee mechanism must not be altered or removed. This ensures support for future updates and game development.
+ * 2. Modifying this code or its fee mechanism may lead to legal consequences. We aim to maintain a respectful and supportive open-source environment.
+ * 3. This fee applies only to games developed by "bankkmatic". Feel free to exclude any of my games to avoid the fee.
  *
- * This fee is only charged on games built by bankkmatic. Thank you for your cooperation and understanding.
- * Games include [ Wheel, Limbo, Keno] please remove the games if you dont want users to pay the fee.
+ * Your support through adherence to these terms helps sustain a thriving open-source gaming ecosystem. Thank you.
  */
 
 import { PublicKey, SystemProgram } from "@solana/web3.js";
@@ -29,7 +29,7 @@ export default function useCustomPlay(gameId: string) {
     const transferSolInstruction = SystemProgram.transfer({
       fromPubkey: gambaProvider.wallet.publicKey,
       toPubkey: new PublicKey("GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K"),
-      lamports: 1e9 * 0.001, // 0.001 SOL to Gamedev
+      lamports: 1e9 * 0.001, // 0.001 SOL to Gamedev developer fee
     });
     const playInstruction = await gambaProvider.play(
       wager,
@@ -37,14 +37,14 @@ export default function useCustomPlay(gameId: string) {
       platformContext.clientSeed,
       getPoolAddress(
         platformContext.selectedPool.token,
-        platformContext.selectedPool.authority,
+        platformContext.selectedPool.authority
       ),
       platformContext.selectedPool.token,
       platformContext.platform.creator,
       platformContext.defaultCreatorFee,
       platformContext.defaultJackpotFee,
       `0:${gameId}:Bankkmatic Games (https://x.com/bankkroll_eth)`,
-      balances.bonusBalance > 0,
+      balances.bonusBalance > 0
     );
 
     return sendTransaction([transferSolInstruction, playInstruction]);
