@@ -43,7 +43,7 @@ export function useRecentPlays(params: Params = {}) {
       // Set a delay on games with suspenseful reveal
       const delay =
         event.data.user.equals(userAddress) &&
-        ["plinko", "slots"].some((x) => router.pathname.includes(x))
+        ["plinko", "slots", "wheel", "limbo", "keno"].some((x) => router.pathname.includes(x))
           ? 3000
           : 1;
 
