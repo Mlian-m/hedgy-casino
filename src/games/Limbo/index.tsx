@@ -13,7 +13,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 export default function Limbo() {
   const game = GambaUi.useGame();
-  const gambaBPlay = useCustomPlay("Limbo");
+  const gambaBPlay = useCustomPlay("limbo");
   const [wager, setWager] = useWagerInput();
   const [targetMultiplier, setTargetMultiplier] = useState<number>(20);
   const [resultMultiplier, setResultMultiplier] = useState<number>(1);

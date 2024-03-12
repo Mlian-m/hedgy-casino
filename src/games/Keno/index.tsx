@@ -21,7 +21,7 @@ export default function Keno() {
   const [revealedBlocks, setRevealedBlocks] = useState(new Set());
   const [gameWon, setGameWon] = useState<boolean | null>(null);
   const game = GambaUi.useGame();
-  const gambaBPlay = useCustomPlay("Keno");
+  const gambaBPlay = useCustomPlay("keno");
   const walletModal = useWalletModal();
   const wallet = useWallet();
   const sounds = useSound({
