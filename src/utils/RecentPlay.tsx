@@ -19,26 +19,34 @@ export function RecentPlay({
   const { game } = extractMetadata(event);
 
   if (!game) {
-    return null;
+    console.log(
+      JSON.stringify({
+        status: "failure",
+        message: "Game information not available",
+        event: event,
+      }),
+    );
+    return <div className="text-gray-500">Game information not available</div>;
   }
 
   return (
     <>
-      <img
-        src={`/games/${game.id}/logo.png`}
-        alt={`Splash for ${game.meta.name}`}
-        width={64}
-      />
-      <div className="text-[#a079ff]">
+      {game ? (
+        <img
+          src={`/games/${game.id}/logo.png`}
+          alt={`Splash for ${game.meta.name}`}
+          width={64}
+        />
+      ) : null}
+      <div style={{ color: "#a079ff" }}>
         {`${data.user.toBase58().substring(0, 4)}...${data.user
           .toBase58()
           .slice(-4)}`}
       </div>
-      <div className="hidden md:inline">{profit >= 0 ? " won " : " lost "}</div>
+      <div className="hidden md:flex">{profit >= 0 ? " WON " : " LOST "}</div>
       <div
-        className={`flex gap-2 items-center rounded-lg p-1 ${
-          profit > 0 ? "bg-green-600" : "bg-white/10"
-        }`}
+        className="flex gap-2 items-center rounded-lg p-1"
+        style={{ backgroundColor: profit > 0 ? "#34D399" : "#666" }}
       >
         <img src={token.image} width={24} className="rounded-full" />
         <TokenValue amount={Math.abs(profit)} mint={data.tokenMint} />

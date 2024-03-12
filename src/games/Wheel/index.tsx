@@ -34,7 +34,7 @@ export default function WheelGame() {
   const walletModal = useWalletModal();
   const wallet = useWallet();
   const game = GambaUi.useGame();
-  const gambaBPlay = useCustomPlay("Wheel");
+  const gambaBPlay = useCustomPlay("wheel");
 
   const sounds = useSound({
     spin: "/games/wheel/spinning.mp3",
