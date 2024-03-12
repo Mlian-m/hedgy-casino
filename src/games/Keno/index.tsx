@@ -215,7 +215,7 @@ export default function Keno() {
               padding: "10px",
             }}
           >
-            BankmaticGames
+            BankkmaticGames
           </a>
         </div>
       </GambaUi.Portal>

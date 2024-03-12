@@ -141,7 +141,7 @@ export default function Limbo() {
               padding: "10px",
             }}
           >
-            BankmaticGames
+            BankkmaticGames
           </a>
         </div>
       </GambaUi.Portal>
