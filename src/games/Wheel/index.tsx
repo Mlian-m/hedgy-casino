@@ -194,7 +194,7 @@ export default function WheelGame() {
               padding: "10px",
             }}
           >
-            BankmaticGames
+            BankkmaticGames
           </a>
         </div>
       </GambaUi.Portal>
