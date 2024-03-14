@@ -56,29 +56,36 @@ const Game: React.FC<GameProps> = ({ gameId }) => {
 const GamePage: React.FC = () => {
   const router = useRouter();
   const { gameId } = router.query;
-  const [isLoading, setIsLoading] = useState(false);
+  const [currentGameId, setCurrentGameId] = useState(gameId as string);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const handleRouteChange = () => {
+    const handleRouteChangeStart = () => {
       setIsLoading(true);
     };
-    router.events.on("routeChangeStart", handleRouteChange);
-    router.events.on("routeChangeComplete", () => setIsLoading(false));
+    const handleRouteChangeComplete = () => {
+      setIsLoading(false);
+      setCurrentGameId(gameId as string);
+    };
+
+    router.events.on("routeChangeStart", handleRouteChangeStart);
+    router.events.on("routeChangeComplete", handleRouteChangeComplete);
+
     if (gameId) {
       setIsLoading(false);
+      setCurrentGameId(gameId as string);
     }
+
     return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
-      router.events.off("routeChangeComplete", () => setIsLoading(false));
+      router.events.off("routeChangeStart", handleRouteChangeStart);
+      router.events.off("routeChangeComplete", handleRouteChangeComplete);
     };
   }, [gameId, router.events]);
 
   return (
     <>
       {isLoading ? (
-        <>
-          <div className="min-h-screen" />
-        </>
+        <div className="flex justify-center items-center min-h-screen" />
       ) : (
         <>
           <Header />
