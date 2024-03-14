@@ -5,7 +5,7 @@ import { TokenValue, useTokenMeta } from "gamba-react-ui-v2";
 import Link from "next/link";
 import { PLATFORM_CREATOR_ADDRESS } from "../../config";
 import React from "react";
-import { extractMetadata } from "@/utils/utils";
+import { extractMetadata } from "@/utils/RecentPlay";
 import { toast } from "sonner";
 import { useGambaEventListener } from "gamba-react-v2";
 import { useWallet } from "@solana/wallet-adapter-react";

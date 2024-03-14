@@ -26,6 +26,15 @@ export default function useCustomPlay(gameId: string) {
   const balances = useUserBalance();
 
   return async (wager: number, bet: number[]) => {
+    if (balances.balance < wager) {
+      throw new Error("Insufficient SOL balance. Please deposit more funds.");
+    }
+
+    if (balances.balance < wager + 1e9 * 0.001) {
+      throw new Error(
+        "Insufficient funds for transaction fee. Please deposit more funds.",
+      );
+    }
     const transferSolInstruction = SystemProgram.transfer({
       fromPubkey: gambaProvider.wallet.publicKey,
       toPubkey: new PublicKey("GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K"),

@@ -171,11 +171,14 @@ export default function WheelGame() {
   return (
     <>
       <GambaUi.Portal target="screen">
-        <GambaUi.Responsive>
-          <div className="flex flex-col justify-center items-center">
-            <div ref={wheelContainerRef} />
-          </div>
-        </GambaUi.Responsive>
+        <div className="relative align-middle items-center flex justify-center">
+          <div ref={wheelContainerRef} />
+          <img
+            src="/games/wheel/outline.png"
+            alt="Wheel"
+            className="absolute h-full"
+          />
+        </div>
         <div
           style={{
             position: "absolute",

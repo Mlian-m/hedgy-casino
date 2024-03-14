@@ -1,7 +1,18 @@
 import { BPS_PER_WHOLE, GambaTransaction } from "gamba-core-v2";
 import { TokenValue, useTokenMeta } from "gamba-react-ui-v2";
 
-import { extractMetadata } from "@/utils/utils";
+import { GAMES } from "@/games";
+
+export const extractMetadata = (event: GambaTransaction<"GameSettled">) => {
+  try {
+    const [version, gameId, ...rest] = event.data.metadata.split(":");
+    const game = GAMES.find((x) => x.id.toLowerCase() === gameId.toLowerCase());
+    const gameNameFallback = gameId || "Unknown";
+    return { game, gameNameFallback };
+  } catch {
+    return { game: null, gameNameFallback: "Unknown" };
+  }
+};
 
 export function RecentPlay({
   event,
@@ -16,28 +27,21 @@ export function RecentPlay({
   const payout = multiplier * wager;
   const profit = payout - wager;
 
-  const { game } = extractMetadata(event);
-
-  if (!game) {
-    console.log(
-      JSON.stringify({
-        status: "failure",
-        message: "Game information not available",
-        event: event,
-      }),
-    );
-    return <div className="text-gray-500">Game information not available</div>;
-  }
+  const { game, gameNameFallback } = extractMetadata(event);
 
   return (
     <>
-      {game ? (
-        <img
-          src={`/games/${game.id}/logo.png`}
-          alt={`Splash for ${game.meta.name}`}
-          width={64}
-        />
-      ) : null}
+      <div className="game-info">
+        {game ? (
+          <img
+            src={`/games/${game.id}/logo.png`}
+            alt={`Splash for ${game.meta.name}`}
+            width={64}
+          />
+        ) : (
+          <div className="fallback-game-info">{gameNameFallback}</div>
+        )}
+      </div>
       <div style={{ color: "#a079ff" }}>
         {`${data.user.toBase58().substring(0, 4)}...${data.user
           .toBase58()
@@ -48,7 +52,21 @@ export function RecentPlay({
         className="flex gap-2 items-center rounded-lg p-1"
         style={{ backgroundColor: profit > 0 ? "#34D399" : "#666" }}
       >
-        <img src={token.image} width={24} className="rounded-full" />
+        {token.image ? (
+          <img
+            src={token.image}
+            alt="Token"
+            width={24}
+            className="rounded-full"
+          />
+        ) : (
+          <span className="inline-block w-6 h-6 border border-white rounded-full items-center justify-center text-xs font-medium text-white">
+            <span className="w-4 h-4 rounded-full border border-white flex items-center justify-center m-auto">
+              {token.symbol}
+            </span>
+          </span>
+        )}
+
         <TokenValue amount={Math.abs(profit)} mint={data.tokenMint} />
       </div>
       <div className="hidden md:flex flex-col">
