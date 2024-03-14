@@ -6,7 +6,7 @@ import React, { useRef, useState } from "react";
 import { GambaTransaction } from "gamba-core-v2";
 import { Modal } from "@/components/ui/Modal";
 import { PLATFORM_SHARABLE_URL } from "../../../../config";
-import { extractMetadata } from "@/utils/utils";
+import { extractMetadata } from "@/utils/RecentPlay";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 import { useRouter } from "next/router";
