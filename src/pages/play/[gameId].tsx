@@ -4,11 +4,11 @@ import CustomRenderer, {
   CustomError,
   GameSlider,
 } from "@/components/sections/Game/Game";
+import React, { useEffect, useState } from "react";
 
 import { GAMES } from "@/games";
 import { GambaUi } from "gamba-react-ui-v2";
 import Header from "@/components/layout/Header";
-import React from "react";
 import { useRouter } from "next/router";
 
 interface GameProps {
@@ -56,11 +56,35 @@ const Game: React.FC<GameProps> = ({ gameId }) => {
 const GamePage: React.FC = () => {
   const router = useRouter();
   const { gameId } = router.query;
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsLoading(true);
+    };
+    router.events.on("routeChangeStart", handleRouteChange);
+    router.events.on("routeChangeComplete", () => setIsLoading(false));
+    if (gameId) {
+      setIsLoading(false);
+    }
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+      router.events.off("routeChangeComplete", () => setIsLoading(false));
+    };
+  }, [gameId, router.events]);
 
   return (
     <>
-      <Header />
-      <Game gameId={gameId as string} key={gameId as string} />
+      {isLoading ? (
+        <>
+          <div className="min-h-screen" />
+        </>
+      ) : (
+        <>
+          <Header />
+          <Game gameId={gameId as string} key={gameId as string} />
+        </>
+      )}
     </>
   );
 };
