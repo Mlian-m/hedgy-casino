@@ -10,7 +10,7 @@ import React, { useContext, useState } from "react";
 
 import { Dropdown } from "@/components/ui/Dropdown";
 import { PublicKey } from "@solana/web3.js";
-import { TOKENS } from "../../../config";
+import { TOKENLIST } from "../../../config";
 
 export default function TokenSelect() {
   const [visible, setVisible] = useState(false);
@@ -27,7 +27,7 @@ export default function TokenSelect() {
     setVisible(!visible);
   };
 
-  const tokensArray = Object.values(TOKENS);
+  const tokensArray = Object.values(TOKENLIST);
 
   return (
     <div className="relative">

@@ -2,15 +2,67 @@
 
 import { GambaUi, useGambaAudioStore } from "gamba-react-ui-v2";
 import React, { useEffect, useState } from "react";
+import { decodeGame, getGameAddress } from "gamba-core-v2";
+import {
+  useAccount,
+  useGamba,
+  useTransactionStore,
+  useWalletAddress,
+} from "gamba-react-v2";
 
 import { GAMES } from "@/games";
 import { GameCard } from "@/components/sections/Dashboard/GameCard";
 import { Icon } from "@/components/ui/Icon";
 import { Modal } from "@/components/ui/Modal";
 import { ProvablyFairModal } from "./ProvablyFairModal";
-import { SlideSection } from "@/components/ui/Slider";
-import { useGamba } from "gamba-react-v2";
 import { useUserStore } from "@/hooks/useUserStore";
+
+interface TransactionStepperProps {
+  currentStep: number;
+}
+
+const TransactionStepper: React.FC<TransactionStepperProps> = ({
+  currentStep,
+}) => {
+  const steps = ["Signing", "Sending", "Settling"];
+
+  return (
+    <div className="flex justify-center">
+      {steps.map((step, index) => (
+        <div
+          key={step}
+          className={`w-full h-2 rounded-md mx-1 flex items-center justify-center transition-all duration-300 
+          ${index < currentStep ? "bg-purple-500" : ""}
+          ${index === currentStep ? "bg-purple-700 animate-purplePulse" : ""}
+          ${index > currentStep ? "bg-gray-300" : ""}
+          `}
+        />
+      ))}
+    </div>
+  );
+};
+
+function useLoadingState() {
+  const userAddress = useWalletAddress();
+  const game = useAccount(getGameAddress(userAddress), decodeGame);
+  const txStore = useTransactionStore();
+
+  return React.useMemo(() => {
+    if (txStore.label !== "play") {
+      return -1;
+    }
+    if (game?.status.resultRequested) {
+      return 2;
+    }
+    if (txStore.state === "processing" || txStore.state === "sending") {
+      return 1;
+    }
+    if (txStore.state === "simulating" || txStore.state === "signing") {
+      return 0;
+    }
+    return -1;
+  }, [txStore, game]);
+}
 
 export function GameSlider() {
   return (
@@ -42,25 +94,18 @@ export function CustomError() {
   );
 }
 
-/**
- * A renderer component to display the contents of the loaded GambaUi.Game
- * Screen
- * Controls
- */
 export default function CustomRenderer() {
-  const gamba = useGamba();
   const { game } = GambaUi.useGame();
   const [info, setInfo] = useState(false);
   const [provablyFair, setProvablyFair] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
   const audioStore = useGambaAudioStore();
   const imagePath = `/games/${game.id}/logo.png`;
   const { newcomer, gamesPlayed, set } = useUserStore();
+  const currentStep = useLoadingState();
 
   useEffect(() => {
     if (newcomer || !gamesPlayed.includes(game.id)) {
       setInfo(true);
-
       set((state) => ({
         newcomer: false,
         gamesPlayed: [...state.gamesPlayed, game.id],
@@ -85,15 +130,6 @@ export default function CustomRenderer() {
         <ProvablyFairModal onClose={() => setProvablyFair(false)} />
       )}
       <div className="w-full relative grid gap-1">
-        {showSplash && (
-          <div className="pointer-events-none absolute inset-0 flex justify-center items-center z-10 bg-[#0c0c11] text-6xl font-bold animate-[splashAnimation_1s_ease-out_forwards]">
-            <img
-              height="150px"
-              src={imagePath}
-              alt={`Splash for ${game.meta.name}`}
-            />
-          </div>
-        )}
         <div className="relative flex-grow bg-[#0c0c11] rounded-lg overflow-hidden transition-height duration-200 md:min-h-[550px] min-h-[500px]">
           <GambaUi.PortalTarget target="error" />
           <GambaUi.PortalTarget target="screen" />
@@ -107,16 +143,7 @@ export default function CustomRenderer() {
             </button>
           </div>
         </div>
-        <div
-          className={`relative h-1 max-w-[100svw] overflow-hidden rounded-lg after:content-[' '] after:absolute after:w-[25%] after:h-full after:bg-[#9564ff] after:transition-opacity duration-500 ${
-            gamba.isPlaying
-              ? " animate-[loadingAnimation_1.5s_infinite] after:opacity-100"
-              : "after:opacity-0"
-          }`}
-          key={Number(gamba.isPlaying)}
-          data-active={gamba.isPlaying}
-        />
-
+        <TransactionStepper currentStep={currentStep} />
         <div className="w-full bg-[#1A1B28] p-2 sm:p-5 text-white rounded-lg flex flex-wrap gap-2 sm:gap-5 items-start sm:flex-row">
           <div className="flex gap-2 justify-center">
             <button

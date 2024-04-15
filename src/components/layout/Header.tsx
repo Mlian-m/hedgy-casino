@@ -4,6 +4,8 @@ import {
   GambaUi,
   TokenValue,
   useCurrentPool,
+  useCurrentToken,
+  useTokenBalance,
   useUserBalance,
 } from "gamba-react-ui-v2";
 import React, { useState } from "react";
@@ -15,7 +17,8 @@ import { UserButton } from "../ui/UserButton";
 
 export default function Header() {
   const pool = useCurrentPool();
-  const balance = useUserBalance();
+  const token = useCurrentToken();
+  const balance = useTokenBalance();
   const [bonusHelp, setBonusHelp] = useState(false);
   const [jackpotHelp, setJackpotHelp] = useState(false);
 
@@ -36,29 +39,51 @@ export default function Header() {
       )}
       {jackpotHelp && (
         <Modal onClose={() => setJackpotHelp(false)}>
-          <h1>Jackpot</h1>
-          <p>
-            There&apos;s{" "}
-            <strong className="text-purple-400">
+          <div className="text-lg font-semibold text-center">
+            {token.name} Jackpot Details
+          </div>
+          {pool.jackpotBalance > 0 && (
+            <div className="flex text-[#003c00] rounded-lg bg-[#03ffa4] px-2.5 py-0.5 uppercase font-bold">
               <TokenValue amount={pool.jackpotBalance} />
-            </strong>{" "}
-            in the Jackpot.
-          </p>
-          <p>
-            The Jackpot is a prize pool that grows with every bet made. As the
-            Jackpot grows, so does your chance of winning. Once a winner is
-            selected, the value of the Jackpot resets and grows from there until
-            a new winner is selected.
-          </p>
-          <GambaUi.Button main>
-            <a
-              href={`https://explorer.gamba.so/pool/${pool.publicKey.toString()}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              View Pool
-            </a>
-          </GambaUi.Button>
+            </div>
+          )}
+          <div className="mt-4">
+            <p>
+              The Jackpot grows with each game played, funded by fees from
+              unsuccessful attempts to win it. Winning the jackpot not only
+              grants substantial rewards but also recycles a tiny portion of the
+              winnings back into the main liquidity pool, sustaining the games
+              economy.
+            </p>
+            <div className="mt-4">
+              <div>
+                <strong>Pool Fee:</strong> {pool.poolFee}%
+              </div>
+              <div>
+                <strong>Liquidity:</strong>{" "}
+                <TokenValue amount={Number(pool.liquidity)} />
+              </div>
+              <div>
+                <strong>Minimum Wager:</strong>{" "}
+                <TokenValue amount={pool.minWager} />
+              </div>
+              <div>
+                <strong>Maximum Payout:</strong>{" "}
+                <TokenValue amount={pool.maxPayout} />
+              </div>
+            </div>
+            <div className="mt-4 text-center">
+              <GambaUi.Button main>
+                <a
+                  href={`https://explorer.gamba.so/pool/${pool.publicKey.toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  View Pool on Explorer
+                </a>
+              </GambaUi.Button>
+            </div>
+          </div>
         </Modal>
       )}
       <div className="flex items-center justify-between w-full p-2.5 bg-gray-900 fixed top-0 left-0 z-50 backdrop-blur-[20px]">
