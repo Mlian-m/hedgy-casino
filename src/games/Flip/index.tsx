@@ -120,11 +120,6 @@ function Flip() {
         </Canvas>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
-        <GambaUi.WagerSelect
-          options={WAGER_OPTIONS}
-          value={wager}
-          onChange={setWager}
-        />
         <GambaUi.Button
           disabled={gamba.isPlaying}
           onClick={() => setSide(side === "heads" ? "tails" : "heads")}
@@ -139,6 +134,8 @@ function Flip() {
             </div>
           </div>
         </GambaUi.Button>
+        <GambaUi.WagerInput value={wager} onChange={setWager} />
+
         {wallet.connected ? (
           <GambaUi.PlayButton onClick={play}>Flip</GambaUi.PlayButton>
         ) : (

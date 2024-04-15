@@ -33,6 +33,7 @@ export const StyledResults = styled.div`
 `;
 
 export const StyledBetButton = styled.div<{
+  $disabled?: boolean;
   $highlighted?: boolean;
   $color?: "black" | "red";
 }>`
