@@ -5,7 +5,7 @@ export const SOUND_CHIP = "/games/roulette/chip.mp3";
 export const SOUND_WIN = "/games/roulette/win.mp3";
 export const SOUND_LOSE = "/games/roulette/lose.mp3";
 
-export const CHIPS = [1, 2, 10];
+export const CHIPS = [1, 2, 3, 4, 5, 10];
 export const NUMBERS = 18;
 export const NUMBER_COLUMNS = Math.ceil(NUMBERS / 3);
 

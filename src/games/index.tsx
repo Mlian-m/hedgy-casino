@@ -76,16 +76,6 @@ export const GAMES: GameBundle[] = [
     app: dynamic(() => import("./Plinko")),
   },
   {
-    id: "wheel",
-    meta: {
-      background: "#77bbff",
-      name: "Wheel",
-      image: "/games/logo.png",
-      description: `Wheel invites players to embark on a captivating journey of chance and anticipation. Take a spin and behold as the wheel determines your fate, with each segment promising a multiplier that could lead to substantial winnings. With its engaging and straightforward gameplay, Wheel offers an immersive experience that is both thrilling and rewarding, promising endless moments of excitement and suspense. ⚠️ Under development. Wheel may not appear please refresh page. ⚠️`,
-    },
-    app: dynamic(() => import("./Wheel"), { ssr: false }),
-  },
-  {
     id: "limbo",
     meta: {
       background: "#ff7d7d",

@@ -13,7 +13,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 export default function Limbo() {
   const game = GambaUi.useGame();
-  const gambaBPlay = useCustomPlay("limbo");
+  // const gambaBPlay = useCustomPlay("limbo");
   const [wager, setWager] = useWagerInput();
   const [targetMultiplier, setTargetMultiplier] = useState<number>(20);
   const [resultMultiplier, setResultMultiplier] = useState<number>(1);
@@ -74,12 +74,19 @@ export default function Limbo() {
       setResultMultiplier(1);
       setTextColor("#FFFFFF");
 
-      await gambaBPlay(
-        wager,
-        new Array(targetMultiplier)
+      //await gambaBPlay(
+      //  wager,
+      //  new Array(targetMultiplier)
+      //    .fill(0)
+      //    .map((_, index) => (index === 0 ? targetMultiplier : 0)),
+      //);
+
+      await game.play({
+        bet: new Array(targetMultiplier)
           .fill(0)
           .map((_, index) => (index === 0 ? targetMultiplier : 0)),
-      );
+        wager: wager,
+      });
       const result = await game.result();
 
       const winCondition = result.multiplier >= targetMultiplier;

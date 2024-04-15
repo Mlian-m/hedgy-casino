@@ -21,7 +21,7 @@ export default function Keno() {
   const [revealedBlocks, setRevealedBlocks] = useState(new Set());
   const [gameWon, setGameWon] = useState<boolean | null>(null);
   const game = GambaUi.useGame();
-  const gambaBPlay = useCustomPlay("keno");
+  //const gambaBPlay = useCustomPlay("keno");
   const walletModal = useWalletModal();
   const wallet = useWallet();
   const sounds = useSound({
@@ -60,7 +60,11 @@ export default function Keno() {
     setGameWon(null);
     setIsPlaying(true);
     try {
-      await gambaBPlay(wager, generateBetArray(selectedNumbers.length));
+      // await gambaBPlay(wager, generateBetArray(selectedNumbers.length));
+      await game.play({
+        bet: generateBetArray(selectedNumbers.length),
+        wager: wager,
+      });
 
       const gameResult = await game.result();
       const win = gameResult.payout > 0;
