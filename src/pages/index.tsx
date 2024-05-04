@@ -1,6 +1,6 @@
+// src/pages/index.tsx
 import React, { useEffect } from "react";
 
-// src/pages/index.tsx
 import Dashboard from "@/components/sections/Dashboard/Dashboard";
 import Head from "next/head";
 import Header from "@/components/layout/Header";
