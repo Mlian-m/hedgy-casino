@@ -7,10 +7,8 @@ import {
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import {
-  FAKE_TOKEN_MINT,
   GambaPlatformProvider,
   TokenMetaProvider,
-  makeHeliusTokenFetcher,
 } from "gamba-react-ui-v2";
 import {
   LIVE_EVENT_TOAST,
@@ -22,7 +20,6 @@ import {
 
 import { AppProps } from "next/app";
 import Footer from "@/components/layout/Footer";
-import { GAMES } from "../games";
 import { GambaProvider } from "gamba-react-v2";
 import GameToast from "@/hooks/useGameEvent";
 import React from "react";

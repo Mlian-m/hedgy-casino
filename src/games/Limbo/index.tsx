@@ -6,14 +6,12 @@
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import React, { useState } from "react";
 
-import useCustomPlay from "@/hooks/useCustomPlay";
 import { useGamba } from "gamba-react-v2";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 export default function Limbo() {
   const game = GambaUi.useGame();
-  // const gambaBPlay = useCustomPlay("limbo");
   const [wager, setWager] = useWagerInput();
   const [targetMultiplier, setTargetMultiplier] = useState<number>(20);
   const [resultMultiplier, setResultMultiplier] = useState<number>(1);
@@ -73,13 +71,6 @@ export default function Limbo() {
       setPlaying(true);
       setResultMultiplier(1);
       setTextColor("#FFFFFF");
-
-      //await gambaBPlay(
-      //  wager,
-      //  new Array(targetMultiplier)
-      //    .fill(0)
-      //    .map((_, index) => (index === 0 ? targetMultiplier : 0)),
-      //);
 
       await game.play({
         bet: new Array(targetMultiplier)

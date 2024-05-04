@@ -134,7 +134,22 @@ export default function CustomRenderer() {
           <GambaUi.PortalTarget target="error" />
           <GambaUi.PortalTarget target="screen" />
           <div className="absolute left-0 bottom-0 p-1 flex gap-2">
+            <div className="flex gap-2 justify-center">
+              <button
+                className="p-2 text-white bg-transparent hover:bg-[#ffffff22] rounded-lg cursor-pointer focus:outline-none"
+                onClick={() => setInfo(true)}
+              >
+                <Icon.Info />
+              </button>
+              <button
+                className="p-2 text-white bg-transparent hover:bg-[#ffffff22] rounded-lg cursor-pointer focus:outline-none"
+                onClick={() => setProvablyFair(true)}
+              >
+                <Icon.Fairness />
+              </button>
+            </div>
             <button
+              className="p-2 text-white bg-transparent hover:bg-[#ffffff22] rounded-lg cursor-pointer focus:outline-none"
               onClick={() =>
                 audioStore.set((audioStore.masterGain + 0.25) % 1.25)
               }
@@ -145,20 +160,6 @@ export default function CustomRenderer() {
         </div>
         <TransactionStepper currentStep={currentStep} />
         <div className="w-full bg-[#1A1B28] p-2 sm:p-5 text-white rounded-lg flex flex-wrap gap-2 sm:gap-5 items-start sm:flex-row">
-          <div className="flex gap-2 justify-center">
-            <button
-              className="p-2 text-white bg-transparent hover:bg-[#ffffff22] rounded-lg cursor-pointer focus:outline-none"
-              onClick={() => setInfo(true)}
-            >
-              <Icon.Info />
-            </button>
-            <button
-              className="p-2 text-white bg-transparent hover:bg-[#ffffff22] rounded-lg cursor-pointer focus:outline-none"
-              onClick={() => setProvablyFair(true)}
-            >
-              <Icon.Fairness />
-            </button>
-          </div>
           <div className="flex-grow flex items-center justify-start gap-2">
             <GambaUi.PortalTarget target="controls" />
             <GambaUi.PortalTarget target="play" />
