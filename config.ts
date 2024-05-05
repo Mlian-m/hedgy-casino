@@ -1,9 +1,5 @@
 // config.ts
-
-import { FAKE_TOKEN_MINT, useTokenMeta } from "gamba-react-ui-v2";
-
 import { PublicKey } from "@solana/web3.js";
-import { TokenMetadata } from "./types";
 
 // Solana address you wish to receive fees
 export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
@@ -11,10 +7,10 @@ export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
 );
 
 // Creator fee (in %)
-export const PLATFORM_CREATOR_FEE = 0.05; // 5% (5/100 = 0.05)
+export const PLATFORM_CREATOR_FEE = 0.05; // 5%
 
 // Jackpot fee (in %)
-export const PLATFORM_JACKPOT_FEE = 0.01; // 1% (1/100 = 0.01)
+export const PLATFORM_JACKPOT_FEE = 0.01; // 1%
 
 // Platform URL - Appears in ShareModal
 export const PLATFORM_SHARABLE_URL = "play-gamba.vercel.app";
@@ -22,7 +18,7 @@ export const PLATFORM_SHARABLE_URL = "play-gamba.vercel.app";
 // Toggle all live events acrossed gamba toast (true = on, false = off)
 export const LIVE_EVENT_TOAST = true;
 
-// Platform explorer URL - Appears in welcome banner (can be changed for if you have cusotm explorer)
+// Platform explorer URL - Appears in welcome banner (can be changed for if you have custom explorer)
 export const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
 
 // Supported tokens
