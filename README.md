@@ -1,6 +1,6 @@
 # Gamba Nextjs
 
-![screencapture-localhost-3000-2024-02-25-12_46_48](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/c7c8d0d4-459b-4cc6-a31e-da2ac84b4306)
+![screencapture](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/9a1e0132-4d12-4c49-9235-b0c10175fd39)
 
 > This is a forked and rewritten repo from the [gamba platform](https://github.com/gamba-labs/platform).
 
@@ -66,17 +66,14 @@ To get started with the Gamba Demo, follow these steps:
    To add a custom token to your platform, Update/Add to the following section with your custom token's details:
 
    ```
-   // List of tokens supported by this platform
-      export const TOKENS: Record<string, TokenMetadata> = {
-         "000000000000000000000000000000000000000000": {
-            mint: new PublicKey("000000000000000000000000000000000"),
-            symbol: "TOKEN_SYMBOL",
-            name: "Token Name",
-            image: "URL_to_Token_Image",
-            decimals: Token_Decimals,
-            baseWager: Base_Wager_Amount,
-         }
-      };
+    {
+      mint: new PublicKey(""),
+      name: "",
+      symbol: "",
+      image: "",
+      decimals: 0,
+      baseWager: 0,
+    },
    ```
 
 4. **Run the Application**
