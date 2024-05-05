@@ -1,13 +1,29 @@
+// src/games/Crash/index.tsx
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import {
   LineLayer1,
+  LineLayer10,
   LineLayer2,
   LineLayer3,
+  LineLayer4,
+  LineLayer5,
+  LineLayer6,
+  LineLayer7,
+  LineLayer8,
+  LineLayer9,
   MultiplierText,
   Rocket,
+  ScreenWrapper,
   StarsLayer1,
+  StarsLayer10,
   StarsLayer2,
   StarsLayer3,
+  StarsLayer4,
+  StarsLayer5,
+  StarsLayer6,
+  StarsLayer7,
+  StarsLayer8,
+  StarsLayer9,
 } from "./styles";
 import React, { useState } from "react";
 
@@ -16,28 +32,14 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 export const calculateBetArray = (multiplier: number) => {
-  const fraction = Math.round((multiplier % 1) * 100) / 100;
-  const repeatMultiplier = (() => {
-    switch (fraction) {
-      case 0.25:
-        return 4;
-      case 0.5:
-        return 2;
-      case 0.75:
-        return 4;
-      default:
-        return 1;
-    }
-  })();
+  const targetMultiplier = Math.ceil(multiplier);
 
-  const totalSum = multiplier * repeatMultiplier;
-  const betArray = Array.from({ length: repeatMultiplier }).map(
-    () => multiplier,
-  );
-  const totalElements = Math.ceil(totalSum);
-  const zerosToAdd = totalElements - repeatMultiplier;
+  // Generate an array filled with zeros, except for the multiplier
+  const betArray = new Array(targetMultiplier)
+    .fill(0)
+    .map((_, index) => (index === 0 ? multiplier : 0));
 
-  return betArray.concat(Array.from({ length: zerosToAdd }).map(() => 0));
+  return betArray;
 };
 
 const CrashGame = () => {
@@ -49,9 +51,9 @@ const CrashGame = () => {
   );
   const game = GambaUi.useGame();
   const sound = useSound({
-    music: "/sounds/music.mp3",
-    crash: "/sounds/crash.mp3",
-    win: "/sounds/win.mp3",
+    music: "/games/crash/music.mp3",
+    crash: "/games/crash/crash.mp3",
+    win: "/games/crash/win.mp3",
   });
 
   const walletModal = useWalletModal();
@@ -65,11 +67,24 @@ const CrashGame = () => {
     }
   };
 
-  const getRocketStyle = () => ({
-    bottom: `${Math.min(currentMultiplier / 1, 1) * 100}%`,
-    left: `${Math.min(currentMultiplier / 1, 1) * 100}%`,
-    transform: `rotate(${90 * (1 - currentMultiplier)}deg)`,
-  });
+  const getRocketStyle = () => {
+    const maxMultiplier = 1;
+    const progress = Math.min(currentMultiplier / maxMultiplier, 1);
+
+    const leftOffset = 20;
+    const bottomOffset = 30;
+    const left = progress * (100 - leftOffset);
+    const bottom = Math.pow(progress, 5) * (100 - bottomOffset);
+    const rotationProgress = Math.pow(progress, 2.3);
+    const startRotationDeg = 90;
+    const rotation = (1 - rotationProgress) * startRotationDeg;
+
+    return {
+      bottom: `${bottom}%`,
+      left: `${left}%`,
+      transform: `rotate(${rotation}deg)`,
+    };
+  };
 
   const doTheIntervalThing = (
     currentMultiplier: number,
@@ -96,8 +111,17 @@ const CrashGame = () => {
     const randomValue = Math.random();
     const maxPossibleMultiplier = Math.min(targetMultiplier, 12);
     const exponent = randomValue > 0.95 ? 2.8 : targetMultiplier > 10 ? 5 : 6;
-    const result =
+    let result =
       1 + Math.pow(randomValue, exponent) * (maxPossibleMultiplier - 1);
+
+    // Set a minimum to at least 2%
+    const minThreshold = targetMultiplier * 0.02;
+
+    // Apply some randomness
+    const randomMultiplier =
+      minThreshold + Math.random() * (targetMultiplier * 0.03);
+
+    result = Math.max(result, randomMultiplier);
     return parseFloat(result.toFixed(2));
   };
 
@@ -118,9 +142,6 @@ const CrashGame = () => {
       ? multiplierTarget
       : calculateBiasedLowMultiplier(multiplierTarget);
 
-    console.log("multiplierResult", multiplierResult);
-    console.log("win", win);
-
     sound.play("music");
     doTheIntervalThing(0, multiplierResult, win);
   };
@@ -128,27 +149,42 @@ const CrashGame = () => {
   return (
     <>
       <GambaUi.Portal target="screen">
-        <StarsLayer1 style={{ opacity: currentMultiplier > 3 ? 0 : 1 }} />
-        <LineLayer1 style={{ opacity: currentMultiplier > 3 ? 1 : 0 }} />
-        <StarsLayer2 style={{ opacity: currentMultiplier > 2 ? 0 : 1 }} />
-        <LineLayer2 style={{ opacity: currentMultiplier > 2 ? 1 : 0 }} />
-        <StarsLayer3 style={{ opacity: currentMultiplier > 1 ? 0 : 1 }} />
-        <LineLayer3 style={{ opacity: currentMultiplier > 1 ? 1 : 0 }} />
-        <MultiplierText color={multiplierColor}>
-          {currentMultiplier.toFixed(2)}x
-        </MultiplierText>
-        <Rocket style={getRocketStyle()} />
+        <ScreenWrapper>
+          <StarsLayer1 style={{ opacity: currentMultiplier > 5 ? 0 : 1 }} />
+          <LineLayer1 style={{ opacity: currentMultiplier > 5 ? 1 : 0 }} />
+          <StarsLayer2 style={{ opacity: currentMultiplier > 4.5 ? 0 : 1 }} />
+          <LineLayer2 style={{ opacity: currentMultiplier > 4.5 ? 1 : 0 }} />
+          <StarsLayer3 style={{ opacity: currentMultiplier > 4 ? 0 : 1 }} />
+          <LineLayer3 style={{ opacity: currentMultiplier > 4 ? 1 : 0 }} />
+          <StarsLayer4 style={{ opacity: currentMultiplier > 3.5 ? 0 : 1 }} />
+          <LineLayer4 style={{ opacity: currentMultiplier > 3.5 ? 1 : 0 }} />
+          <StarsLayer5 style={{ opacity: currentMultiplier > 3 ? 0 : 1 }} />
+          <LineLayer5 style={{ opacity: currentMultiplier > 3 ? 1 : 0 }} />
+          <StarsLayer6 style={{ opacity: currentMultiplier > 2.5 ? 0 : 1 }} />
+          <LineLayer6 style={{ opacity: currentMultiplier > 2.5 ? 1 : 0 }} />
+          <StarsLayer7 style={{ opacity: currentMultiplier > 2 ? 0 : 1 }} />
+          <LineLayer7 style={{ opacity: currentMultiplier > 2 ? 1 : 0 }} />
+          <StarsLayer8 style={{ opacity: currentMultiplier > 1.5 ? 0 : 1 }} />
+          <LineLayer8 style={{ opacity: currentMultiplier > 1.5 ? 1 : 0 }} />
+          <StarsLayer9 style={{ opacity: currentMultiplier > 1 ? 0 : 1 }} />
+          <LineLayer9 style={{ opacity: currentMultiplier > 1 ? 1 : 0 }} />
+          <StarsLayer10 style={{ opacity: currentMultiplier > 0.5 ? 0 : 1 }} />
+          <LineLayer10 style={{ opacity: currentMultiplier > 0.5 ? 1 : 0 }} />
+
+          <MultiplierText color={multiplierColor}>
+            {currentMultiplier.toFixed(2)}x
+          </MultiplierText>
+          <Rocket style={getRocketStyle()} />
+        </ScreenWrapper>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
         <CustomSlider value={multiplierTarget} onChange={setMultiplierTarget} />
 
         {wallet.connected ? (
-          <GambaUi.Button main onClick={play}>
-            Play
-          </GambaUi.Button>
+          <GambaUi.PlayButton onClick={play}>Play</GambaUi.PlayButton>
         ) : (
-          <GambaUi.Button main onClick={play}>
+          <GambaUi.Button main onClick={connect}>
             Play
           </GambaUi.Button>
         )}
