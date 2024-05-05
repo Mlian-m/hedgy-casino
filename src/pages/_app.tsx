@@ -6,10 +6,7 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import {
-  GambaPlatformProvider,
-  TokenMetaProvider,
-} from "gamba-react-ui-v2";
+import { GambaPlatformProvider, TokenMetaProvider } from "gamba-react-ui-v2";
 import {
   LIVE_EVENT_TOAST,
   PLATFORM_CREATOR_ADDRESS,

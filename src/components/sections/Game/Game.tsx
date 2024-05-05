@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { decodeGame, getGameAddress } from "gamba-core-v2";
 import {
   useAccount,
-  useGamba,
   useTransactionStore,
   useWalletAddress,
 } from "gamba-react-v2";

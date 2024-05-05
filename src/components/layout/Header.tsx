@@ -6,7 +6,6 @@ import {
   useCurrentPool,
   useCurrentToken,
   useTokenBalance,
-  useUserBalance,
 } from "gamba-react-ui-v2";
 import React, { useState } from "react";
 
