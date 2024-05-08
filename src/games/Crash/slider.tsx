@@ -1,3 +1,4 @@
+// src/games/Crash/slider.tsx
 import React from "react";
 import styled from "styled-components";
 
@@ -56,11 +57,9 @@ interface CustomSliderProps {
 export default function CustomSlider({ value, onChange }: CustomSliderProps) {
   const multipliers = React.useMemo(
     () =>
-      Array.from({ length: 101 }).map((_, i) => {
-        if (i <= 50) {
-          return Math.round((1 + 9 * (i / 50)) * 4) / 4;
-        }
-        return Math.round(10 + 90 * ((i - 50) / 50));
+      Array.from({ length: 99 }).map((_, i) => {
+        // Generate values between 2 and 100
+        return 2 + i;
       }),
     [],
   );
@@ -70,7 +69,7 @@ export default function CustomSlider({ value, onChange }: CustomSliderProps) {
   };
 
   const sliderValue = multipliers.indexOf(value);
-  const percentage = (sliderValue / 100) * 100;
+  const percentage = (sliderValue / 98) * 100;
 
   return (
     <SliderContainer>
@@ -80,7 +79,7 @@ export default function CustomSlider({ value, onChange }: CustomSliderProps) {
           background: `linear-gradient(to right, #007bff ${percentage}%, #d3d3d3 ${percentage}%)`,
         }}
         min="0"
-        max="100"
+        max="98"
         value={sliderValue.toString()}
         onChange={handleSliderChange}
       />

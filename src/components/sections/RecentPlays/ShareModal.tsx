@@ -1,5 +1,6 @@
 // src/components/sections/RecentPlays/ShareModal.tsx
 
+import GambaPlayButton, { GambaButton } from "@/components/ui/GambaPlayButton";
 import { GambaUi, TokenValue, useTokenMeta } from "gamba-react-ui-v2";
 import React, { useRef, useState } from "react";
 
@@ -127,23 +128,19 @@ export function ShareModal({
           </div>
         </div>
         <div className="flex gap-2">
-          <GambaUi.Button
-            size="small"
+          <GambaButton
             onClick={() =>
               window.open(
                 `https://explorer.gamba.so/tx/${event.signature}`,
                 "_blank",
               )
             }
-          >
-            Verify
-          </GambaUi.Button>
-          <GambaUi.Button size="small" onClick={gotoGame}>
-            Play {game?.meta?.name}
-          </GambaUi.Button>
-          <GambaUi.Button size="small" disabled={copying} onClick={copyImage}>
-            Share
-          </GambaUi.Button>
+            text="Verify"
+          />
+
+          <GambaButton onClick={gotoGame} text={`Play ${game?.meta?.name}`} />
+
+          <GambaButton onClick={copyImage} text="Share" />
         </div>
       </div>
     </Modal>

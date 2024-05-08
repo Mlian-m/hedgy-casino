@@ -4,6 +4,7 @@ import { GambaPlatformContext, GambaUi } from "gamba-react-ui-v2";
 import React, { useContext } from "react";
 import { useGamba, useGambaProgram, useSendTransaction } from "gamba-react-v2";
 
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
 import { Icon } from "@/components/ui/Icon";
 import { Modal } from "@/components/ui/Modal";
 
@@ -30,9 +31,7 @@ export function ProvablyFairModal(props: { onClose: () => void }) {
             first time, you can request the initial hashed seed ahead of time.
             After this it will be done automatically for each play.
           </p>
-          <GambaUi.Button main onClick={initialize}>
-            Get hashed seed
-          </GambaUi.Button>
+          <GambaPlayButton onPlay={initialize} text="Get hashed seed" />
         </>
       )}
       {gamba.userCreated && (

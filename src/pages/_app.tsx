@@ -7,6 +7,7 @@ import {
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { GambaPlatformProvider, TokenMetaProvider } from "gamba-react-ui-v2";
+import { GambaProvider, SendTransactionProvider } from "gamba-react-v2";
 import {
   LIVE_EVENT_TOAST,
   PLATFORM_CREATOR_ADDRESS,
@@ -17,7 +18,6 @@ import {
 
 import { AppProps } from "next/app";
 import Footer from "@/components/layout/Footer";
-import { GambaProvider } from "gamba-react-v2";
 import GameToast from "@/hooks/useGameEvent";
 import React from "react";
 import { Toaster } from "sonner";
@@ -38,25 +38,27 @@ function MyApp({ Component, pageProps }: AppProps) {
       <WalletProvider autoConnect wallets={[]}>
         <WalletModalProvider>
           <TokenMetaProvider tokens={TOKENLIST}>
-            <GambaProvider>
-              <GambaPlatformProvider
-                creator={PLATFORM_CREATOR_ADDRESS}
-                defaultCreatorFee={PLATFORM_CREATOR_FEE}
-                defaultJackpotFee={PLATFORM_JACKPOT_FEE}
-              >
-                <Component {...pageProps} />
-                <Footer />
-                <Toaster
-                  position="bottom-right"
-                  richColors
-                  toastOptions={{
-                    style: { background: "#15151f" },
-                  }}
-                />
-                {LIVE_EVENT_TOAST && <GameToast />}
-                {showDisclaimer && <DisclaimerModal />}
-              </GambaPlatformProvider>
-            </GambaProvider>
+            <SendTransactionProvider priorityFee={400_201}>
+              <GambaProvider>
+                <GambaPlatformProvider
+                  creator={PLATFORM_CREATOR_ADDRESS}
+                  defaultCreatorFee={PLATFORM_CREATOR_FEE}
+                  defaultJackpotFee={PLATFORM_JACKPOT_FEE}
+                >
+                  <Component {...pageProps} />
+                  <Footer />
+                  <Toaster
+                    position="bottom-right"
+                    richColors
+                    toastOptions={{
+                      style: { background: "#15151f" },
+                    }}
+                  />
+                  {LIVE_EVENT_TOAST && <GameToast />}
+                  {showDisclaimer && <DisclaimerModal />}
+                </GambaPlatformProvider>
+              </GambaProvider>
+            </SendTransactionProvider>
           </TokenMetaProvider>
         </WalletModalProvider>
       </WalletProvider>

@@ -1,6 +1,6 @@
 # Gamba Nextjs
 
-![screencapture](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/9a1e0132-4d12-4c49-9235-b0c10175fd39)
+![screencapture](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/d6a79d4a-b378-405a-a662-cd1ccbf7232e)
 
 > This is a forked and rewritten repo from the [gamba platform](https://github.com/gamba-labs/platform).
 

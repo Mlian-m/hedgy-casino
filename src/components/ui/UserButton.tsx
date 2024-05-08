@@ -1,5 +1,6 @@
 // src/components/sections/UserButton.tsx
 
+import { GambaButton } from "./GambaPlayButton";
 import { GambaUi } from "gamba-react-ui-v2";
 import { Modal } from "./Modal";
 import React from "react";
@@ -23,9 +24,7 @@ function ConnectedButton() {
           <h1 className="min-w-64">
             {truncateString(address.toBase58(), 8, 8)}
           </h1>
-          <GambaUi.Button onClick={() => wallet.disconnect()}>
-            Disconnect
-          </GambaUi.Button>
+          <GambaButton onClick={() => wallet.disconnect()} text="Disconnect" />
         </Modal>
       )}
       <div className="max-sm:text-xs whitespace-nowrap" ref={ref}>

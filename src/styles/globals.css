@@ -241,11 +241,3 @@ body::-webkit-scrollbar-thumb {
 .game-card:hover .play {
   opacity: 1;
 }
-
-/* wheel styles */
-.wheel-container {
-  width: 100%;
-  max-width: 500px;
-  aspect-ratio: 1;
-  margin: auto;
-}
