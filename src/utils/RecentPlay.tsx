@@ -35,7 +35,7 @@ export function RecentPlay({
         {game ? (
           <img
             src={`/games/${game.id}/logo.png`}
-            alt={`Splash for ${game.meta.name}`}
+            alt={`Splash`}
             width={64}
           />
         ) : (

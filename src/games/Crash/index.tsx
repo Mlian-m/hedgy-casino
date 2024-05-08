@@ -1,3 +1,6 @@
+import GambaPlayButton, {
+  ButtonWrapper,
+} from "@/components/ui/GambaPlayButton";
 // src/games/Crash/index.tsx
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import {
@@ -28,23 +31,10 @@ import {
 import React, { useState } from "react";
 
 import CustomSlider from "./slider";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-
-export const calculateBetArray = (multiplier: number) => {
-  const targetMultiplier = Math.ceil(multiplier);
-
-  // Generate an array filled with zeros, except for the multiplier
-  const betArray = new Array(targetMultiplier)
-    .fill(0)
-    .map((_, index) => (index === 0 ? multiplier : 0));
-
-  return betArray;
-};
 
 const CrashGame = () => {
   const [wager, setWager] = useWagerInput();
-  const [multiplierTarget, setMultiplierTarget] = useState(1.5);
+  const [multiplierTarget, setMultiplierTarget] = useState(2);
   const [currentMultiplier, setCurrentMultiplier] = useState(0);
   const [rocketState, setRocketState] = useState<"idle" | "win" | "crash">(
     "idle",
@@ -56,15 +46,13 @@ const CrashGame = () => {
     win: "/games/crash/win.mp3",
   });
 
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
+  const calculateBetArray = (multiplier: number) => {
+    const targetMultiplier = Math.ceil(multiplier);
 
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
+    const betArray = new Array(targetMultiplier)
+      .fill(0)
+      .map((_, index) => (index === 0 ? multiplier : 0));
+    return betArray;
   };
 
   const getRocketStyle = () => {
@@ -133,6 +121,7 @@ const CrashGame = () => {
 
   const play = async () => {
     setRocketState("idle");
+
     const bet = calculateBetArray(multiplierTarget);
     await game.play({ wager, bet });
 
@@ -178,16 +167,15 @@ const CrashGame = () => {
         </ScreenWrapper>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
-        <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <CustomSlider value={multiplierTarget} onChange={setMultiplierTarget} />
+        <ButtonWrapper>
+          <GambaUi.WagerInput value={wager} onChange={setWager} />
+          <CustomSlider
+            value={multiplierTarget}
+            onChange={setMultiplierTarget}
+          />
+        </ButtonWrapper>
 
-        {wallet.connected ? (
-          <GambaUi.PlayButton onClick={play}>Play</GambaUi.PlayButton>
-        ) : (
-          <GambaUi.Button main onClick={connect}>
-            Play
-          </GambaUi.Button>
-        )}
+        <GambaPlayButton disabled={!wager} onPlay={play} text="Play" />
       </GambaUi.Portal>
     </>
   );

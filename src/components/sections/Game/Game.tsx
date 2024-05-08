@@ -9,6 +9,7 @@ import {
   useWalletAddress,
 } from "gamba-react-v2";
 
+import { FaStar } from "react-icons/fa";
 import { GAMES } from "@/games";
 import { GameCard } from "@/components/sections/Dashboard/GameCard";
 import { Icon } from "@/components/ui/Icon";
@@ -112,6 +113,56 @@ export default function CustomRenderer() {
     }
   }, [game.id, gamesPlayed, newcomer, set]);
 
+  const VolatilityStars = ({ count }: { count: number }) => {
+    const totalStars = 5;
+
+    // Function to determine the size class based on the star index
+    const getSizeClass = (index: number) => {
+      switch (index) {
+        case 0:
+          return "text-sm";
+        case 1:
+          return "text-md";
+        case 2:
+          return "text-lg";
+        case 3:
+          return "text-xl";
+        case 4:
+          return "text-2xl";
+        default:
+          return "text-sm";
+      }
+    };
+
+    const getShadowClass = (index: number) => {
+      return index < count ? "shadow-lg" : "shadow-sm";
+    };
+
+    const filledStars = Array.from({ length: count }).map((_, index) => (
+      <FaStar
+        key={`filled-${index}`}
+        className={`text-yellow-500 ${getSizeClass(index)} ${getShadowClass(
+          index,
+        )}`}
+      />
+    ));
+
+    const emptyStars = Array.from({ length: totalStars - count }).map(
+      (_, index) => (
+        <FaStar
+          key={`empty-${index}`}
+          className={`text-gray-300 ${getSizeClass(index)} shadow-sm`}
+        />
+      ),
+    );
+
+    return (
+      <div className="flex space-x-1 md:space-x-2 items-center">
+        {[...filledStars, ...emptyStars]}
+      </div>
+    );
+  };
+
   return (
     <>
       {info && (
@@ -123,6 +174,11 @@ export default function CustomRenderer() {
           />
           <h1>{game.meta.name}</h1>
           <p>{game.meta.description}</p>
+          <div>
+            <h2 className="text-xl">Volatility</h2>
+            {/* Render volatility stars based on game.meta.volatility */}
+            <VolatilityStars count={game.meta.volatility} />
+          </div>
         </Modal>
       )}
       {provablyFair && (
