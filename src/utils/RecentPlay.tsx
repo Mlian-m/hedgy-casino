@@ -33,11 +33,7 @@ export function RecentPlay({
     <>
       <div className="game-info">
         {game ? (
-          <img
-            src={`/games/${game.id}/logo.png`}
-            alt={`Splash`}
-            width={64}
-          />
+          <img src={`/games/${game.id}/logo.png`} alt={`Splash`} width={64} />
         ) : (
           <div className="fallback-game-info">{gameNameFallback}</div>
         )}
