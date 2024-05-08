@@ -1,6 +1,3 @@
-import GambaPlayButton, {
-  ButtonWrapper,
-} from "@/components/ui/GambaPlayButton";
 // src/games/Crash/index.tsx
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import {
@@ -31,6 +28,7 @@ import {
 import React, { useState } from "react";
 
 import CustomSlider from "./slider";
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
 
 const CrashGame = () => {
   const [wager, setWager] = useWagerInput();
@@ -167,13 +165,8 @@ const CrashGame = () => {
         </ScreenWrapper>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
-        <ButtonWrapper>
-          <GambaUi.WagerInput value={wager} onChange={setWager} />
-          <CustomSlider
-            value={multiplierTarget}
-            onChange={setMultiplierTarget}
-          />
-        </ButtonWrapper>
+        <GambaUi.WagerInput value={wager} onChange={setWager} />
+        <CustomSlider value={multiplierTarget} onChange={setMultiplierTarget} />
 
         <GambaPlayButton disabled={!wager} onPlay={play} text="Play" />
       </GambaUi.Portal>

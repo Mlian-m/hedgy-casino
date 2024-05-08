@@ -29,11 +29,7 @@ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
 
   return (
     <>
-      <img
-        src={`/games/${game.id}/logo.png`}
-        alt={`${game.meta.name}`}
-        className="h-10"
-      />
+      <img src={`/games/${game.id}/logo.png`} alt={"Splash"} className="h-10" />
       <div className={textColorClass}>
         <img
           src="/logo.svg"

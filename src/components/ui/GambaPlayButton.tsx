@@ -2,7 +2,6 @@
 
 import { GambaUi } from "gamba-react-ui-v2";
 import React from "react";
-import styled from "styled-components";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
@@ -17,18 +16,6 @@ interface GambaButtonProps {
   onClick: () => void;
   text: string;
 }
-
-export const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 6px;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    width: auto;
-  }
-`;
 
 export const GambaButton = ({ disabled, onClick, text }: GambaButtonProps) => {
   return (
