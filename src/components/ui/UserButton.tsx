@@ -1,17 +1,17 @@
 // src/components/sections/UserButton.tsx
 
+import React, { useState } from "react";
+
 import { GambaButton } from "./GambaPlayButton";
 import { GambaUi } from "gamba-react-ui-v2";
 import { Modal } from "./Modal";
-import React from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletAddress } from "gamba-react-v2";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 function ConnectedButton() {
-  const [modal, setModal] = React.useState(false);
+  const [modal, setModal] = useState(false);
   const wallet = useWallet();
-  const ref = React.useRef<HTMLDivElement>(null!);
   const address = useWalletAddress();
 
   const truncateString = (s: string, startLen = 4, endLen = startLen) =>
@@ -27,7 +27,7 @@ function ConnectedButton() {
           <GambaButton onClick={() => wallet.disconnect()} text="Disconnect" />
         </Modal>
       )}
-      <div className="max-sm:text-xs whitespace-nowrap" ref={ref}>
+      <div className="max-sm:text-xs whitespace-nowrap">
         <GambaUi.Button onClick={() => setModal(true)}>
           <div className="flex gap-2 items-center">
             <img src={wallet.wallet?.adapter.icon} width={20} />

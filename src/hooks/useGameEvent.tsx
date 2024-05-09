@@ -128,7 +128,7 @@ const GameToast = () => {
 
         toastType(<RecentPlay event={event} />, {
           duration: 5000,
-          position: "bottom-left",
+          position: "bottom-right",
         });
       }
     }

@@ -1,16 +1,12 @@
 # Gamba Nextjs
 
-![screencapture](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/d6a79d4a-b378-405a-a662-cd1ccbf7232e)
+![screencapture](https://github.com/BankkRoll/Gamba-V2-Next.js/assets/106103625/b924180e-39a0-47b2-89f7-87b1ae460ce1)
 
 > This is a forked and rewritten repo from the [gamba platform](https://github.com/gamba-labs/platform).
 
 A demo frontend featuring multiple casino games built on Gamba.
 
 Simply provide your own wallet address to the `<Gamba />` provider and start collecting fees on every bet made on your platform.
-
-## Rewritten in Next.js
-
-This version of the Gamba Demo has been rewritten using Next.js instead of Vite.
 
 ## Quick Setup
 
@@ -31,7 +27,7 @@ To get started with the Gamba Demo, follow these steps:
    npm install
    ```
 
-3. **Configure the Config and Environment Variables**
+3. **Configure your RPC**
 
    Rename the `.env.example` file to `.env` and update the variables to match your environment.
 
@@ -39,44 +35,31 @@ To get started with the Gamba Demo, follow these steps:
    NEXT_PUBLIC_RPC_ENDPOINT=<Your RPC Endpoint>
    ```
 
-   Edit the [config.ts](./config.ts) and configure all your info
+4. **Configure your platform**
 
-   ```
-      // Solana address you wish to receive fees
-      export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
-        "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K",
-      );
+   Edit the [config.ts](./config.ts) and configure all your info:
 
-      // Creator fee (in %)
-      export const PLATFORM_CREATOR_FEE = 0.05; // 5% (5/100 = 0.05)
-
-      // Jackpot fee (in %)
-      export const PLATFORM_JACKPOT_FEE = 0.01; // 1% (1/100 = 0.01)
-
-      // Platform URL - Appears in ShareModal
-      export const PLATFORM_SHARABLE_URL = "play-gamba.vercel.app";
-
-      // Toggle all live events acrossed gamba toast (true = on, false = off)
-      export const LIVE_EVENT_TOAST = true;
-
-      // Platform explorer URL - Appears in welcome banner (can be changed for if you have cusotm explorer)
-      export const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
-   ```
+   - Platform Creator
+   - Platform FEEs
+   - MetaTags SEO
+   - Footer Links
+   - Supported Tokens
+   - ect.
 
    To add a custom token to your platform, Update/Add to the following section with your custom token's details:
 
    ```
-    {
-      mint: new PublicKey(""),
-      name: "",
-      symbol: "",
-      image: "",
-      decimals: 0,
-      baseWager: 0,
-    },
+   {
+      mint: new PublicKey("So11111111111111111111111111111111111111112"),
+      name: "Solana",
+      symbol: "SOL",
+      image: "/logo.png",
+      decimals: 9,
+      baseWager: 0.01e9,
+   }
    ```
 
-4. **Run the Application**
+5. **Run the Application**
 
 Start the development server:
 

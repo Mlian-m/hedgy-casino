@@ -1,27 +1,96 @@
 // config.ts
 import { PublicKey } from "@solana/web3.js";
 
-// Solana address you wish to receive fees
+// Solana creator to receive fees
 export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
   "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K",
 );
 
-// Creator fee (in %)
+// Platform fees
 export const PLATFORM_CREATOR_FEE = 0.05; // 5%
-
-// Jackpot fee (in %)
 export const PLATFORM_JACKPOT_FEE = 0.01; // 1%
 
-// Platform URL - Appears in ShareModal
-export const PLATFORM_SHARABLE_URL = "play-gamba.vercel.app";
-
-// Toggle all live events acrossed gamba toast (true = on, false = off)
+// Toggle live toast events - all game events (true = on, false = off)
 export const LIVE_EVENT_TOAST = true;
 
-// Platform explorer URL - Appears in welcome banner (can be changed for if you have custom explorer)
-export const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
+/******************************************
+ * ┌──────────────────────────────────────┐ *
+ * │          FOOTER LINKS                │ *
+ * └──────────────────────────────────────┘ *
+ ******************************************/
 
-// Supported tokens
+export const FOOTER_LINKS = [
+  {
+    href: "https://github.com/BankkRoll/Gamba-V2-Next.js",
+    title: "👨‍💻 Build your own",
+  },
+  {
+    href: "https://explorer.gamba.so/create",
+    title: "🚀 Create Pool",
+  },
+  {
+    href: "https://gamba.so/docs",
+    title: "📖 Gamba Docs",
+  },
+  {
+    href: "https://discord.com/invite/HSTtFFwR",
+    title: "💬 Join Discord",
+  },
+];
+
+export const FOOTER_TWITTER_LINK = {
+  href: "https://twitter.com/bankkroll_eth",
+  title: "© 2024 Template made with ❤️ by Bankk",
+};
+
+/******************************************
+ * ┌──────────────────────────────────────┐ *
+ * │          METATAGS (SEO)              │ *
+ * └──────────────────────────────────────┘ *
+ ******************************************/
+
+export const BASE_SEO_CONFIG = {
+  defaultTitle: "Gamba - NEXTjs Demo",
+  description:
+    "The gambleFi protocol with end-to-end tools for on-chain degeneracy on Solana.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://play-gamba.vercel.app/",
+    title: "Gamba - NEXTjs Demo",
+    description:
+      "The gambleFi protocol with end-to-end tools for on-chain degeneracy on Solana.",
+    images: [
+      {
+        url: "https://play-gamba.vercel.app/seo.png",
+        alt: "Gamba - NEXTjs Demo",
+      },
+    ],
+    site_name: "Gamba - NEXTjs Demo",
+  },
+  twitter: {
+    cardType: "summary_large_image",
+    site: "https://twitter.com/gambalabs",
+    handle: "@gambalabs",
+  },
+  additionalMetaTags: [
+    {
+      name: "keywords",
+      content: "casino, gaming, rewards, gambling, entertainment",
+    },
+    {
+      name: "theme-color",
+      content: "#000000",
+    },
+  ],
+};
+
+/******************************************
+ * ┌──────────────────────────────────────┐ *
+ * │      SUPPORTED PLATFORM TOKENS       │ *
+ * └──────────────────────────────────────┘ *
+ ******************************************/
+
 export const TOKENLIST = [
   // SOL
   {
@@ -54,7 +123,6 @@ export const TOKENLIST = [
     baseWager: 2000000e5,
   },
   // ADD NEW TOKENS HERE
-  // USE TOKEN LAYOUT FOR LAYOUT STRUCTURE
   // {
   //   mint: new PublicKey(""),
   //   name: "",

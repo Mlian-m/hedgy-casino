@@ -7,7 +7,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 interface GambaPlayButtonProps {
   disabled?: boolean;
-  onPlay: () => void;
+  onClick: () => void;
   text: string;
 }
 
@@ -25,7 +25,7 @@ export const GambaButton = ({ disabled, onClick, text }: GambaButtonProps) => {
   );
 };
 
-const GambaPlayButton = ({ disabled, onPlay, text }: GambaPlayButtonProps) => {
+const GambaPlayButton = ({ disabled, onClick, text }: GambaPlayButtonProps) => {
   const walletModal = useWalletModal();
   const wallet = useWallet();
 
@@ -38,7 +38,7 @@ const GambaPlayButton = ({ disabled, onPlay, text }: GambaPlayButtonProps) => {
   };
 
   return wallet.connected ? (
-    <GambaUi.Button main disabled={disabled} onClick={onPlay}>
+    <GambaUi.Button main disabled={disabled} onClick={onClick}>
       {text}
     </GambaUi.Button>
   ) : (

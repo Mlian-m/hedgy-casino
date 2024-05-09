@@ -6,8 +6,8 @@ import { CellButton, Container, Grid } from "./keno.styles";
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
 import React, { useEffect, useState } from "react";
 
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
+import { toast } from "sonner";
 
 const GRID_SIZE = 40;
 const MAX_SELECTION = 10;
@@ -20,22 +20,12 @@ export default function Keno() {
   const [revealedBlocks, setRevealedBlocks] = useState(new Set());
   const [gameWon, setGameWon] = useState<boolean | null>(null);
   const game = GambaUi.useGame();
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
   const sounds = useSound({
     reveal: "/games/keno/reveal.mp3",
     win: "/games/keno/win.mp3",
     lose: "/games/keno/lose.mp3",
     ping: "/games/keno/ping.mp3",
   });
-
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
-  };
 
   const toggleNumberSelection = (number: number) => {
     if (selectedNumbers.includes(number)) {
@@ -57,6 +47,7 @@ export default function Keno() {
     setRevealedBlocks(new Set());
     setGameWon(null);
     setIsPlaying(true);
+
     try {
       await game.play({
         bet: generateBetArray(selectedNumbers.length),
@@ -65,15 +56,16 @@ export default function Keno() {
 
       const gameResult = await game.result();
       const win = gameResult.payout > 0;
+
       const simulatedDrawnNumbers = simulateDrawnNumbers(win, selectedNumbers);
       setDrawnNumbers(simulatedDrawnNumbers);
 
       revealDrawnNumbers(simulatedDrawnNumbers, win);
       setGameWon(win);
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
+    } finally {
       setIsPlaying(false);
-    } catch (error) {
-      setIsPlaying(false);
-      console.error("Error playing game:", error);
     }
   };
 
@@ -198,49 +190,21 @@ export default function Keno() {
                 : null}
           </p>
         </GambaUi.Responsive>
-        <div
-          style={{
-            position: "absolute",
-            bottom: "4px",
-            right: "4px",
-            zIndex: 1000,
-          }}
-        >
-          <a
-            href="https://x.com/bankkroll_eth"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontSize: "14px",
-              color: "#fff",
-              padding: "10px",
-            }}
-          >
-            BankkmaticGames
-          </a>
-        </div>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-        {wallet.connected ? (
-          <>
-            <GambaUi.PlayButton disabled={isPlaying} onClick={resetGame}>
-              Clear
-            </GambaUi.PlayButton>
-            <GambaUi.PlayButton
-              disabled={
-                selectedNumbers.length === 0 || isPlaying || gameWon !== null
-              }
-              onClick={play}
-            >
-              Play
-            </GambaUi.PlayButton>
-          </>
-        ) : (
-          <GambaUi.Button main onClick={connect}>
-            Play
-          </GambaUi.Button>
-        )}
+        <GambaPlayButton
+          disabled={isPlaying}
+          onClick={resetGame}
+          text="Clear"
+        />
+        <GambaPlayButton
+          disabled={
+            selectedNumbers.length === 0 || isPlaying || gameWon !== null
+          }
+          onClick={play}
+          text="Play"
+        />
       </GambaUi.Portal>
     </>
   );

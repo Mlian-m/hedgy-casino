@@ -1,39 +1,29 @@
 // src/games/ExampleGame/ExampleGame.tsx
 
 import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
+import React, { useRef } from "react";
 
-import React from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
+import { toast } from "sonner";
 
 export default function ExampleGame() {
-  const _hue = React.useRef(0);
+  const _hue = useRef(0);
   const [wager, setWager] = useWagerInput();
   const game = GambaUi.useGame();
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
   const SOUND = "/games/Dice/play.mp3";
   const sound = useSound({ test: SOUND });
 
-  const click = () => {
-    _hue.current = (_hue.current + 30) % 360;
-    sound.play("test", { playbackRate: 0.75 + Math.random() * 0.5 });
-  };
-
   const play = async () => {
-    await game.play({
-      wager,
-      bet: [2, 0],
-    });
-    const result = await game.result();
-    console.log(result);
-  };
-
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
+    try {
+      sound.play("test");
+      await game.play({
+        wager,
+        bet: [2, 0],
+      });
+      const result = await game.result();
+      console.log(result);
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
     }
   };
 
@@ -79,16 +69,7 @@ export default function ExampleGame() {
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <GambaUi.Button onClick={click}>Useless button</GambaUi.Button>
-        {wallet.connected ? (
-          <GambaUi.PlayButton onClick={play}>
-            Double or Nothing
-          </GambaUi.PlayButton>
-        ) : (
-          <GambaUi.Button main onClick={connect}>
-            Play
-          </GambaUi.Button>
-        )}
+        <GambaPlayButton disabled={!wager} onClick={play} text="Play" />
       </GambaUi.Portal>
     </>
   );

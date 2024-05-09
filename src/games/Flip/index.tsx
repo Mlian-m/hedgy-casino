@@ -1,14 +1,15 @@
 // src/games/Flip/index.tsx
-
-import { Coin, TEXTURE_HEADS, TEXTURE_TAILS } from "./Coin";
+import { BannerWithMessages, FlipBanner } from "./FlipBanner";
 import { GambaUi, useCurrentToken, useSound } from "gamba-react-ui-v2";
+import React, { FC, Suspense, useEffect, useState } from "react";
 
 import { Canvas } from "@react-three/fiber";
+import { Coin } from "./Coin";
 import { Effect } from "./Effect";
-import React from "react";
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
+import { Text } from "@react-three/drei";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const SIDES = {
   heads: [2, 0],
@@ -25,25 +26,14 @@ function Flip() {
   const game = GambaUi.useGame();
   const token = useCurrentToken();
   const gamba = useGamba();
-  const [flipping, setFlipping] = React.useState(false);
-  const [win, setWin] = React.useState(false);
-  const [resultIndex, setResultIndex] = React.useState(0);
-  const [side, setSide] = React.useState<Side>("heads");
-
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
-
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
-  };
+  const [flipping, setFlipping] = useState(false);
+  const [win, setWin] = useState<boolean | undefined>(undefined);
+  const [resultIndex, setResultIndex] = useState(0);
+  const [result, setResult] = useState([]);
+  const [side, setSide] = useState<Side>("heads");
 
   const WAGER_OPTIONS = [1, 5, 10, 50, 100].map((x) => x * token.baseWager);
-
-  const [wager, setWager] = React.useState(WAGER_OPTIONS[0]);
+  const [wager, setWager] = useState(WAGER_OPTIONS[0]);
 
   const sounds = useSound({
     coin: SOUND_COIN,
@@ -51,11 +41,20 @@ function Flip() {
     lose: SOUND_LOSE,
   });
 
+  let messages = ["Flip to win!"];
+  if (flipping) {
+    messages = ["Flipping!", "Good luck!"];
+  } else if (win === true) {
+    messages = ["You win!", "Congrats!"];
+  } else if (win === false) {
+    messages = ["You lose!"];
+  }
+
   const play = async () => {
     try {
-      setWin(false);
+      setWin(undefined);
       setFlipping(true);
-
+      setResult([]);
       sounds.play("coin", { playbackRate: 0.5 });
 
       await game.play({
@@ -65,20 +64,21 @@ function Flip() {
       });
 
       sounds.play("coin");
-
       const result = await gamba.result();
-
       const win = result.payout > 0;
-
       setResultIndex(result.resultIndex);
-
-      setWin(win);
+      setResult(result as any);
+      setWin(win ? true : false);
 
       if (win) {
         sounds.play("win");
       } else {
         sounds.play("lose");
       }
+    } catch (err: any) {
+      messages = ["Flip to win!"];
+
+      toast.error(`An error occurred: ${err.message}`);
     } finally {
       setFlipping(false);
     }
@@ -96,9 +96,37 @@ function Flip() {
             position: [0, 0, 100],
           }}
         >
-          <React.Suspense fallback={null}>
-            <Coin result={resultIndex} flipping={flipping} />
-          </React.Suspense>
+          <Suspense fallback={null}>
+            <ambientLight />
+            <BannerWithMessages messages={messages} />
+          </Suspense>
+          <Suspense fallback={null}>
+            <Coin
+              key={"main-coin"}
+              result={resultIndex}
+              flipping={flipping}
+              scale={1}
+              rotation={[-0.6, 0, 0]}
+            />
+          </Suspense>
+          <Suspense fallback={null}>
+            <FlipBanner position={[0, -2.5, 0]} />
+            <Coin
+              key={"side-coin"}
+              result={side === "heads" ? 0 : 1}
+              flipping={false}
+              scale={0.8}
+              position={[-0.4, -2.5, 0]}
+              onClick={() => setSide(side === "heads" ? "tails" : "heads")}
+            />
+            <Text
+              onClick={() => setSide(side === "heads" ? "tails" : "heads")}
+              position={[0.4, -2.5, 0]}
+              fontSize={0.25}
+            >
+              {side === "heads" ? "Heads" : "Tails"}
+            </Text>
+          </Suspense>
           <Effect color="white" />
 
           {flipping && <Effect color="white" />}
@@ -119,30 +147,10 @@ function Flip() {
           />
         </Canvas>
       </GambaUi.Portal>
-      <GambaUi.Portal target="controls">
-        <GambaUi.Button
-          disabled={gamba.isPlaying}
-          onClick={() => setSide(side === "heads" ? "tails" : "heads")}
-        >
-          <div style={{ display: "flex" }}>
-            <img
-              width={32}
-              src={side === "heads" ? TEXTURE_HEADS : TEXTURE_TAILS}
-            />
-            <div className="flex justify-center items-center">
-              {side === "heads" ? "Heads" : "Tails"}
-            </div>
-          </div>
-        </GambaUi.Button>
-        <GambaUi.WagerInput value={wager} onChange={setWager} />
 
-        {wallet.connected ? (
-          <GambaUi.PlayButton onClick={play}>Flip</GambaUi.PlayButton>
-        ) : (
-          <GambaUi.Button main onClick={connect}>
-            Play
-          </GambaUi.Button>
-        )}
+      <GambaUi.Portal target="controls">
+        <GambaUi.WagerInput value={wager} onChange={setWager} />
+        <GambaPlayButton onClick={play} text="Flip" />
       </GambaUi.Portal>
     </>
   );

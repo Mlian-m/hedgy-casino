@@ -8,13 +8,13 @@ import {
   useSound,
   useWagerInput,
 } from "gamba-react-ui-v2";
+import React, { useMemo, useState } from "react";
 
 import { BPS_PER_WHOLE } from "gamba-core-v2";
-import React from "react";
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
 import Slider from "./Slider";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const SOUND_PLAY = "/games/dice/play.mp3";
 const SOUND_LOSE = "/games/dice/lose.mp3";
@@ -44,8 +44,8 @@ export default function Dice() {
   const gamba = useGamba();
   const [wager, setWager] = useWagerInput();
   const pool = useCurrentPool();
-  const [resultIndex, setResultIndex] = React.useState(-1);
-  const [rollUnderIndex, setRollUnderIndex] = React.useState(
+  const [resultIndex, setResultIndex] = useState(-1);
+  const [rollUnderIndex, setRollUnderIndex] = useState(
     Math.floor(DICE_SIDES / 2),
   );
   const sounds = useSound({
@@ -54,22 +54,12 @@ export default function Dice() {
     lose: SOUND_LOSE,
     tick: SOUND_TICK,
   });
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
-
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
-  };
 
   const multiplier =
     Number(BigInt(DICE_SIDES * BPS_PER_WHOLE) / BigInt(rollUnderIndex)) /
     BPS_PER_WHOLE;
 
-  const bet = React.useMemo(
+  const bet = useMemo(
     () =>
       outcomes(DICE_SIDES, (resultIndex) => {
         if (resultIndex < rollUnderIndex) {
@@ -84,21 +74,26 @@ export default function Dice() {
   const game = GambaUi.useGame();
 
   const play = async () => {
-    sounds.play("play");
+    try {
+      sounds.play("play");
+      setResultIndex(-1);
 
-    await game.play({
-      wager,
-      bet,
-    });
+      await game.play({
+        wager,
+        bet,
+      });
 
-    const result = await game.result();
+      const result = await game.result();
+      setResultIndex(result.resultIndex);
 
-    setResultIndex(result.resultIndex);
-
-    if (result.resultIndex < rollUnderIndex) {
-      sounds.play("win");
-    } else {
-      sounds.play("lose");
+      if (result.resultIndex < rollUnderIndex) {
+        sounds.play("win");
+      } else {
+        sounds.play("lose");
+      }
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
+      setResultIndex(-1);
     }
   };
 
@@ -158,13 +153,7 @@ export default function Dice() {
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-        {wallet.connected ? (
-          <GambaUi.PlayButton onClick={play}>Roll</GambaUi.PlayButton>
-        ) : (
-          <GambaUi.Button main onClick={connect}>
-            Play
-          </GambaUi.Button>
-        )}
+        <GambaPlayButton onClick={play} text="Roll" />
       </GambaUi.Portal>
     </>
   );

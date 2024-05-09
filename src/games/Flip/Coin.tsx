@@ -1,5 +1,3 @@
-// src/games/Flip/Coin.tsx
-
 import React, { useEffect, useRef } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
 
@@ -10,36 +8,48 @@ const MODEL_COIN = "/games/flip/Coin.glb";
 const TEXTURE_HEADS = "/games/flip/heads.png";
 const TEXTURE_TAILS = "/games/flip/tails.png";
 
-function CoinModel() {
-  // Use the `useGLTF` and `useTexture` hooks with the paths
+function CoinModel({ headsMap, tailsMap }: { headsMap: any; tailsMap: any }) {
   const { nodes } = useGLTF(MODEL_COIN);
-  const [heads, tails] = useTexture([TEXTURE_HEADS, TEXTURE_TAILS]);
+
+  const coinMesh = nodes.Coin.clone();
 
   return (
     <>
-      <primitive object={nodes.Coin} />
+      <primitive object={coinMesh} />
       <mesh position-z={0.3}>
         <planeGeometry args={[1.3, 1.3]} />
-        <meshStandardMaterial transparent map={heads} />
+        <meshStandardMaterial transparent map={headsMap} />
       </mesh>
       <group rotation-y={Math.PI}>
         <mesh position-z={0.3}>
           <planeGeometry args={[1.3, 1.3]} />
-          <meshStandardMaterial transparent map={tails} />
+          <meshStandardMaterial transparent map={tailsMap} />
         </mesh>
       </group>
     </>
   );
 }
 
-interface CoinFlipProps {
+interface CoinProps {
   flipping: boolean;
   result: number;
+  scale?: number;
+  rotation?: [number, number, number];
+  position?: [number, number, number];
+  onClick?: () => void;
 }
 
-export function Coin({ flipping, result }: CoinFlipProps) {
+export function Coin({
+  flipping,
+  result,
+  scale = 1,
+  rotation = [0, 0, 0],
+  position = [0, 0, 0],
+  onClick,
+}: CoinProps) {
   const group = useRef<Group | null>(null);
   const target = useRef(0);
+  const [heads, tails] = useTexture([TEXTURE_HEADS, TEXTURE_TAILS]);
 
   useEffect(() => {
     if (!flipping && group.current) {
@@ -61,15 +71,20 @@ export function Coin({ flipping, result }: CoinFlipProps) {
           1,
         );
       }
-      const scale = flipping ? 1.25 : 1;
-      group.current.scale.y += (scale - group.current.scale.y) * 0.1;
-      group.current.scale.setScalar(group.current.scale.y);
+      const currentScale = flipping ? 1.25 : 1;
+      group.current.scale.y += (currentScale - group.current.scale.y) * 0.1;
+      group.current.scale.setScalar(group.current.scale.y * scale);
     }
   });
 
   return (
-    <group ref={group}>
-      <CoinModel />
+    <group
+      rotation={rotation}
+      ref={group}
+      position={position}
+      onClick={onClick}
+    >
+      <CoinModel headsMap={heads} tailsMap={tails} />
     </group>
   );
 }

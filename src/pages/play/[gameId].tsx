@@ -6,9 +6,10 @@ import CustomRenderer, {
 } from "@/components/sections/Game/Game";
 import React, { useEffect, useState } from "react";
 
+import { BASE_SEO_CONFIG } from "../../../config";
 import { GAMES } from "@/games";
 import { GambaUi } from "gamba-react-ui-v2";
-import Header from "@/components/layout/Header";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 
 interface GameProps {
@@ -59,6 +60,10 @@ const GamePage: React.FC = () => {
   const [currentGameId, setCurrentGameId] = useState(gameId as string);
   const [isLoading, setIsLoading] = useState(true);
 
+  const game = GAMES.find((x) => x.id === gameId);
+  const gameName = game?.meta?.name;
+  const imagePath = `/games/${gameId}/logo.png`;
+
   useEffect(() => {
     const handleRouteChangeStart = () => {
       setIsLoading(true);
@@ -84,12 +89,31 @@ const GamePage: React.FC = () => {
 
   return (
     <>
+      <NextSeo
+        title={`${BASE_SEO_CONFIG.defaultTitle} | ${gameName}`}
+        description={BASE_SEO_CONFIG.description}
+        canonical={`${BASE_SEO_CONFIG.openGraph.url}/${currentGameId}`}
+        openGraph={{
+          ...BASE_SEO_CONFIG.openGraph,
+          title: `${BASE_SEO_CONFIG.defaultTitle} | ${gameName}`,
+          url: `${BASE_SEO_CONFIG.openGraph.url}/${currentGameId}`,
+          description: BASE_SEO_CONFIG.openGraph.description,
+          images: [
+            {
+              url: `${BASE_SEO_CONFIG.openGraph.url}/${imagePath}`,
+              alt: `${BASE_SEO_CONFIG.defaultTitle} | ${gameName}`,
+            },
+          ],
+        }}
+        twitter={BASE_SEO_CONFIG.twitter}
+        additionalMetaTags={BASE_SEO_CONFIG.additionalMetaTags}
+      />
+
       {isLoading ? (
         <div className="flex justify-center items-center min-h-screen" />
       ) : (
         <>
-          <Header />
-          <Game gameId={gameId as string} key={gameId as string} />
+          <Game gameId={currentGameId} key={currentGameId} />
         </>
       )}
     </>
