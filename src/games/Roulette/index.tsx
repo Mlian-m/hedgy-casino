@@ -5,7 +5,7 @@ import {
   useCurrentPool,
   useCurrentToken,
   useSound,
-  useUserBalance,
+  useTokenBalance,
 } from "gamba-react-ui-v2";
 import {
   addResult,
@@ -17,14 +17,14 @@ import {
 } from "./signals";
 
 import { Chip } from "./Chip";
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
 import React from "react";
 import { StyledResults } from "./Roulette.styles";
 import { Table } from "./Table";
 import { computed } from "@preact/signals-react";
 import styled from "styled-components";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const Wrapper = styled.div`
   display: grid;
@@ -48,7 +48,7 @@ function Results() {
 function Stats() {
   const pool = useCurrentPool();
   const token = useCurrentToken();
-  const balance = useUserBalance();
+  const balance = useTokenBalance();
   const wager = (totalChipValue.value * token.baseWager) / 10_000;
 
   const multiplier = Math.max(...bet.value);
@@ -94,18 +94,8 @@ export default function Roulette() {
   const game = GambaUi.useGame();
   const token = useCurrentToken();
   const pool = useCurrentPool();
-  const balance = useUserBalance();
+  const balance = useTokenBalance();
   const gamba = useGamba();
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
-
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
-  };
 
   const sounds = useSound({
     win: SOUND_WIN,
@@ -121,17 +111,25 @@ export default function Roulette() {
   const balanceExceeded = wager > balance.balance + balance.bonusBalance;
 
   const play = async () => {
-    await game.play({
-      bet: bet.value,
-      wager,
-    });
-    sounds.play("play");
-    const result = await gamba.result();
-    addResult(result.resultIndex);
-    if (result.payout > 0) {
-      sounds.play("win");
-    } else {
-      sounds.play("lose");
+    try {
+      results.value = [];
+      sounds.play("play");
+
+      await game.play({
+        bet: bet.value,
+        wager,
+      });
+
+      const result = await gamba.result();
+      addResult(result.resultIndex);
+
+      if (result.payout > 0) {
+        sounds.play("win");
+      } else {
+        sounds.play("lose");
+      }
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
     }
   };
 
@@ -158,24 +156,16 @@ export default function Roulette() {
             </>
           )}
         />
-        <GambaUi.Button
+        <GambaPlayButton
           disabled={!wager || gamba.isPlaying}
           onClick={clearChips}
-        >
-          Clear
-        </GambaUi.Button>
-        {wallet.connected ? (
-          <GambaUi.PlayButton
-            disabled={!wager || balanceExceeded || maxPayoutExceeded}
-            onClick={play}
-          >
-            Spin
-          </GambaUi.PlayButton>
-        ) : (
-          <GambaUi.Button main onClick={connect}>
-            Play
-          </GambaUi.Button>
-        )}
+          text="Clear"
+        />
+        <GambaPlayButton
+          disabled={!wager || balanceExceeded || maxPayoutExceeded}
+          onClick={play}
+          text="Play"
+        />
       </GambaUi.Portal>
     </>
   );

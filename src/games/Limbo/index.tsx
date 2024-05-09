@@ -3,23 +3,33 @@
  * Author: BankkRoll
  */
 
-import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
+import {
+  GambaUi,
+  TokenValue,
+  useCurrentPool,
+  useCurrentToken,
+  useSound,
+  useWagerInput,
+} from "gamba-react-ui-v2";
 import React, { useState } from "react";
 
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
+import Slider from "./Slider";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 export default function Limbo() {
   const game = GambaUi.useGame();
+  const gamba = useGamba();
   const [wager, setWager] = useWagerInput();
   const [targetMultiplier, setTargetMultiplier] = useState<number>(20);
-  const [resultMultiplier, setResultMultiplier] = useState<number>(1);
+  const [resultMultiplier, setResultMultiplier] = useState<number>(0);
   const [playing, setPlaying] = useState<boolean>(false);
   const [isWin, setIsWin] = useState<boolean | null>(null);
   const [textColor, setTextColor] = useState<string>("#FFFFFF");
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
+  const pool = useCurrentPool();
+  const selectedToken = useCurrentToken();
+
   const sounds = useSound({
     spin: "/games/limbo/numbers.mp3",
     win: "/games/limbo/win.mp3",
@@ -27,16 +37,8 @@ export default function Limbo() {
     tick: "/games/limbo/tick.mp3",
   });
 
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
-  };
-
-  const handleMultiplierChange = (value: string) => {
-    setTargetMultiplier(Math.max(2, Math.min(100, parseFloat(value))));
+  const handleMultiplierChange = (value: number) => {
+    setTargetMultiplier(Math.max(2, Math.min(100, value)));
     sounds.play("tick");
   };
 
@@ -69,7 +71,7 @@ export default function Limbo() {
   const play = async () => {
     try {
       setPlaying(true);
-      setResultMultiplier(1);
+      setResultMultiplier(0);
       setTextColor("#FFFFFF");
 
       await game.play({
@@ -78,19 +80,21 @@ export default function Limbo() {
           .map((_, index) => (index === 0 ? targetMultiplier : 0)),
         wager: wager,
       });
+
       const result = await game.result();
 
       const winCondition = result.multiplier >= targetMultiplier;
       setIsWin(winCondition);
       sounds.play("spin", { playbackRate: 0.8 });
+
       const endMultiplier = winCondition
         ? targetMultiplier + Math.random() * targetMultiplier * 0.2
         : 1 + Math.random() * (targetMultiplier - 1);
 
       setTimeout(() => startAnimation(1, endMultiplier, winCondition), 500);
-      setPlaying(false);
-    } catch (error) {
-      console.log(error);
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
+    } finally {
       setPlaying(false);
     }
   };
@@ -111,7 +115,7 @@ export default function Limbo() {
           >
             <div
               style={{
-                fontSize: "100px",
+                fontSize: "10rem",
                 fontWeight: "bold",
                 color: textColor,
                 transition: "color 0.5s ease-in-out",
@@ -119,69 +123,96 @@ export default function Limbo() {
             >
               {resultMultiplier.toFixed(2)}x
             </div>
+            <div className="flex gap-4 justify-between items-center mx-auto">
+              <div className="flex flex-col justify-between items-center mx-auto">
+                <div
+                  style={{
+                    fontSize: "2vh",
+                    fontWeight: "bold",
+                    color: textColor,
+                    transition: "color 0.5s ease-in-out",
+                  }}
+                >
+                  {targetMultiplier}%
+                </div>
+                <div
+                  style={{
+                    fontSize: "2vh",
+                    color: textColor,
+                    marginBottom: "2vh",
+                  }}
+                >
+                  Win Chance
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-between items-center mx-auto">
+                <div
+                  style={{
+                    fontSize: "2vh",
+                    fontWeight: "bold",
+                    color: textColor,
+                    transition: "color 0.5s ease-in-out",
+                  }}
+                >
+                  {targetMultiplier}x
+                </div>
+                <div
+                  style={{
+                    fontSize: "2vh",
+                    color: textColor,
+                    marginBottom: "2vh",
+                  }}
+                >
+                  Multiplier
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-between items-center mx-auto">
+                <div
+                  style={{
+                    fontSize: "2vh",
+                    fontWeight: "bold",
+                    color: textColor,
+                    transition: "color 0.5s ease-in-out",
+                  }}
+                >
+                  <TokenValue
+                    mint={pool.token}
+                    suffix={selectedToken?.symbol}
+                    amount={targetMultiplier * wager}
+                  />
+                </div>
+                <div
+                  style={{
+                    fontSize: "2vh",
+                    color: textColor,
+                    marginBottom: "2vh",
+                  }}
+                >
+                  Payout
+                </div>
+              </div>
+            </div>
+            <Slider
+              disabled={gamba.isPlaying}
+              range={[2, 100]}
+              min={2}
+              max={100}
+              value={targetMultiplier}
+              onChange={handleMultiplierChange}
+            />
           </div>
         </GambaUi.Responsive>
-        <div
-          style={{
-            position: "absolute",
-            bottom: "4px",
-            right: "4px",
-            zIndex: 1000,
-          }}
-        >
-          <a
-            href="https://x.com/bankkroll_eth"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontSize: "14px",
-              color: "#fff",
-              padding: "10px",
-            }}
-          >
-            BankkmaticGames
-          </a>
-        </div>
       </GambaUi.Portal>
 
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            position: "relative",
-            height: "40px",
-          }}
-        >
-          <label style={{ position: "absolute", right: "40px", top: "-10px" }}>
-            Target
-          </label>
-          <input
-            id="targetMultiplier"
-            placeholder="Target Multiplier"
-            type="range"
-            min={2}
-            max={100}
-            step={1}
-            value={String(targetMultiplier)}
-            onChange={(e) => handleMultiplierChange(e.target.value)}
-          />
-          <label
-            style={{ position: "absolute", right: "40px", bottom: "-10px" }}
-          >
-            {targetMultiplier}.00X
-          </label>
-        </div>
-        {wallet.connected ? (
-          <GambaUi.PlayButton onClick={play} disabled={playing}>
-            {playing ? "Playing..." : "Play"}
-          </GambaUi.PlayButton>
-        ) : (
-          <GambaUi.Button main onClick={connect}>
-            Play
-          </GambaUi.Button>
-        )}
+        <GambaPlayButton
+          onClick={play}
+          disabled={playing}
+          text={playing ? "Playing..." : "Play"}
+        />
       </GambaUi.Portal>
     </>
   );

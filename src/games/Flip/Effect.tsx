@@ -2,7 +2,8 @@
 
 import * as THREE from "three";
 
-import React from "react";
+import React, { useRef } from "react";
+
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 
@@ -13,8 +14,8 @@ const STARS = 10;
 
 export const Effect = ({ color }: { color: string }) => {
   const texture = useTexture(TEXTURE_STAR);
-  const mesh = React.useRef<THREE.InstancedMesh>(null!);
-  const animation = React.useRef(0);
+  const mesh = useRef<THREE.InstancedMesh>(null!);
+  const animation = useRef(0);
 
   useFrame(() => {
     for (let i = 0; i < STARS; i++) {

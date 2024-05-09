@@ -6,8 +6,9 @@ import { createJSONStorage, persist } from "zustand/middleware";
 export interface UserStore {
   agreedToTerms: boolean;
   newcomer: boolean;
-  /** A list of games played. The first time a game is opened we display instructions. */
   gamesPlayed: string[];
+  isPriorityFeeEnabled: boolean;
+  priorityFee: number;
   set: StoreApi<UserStore>["setState"];
 }
 
@@ -20,6 +21,9 @@ export const useUserStore = create(
       agreedToTerms: false,
       newcomer: true,
       gamesPlayed: [],
+      /** Priority fee in microlamports. If set, a setComputeUnitPrice is added instruction to the transactions */
+      priorityFee: 400_201,
+      isPriorityFeeEnabled: true,
       set,
     }),
     {

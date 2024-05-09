@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { SLOT_ITEMS, SlotItem } from "./constants";
 import styled, { css, keyframes } from "styled-components";
+
 import { StyledSpinner } from "./Slot.styles";
 
 interface SlotProps {
@@ -81,7 +82,7 @@ const Revealed = styled.div<{ $revealed: boolean; $good: boolean }>`
 `;
 
 export function Slot({ revealed, good, item, index }: SlotProps) {
-  const items = React.useMemo(
+  const items = useMemo(
     () => [...SLOT_ITEMS].sort(() => Math.random() - 0.5),
     [],
   );

@@ -224,13 +224,13 @@ export const ScreenWrapper = styled.div`
 `;
 
 export const MultiplierText = styled.div`
-  font-size: 48px;
+  font-size: 5rem;
   color: ${(props) => props.color || "#fff"};
   text-shadow: 0 0 20px #fff;
   z-index: 1;
   font-family: monospace;
   position: absolute;
-  top: 50%;
+  top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
 `;

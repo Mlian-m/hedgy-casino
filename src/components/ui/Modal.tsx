@@ -28,8 +28,12 @@ export function Modal({ children, onClose }: Props) {
     <div className="fixed inset-0 bg-black bg-opacity-70 z-[999] h-screen flex items-center justify-center p-2 animate-fade-in overflow-y-hidden">
       <div className="flex items-center justify-center">
         <div
+          style={{
+            backgroundImage:
+              "linear-gradient(to bottom right, #1e3a8a, #6b21a8)",
+          }}
           tabIndex={-1}
-          className="focus:outline-none relative flex flex-col items-center w-full max-w-md mx-auto rounded-lg bg-[#15151f] shadow-lg z-100 py-5 pb-5 animate-scale-up text-white overflow-y-auto max-h-[90vh]"
+          className="outline outline-1 relative flex flex-col items-center w-full max-w-sm md:max-w-lg mx-auto rounded-lg bg-[#15151f] shadow-lg z-100 py-5 pb-5 animate-scale-up text-white overflow-y-auto max-h-[90vh]"
         >
           {onClose && (
             <button

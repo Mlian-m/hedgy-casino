@@ -25,13 +25,13 @@ import {
   useSound,
   useWagerInput,
 } from "gamba-react-ui-v2";
+import React, { useMemo, useState } from "react";
 import { generateGrid, revealAllMines, revealGold } from "./utils";
 
 import { BPS_PER_WHOLE } from "gamba-core-v2";
-import React from "react";
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 function Mines() {
   const game = GambaUi.useGame();
@@ -43,28 +43,18 @@ function Mines() {
     step: SOUND_STEP,
     explode: SOUND_EXPLODE,
   });
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
-
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
-  };
 
   const pool = useCurrentPool();
 
-  const [grid, setGrid] = React.useState(generateGrid(GRID_SIZE));
-  const [currentLevel, setLevel] = React.useState(0);
-  const [selected, setSelected] = React.useState(-1);
-  const [totalGain, setTotalGain] = React.useState(0);
-  const [loading, setLoading] = React.useState(false);
-  const [started, setStarted] = React.useState(false);
+  const [grid, setGrid] = useState(generateGrid(GRID_SIZE));
+  const [currentLevel, setLevel] = useState(0);
+  const [selected, setSelected] = useState(-1);
+  const [totalGain, setTotalGain] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [started, setStarted] = useState(false);
 
   const [initialWager, setInitialWager] = useWagerInput();
-  const [mines, setMines] = React.useState(MINE_SELECT[2]);
+  const [mines, setMines] = useState(MINE_SELECT[2]);
 
   const getMultiplierForLevel = (level: number) => {
     const remainingCells = GRID_SIZE - level;
@@ -75,14 +65,13 @@ function Mines() {
     );
   };
 
-  const levels = React.useMemo(() => {
+  const levels = useMemo(() => {
     const totalLevels = GRID_SIZE - mines;
     let cumProfit = 0;
     let previousBalance = initialWager;
 
     return Array.from({ length: totalLevels })
       .map((_, level) => {
-        // For the first level, the wager is the initial wager. For subsequent levels, it's the previous balance.
         const wager = level === 0 ? initialWager : previousBalance;
         const multiplier = getMultiplierForLevel(level);
         const remainingCells = GRID_SIZE - level;
@@ -135,6 +124,7 @@ function Mines() {
       sounds.play("step", {});
       sounds.sounds.tick.player.loop = true;
       sounds.play("tick", {});
+
       await game.play({
         bet,
         wager,
@@ -145,7 +135,6 @@ function Mines() {
 
       sounds.sounds.tick.player.stop();
 
-      // Lose
       if (result.payout === 0) {
         setStarted(false);
         setGrid(revealAllMines(grid, cellIndex, mines));
@@ -163,10 +152,11 @@ function Mines() {
           playbackRate: Math.pow(PITCH_INCREASE_FACTOR, currentLevel),
         });
       } else {
-        // No more squares
         sounds.play("win", { playbackRate: 0.9 });
         sounds.play("finish");
       }
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
     } finally {
       setLoading(false);
       setSelected(-1);
@@ -213,7 +203,6 @@ function Mines() {
                     onClick={() => play(index)}
                     disabled={!canPlay || cell.status !== "hidden"}
                   >
-                    {/* {(cell.status === 'hidden' || cell.status === 'mine') && <MineSvg />} */}
                     {cell.status === "gold" && (
                       <div>
                         +<TokenValue amount={cell.profit} />
@@ -239,18 +228,13 @@ function Mines() {
               onChange={setMines}
               label={(mines) => <>{mines} Mines</>}
             />
-            {wallet.connected ? (
-              <GambaUi.PlayButton onClick={start}>Start</GambaUi.PlayButton>
-            ) : (
-              <GambaUi.Button main onClick={connect}>
-                Play
-              </GambaUi.Button>
-            )}
+            <GambaPlayButton onClick={start} text="Play" />
           </>
         ) : (
-          <GambaUi.Button onClick={endGame}>
-            {totalGain > 0 ? "Finish" : "Reset"}
-          </GambaUi.Button>
+          <GambaPlayButton
+            onClick={endGame}
+            text={totalGain > 0 ? "Finish" : "Reset"}
+          />
         )}
       </GambaUi.Portal>
     </>

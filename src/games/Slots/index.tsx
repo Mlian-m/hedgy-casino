@@ -1,3 +1,4 @@
+// src/games/Slots/index.tsx
 import {
   EffectTest,
   GambaUi,
@@ -21,20 +22,20 @@ import {
   SPIN_DELAY,
   SlotItem,
 } from "./constants";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { generateBetArray, getSlotCombination } from "./utils";
 
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
 import { GameResult } from "gamba-core-v2";
 import { ItemPreview } from "./ItemPreview";
-import React from "react";
 import { Slot } from "./Slot";
 import { StyledSlots } from "./Slots.styles";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
-const Messages: React.FC<{ messages: string[] }> = ({ messages }) => {
-  const [messageIndex, setMessageIndex] = React.useState(0);
-  React.useEffect(() => {
+const Messages: FC<{ messages: string[] }> = ({ messages }) => {
+  const [messageIndex, setMessageIndex] = useState(0);
+  useEffect(() => {
     const timeout = setInterval(() => {
       setMessageIndex((x) => (x + 1) % messages.length);
     }, 2500);
@@ -47,25 +48,14 @@ export default function Slots() {
   const gamba = useGamba();
   const game = GambaUi.useGame();
   const pool = useCurrentPool();
-  const [spinning, setSpinning] = React.useState(false);
-  const [result, setResult] = React.useState<GameResult>();
-  const [good, setGood] = React.useState(false);
-  const [revealedSlots, setRevealedSlots] = React.useState(NUM_SLOTS);
+  const [spinning, setSpinning] = useState(false);
+  const [result, setResult] = useState<GameResult>();
+  const [good, setGood] = useState(false);
+  const [revealedSlots, setRevealedSlots] = useState(NUM_SLOTS);
   const [wager, setWager] = useWagerInput();
-  const [combination, setCombination] = React.useState(
+  const [combination, setCombination] = useState(
     Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0]),
   );
-
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
-
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
-  };
 
   const sounds = useSound({
     win: SOUND_WIN,
@@ -76,7 +66,7 @@ export default function Slots() {
     play: SOUND_PLAY,
   });
 
-  const bet = React.useMemo(
+  const bet = useMemo(
     () => generateBetArray(pool.maxPayout, wager),
     [pool.maxPayout, wager, gamba.nonce],
   );
@@ -137,7 +127,6 @@ export default function Slots() {
 
       const result = await gamba.result();
 
-      // Make sure we wait a minimum time of SPIN_DELAY before slots are revealed:
       const resultDelay = Date.now() - startTime;
       const revealDelay = Math.max(0, SPIN_DELAY - resultDelay);
 
@@ -148,11 +137,10 @@ export default function Slots() {
       setResult(result);
 
       setTimeout(() => revealSlot(combination), revealDelay);
-    } catch (err) {
-      // Reset if there's an error
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
       setSpinning(false);
       setRevealedSlots(NUM_SLOTS);
-      throw err;
     }
   };
 
@@ -160,7 +148,6 @@ export default function Slots() {
     <>
       <GambaUi.Portal target="screen">
         {good && <EffectTest src={combination[0].image} />}
-        {/* {true && <EffectTest src={combination[0].image} />} */}
         <GambaUi.Responsive>
           <StyledSlots>
             <div>
@@ -196,16 +183,7 @@ export default function Slots() {
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-
-        {wallet.connected ? (
-          <GambaUi.PlayButton disabled={!valid} onClick={play}>
-            Spin
-          </GambaUi.PlayButton>
-        ) : (
-          <GambaUi.Button main onClick={connect}>
-            Spin
-          </GambaUi.Button>
-        )}
+        <GambaPlayButton disabled={!valid} onClick={play} text="Spin" />
       </GambaUi.Portal>
     </>
   );

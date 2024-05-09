@@ -1,7 +1,8 @@
 // src/components/sections/Game/Game.tsx
 
+import { FaStar, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { GambaUi, useGambaAudioStore } from "gamba-react-ui-v2";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { decodeGame, getGameAddress } from "gamba-core-v2";
 import {
   useAccount,
@@ -9,7 +10,6 @@ import {
   useWalletAddress,
 } from "gamba-react-v2";
 
-import { FaStar } from "react-icons/fa";
 import { GAMES } from "@/games";
 import { GameCard } from "@/components/sections/Dashboard/GameCard";
 import { Icon } from "@/components/ui/Icon";
@@ -21,9 +21,7 @@ interface TransactionStepperProps {
   currentStep: number;
 }
 
-const TransactionStepper: React.FC<TransactionStepperProps> = ({
-  currentStep,
-}) => {
+const TransactionStepper: FC<TransactionStepperProps> = ({ currentStep }) => {
   const steps = ["Signing", "Sending", "Settling"];
 
   return (
@@ -47,7 +45,7 @@ function useLoadingState() {
   const game = useAccount(getGameAddress(userAddress), decodeGame);
   const txStore = useTransactionStore();
 
-  return React.useMemo(() => {
+  return useMemo(() => {
     if (txStore.label !== "play") {
       return -1;
     }
@@ -104,6 +102,7 @@ export default function CustomRenderer() {
   const currentStep = useLoadingState();
 
   useEffect(() => {
+    audioStore.set(1);
     if (newcomer || !gamesPlayed.includes(game.id)) {
       setInfo(true);
       set((state) => ({
@@ -116,7 +115,6 @@ export default function CustomRenderer() {
   const VolatilityStars = ({ count }: { count: number }) => {
     const totalStars = 5;
 
-    // Function to determine the size class based on the star index
     const getSizeClass = (index: number) => {
       switch (index) {
         case 0:
@@ -167,16 +165,10 @@ export default function CustomRenderer() {
     <>
       {info && (
         <Modal onClose={() => setInfo(false)}>
-          <img
-            height="150px"
-            src={imagePath}
-            alt={`Splash for ${game.meta.name}`}
-          />
-          <h1>{game.meta.name}</h1>
+          <img height="150px" src={imagePath} alt={`${game.meta.name}`} />
           <p>{game.meta.description}</p>
           <div>
             <h2 className="text-xl">Volatility</h2>
-            {/* Render volatility stars based on game.meta.volatility */}
             <VolatilityStars count={game.meta.volatility} />
           </div>
         </Modal>
@@ -185,7 +177,7 @@ export default function CustomRenderer() {
         <ProvablyFairModal onClose={() => setProvablyFair(false)} />
       )}
       <div className="w-full relative grid gap-1">
-        <div className="relative flex-grow bg-[#0c0c11] rounded-lg overflow-hidden transition-height duration-200 md:min-h-[550px] min-h-[500px]">
+        <div className="relative flex-grow bg-[#1A1B28] rounded-lg overflow-hidden transition-height duration-200 md:min-h-[550px] min-h-[500px]">
           <GambaUi.PortalTarget target="error" />
           <GambaUi.PortalTarget target="screen" />
           <div className="absolute left-0 bottom-0 p-1 flex gap-2">
@@ -206,10 +198,18 @@ export default function CustomRenderer() {
             <button
               className="p-2 text-white bg-transparent hover:bg-[#ffffff22] rounded-lg cursor-pointer focus:outline-none"
               onClick={() =>
-                audioStore.set((audioStore.masterGain + 0.25) % 1.25)
+                audioStore.set(audioStore.masterGain === 0 ? 1 : 0)
               }
             >
-              Volume: {audioStore.masterGain * 100}%
+              {audioStore.masterGain === 0 ? (
+                <>
+                  <FaVolumeMute className="w-6 h-6" />
+                </>
+              ) : (
+                <>
+                  <FaVolumeUp className="w-6 h-6" />
+                </>
+              )}
             </button>
           </div>
         </div>

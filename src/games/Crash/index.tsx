@@ -1,5 +1,12 @@
 // src/games/Crash/index.tsx
-import { GambaUi, useSound, useWagerInput } from "gamba-react-ui-v2";
+import {
+  GambaUi,
+  TokenValue,
+  useCurrentPool,
+  useCurrentToken,
+  useSound,
+  useWagerInput,
+} from "gamba-react-ui-v2";
 import {
   LineLayer1,
   LineLayer10,
@@ -27,8 +34,10 @@ import {
 } from "./styles";
 import React, { useState } from "react";
 
-import CustomSlider from "./slider";
 import GambaPlayButton from "@/components/ui/GambaPlayButton";
+import Slider from "./Slider";
+import { toast } from "sonner";
+import { useGamba } from "gamba-react-v2";
 
 const CrashGame = () => {
   const [wager, setWager] = useWagerInput();
@@ -37,6 +46,9 @@ const CrashGame = () => {
   const [rocketState, setRocketState] = useState<"idle" | "win" | "crash">(
     "idle",
   );
+  const gamba = useGamba();
+  const pool = useCurrentPool();
+  const selectedToken = useCurrentToken();
   const game = GambaUi.useGame();
   const sound = useSound({
     music: "/games/crash/music.mp3",
@@ -100,10 +112,8 @@ const CrashGame = () => {
     let result =
       1 + Math.pow(randomValue, exponent) * (maxPossibleMultiplier - 1);
 
-    // Set a minimum to at least 2%
     const minThreshold = targetMultiplier * 0.02;
 
-    // Apply some randomness
     const randomMultiplier =
       minThreshold + Math.random() * (targetMultiplier * 0.03);
 
@@ -118,19 +128,27 @@ const CrashGame = () => {
   })();
 
   const play = async () => {
-    setRocketState("idle");
+    try {
+      setRocketState("idle");
+      setCurrentMultiplier(0);
 
-    const bet = calculateBetArray(multiplierTarget);
-    await game.play({ wager, bet });
+      const bet = calculateBetArray(multiplierTarget);
+      await game.play({ wager, bet });
 
-    const result = await game.result();
-    const win = result.payout > 0;
-    const multiplierResult = win
-      ? multiplierTarget
-      : calculateBiasedLowMultiplier(multiplierTarget);
+      const result = await game.result();
+      const win = result.payout > 0;
 
-    sound.play("music");
-    doTheIntervalThing(0, multiplierResult, win);
+      const multiplierResult = win
+        ? multiplierTarget
+        : calculateBiasedLowMultiplier(multiplierTarget);
+
+      sound.play("music");
+
+      doTheIntervalThing(0, multiplierResult, win);
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
+      setRocketState("idle");
+    }
   };
 
   return (
@@ -161,14 +179,99 @@ const CrashGame = () => {
           <MultiplierText color={multiplierColor}>
             {currentMultiplier.toFixed(2)}x
           </MultiplierText>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "30%",
+              left: "0",
+              right: "0",
+              maxWidth: "300px",
+              display: "flex",
+              flexDirection: "column",
+              margin: "auto",
+              justifyContent: "center",
+              alignItems: "center",
+              transition: "all 0.5s ease-in-out",
+            }}
+          >
+            <div className="flex gap-4 justify-between items-center mx-auto">
+              <div className="flex flex-col justify-between items-center mx-auto">
+                <div
+                  style={{
+                    fontSize: "1.5vh",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {multiplierTarget}%
+                </div>
+                <div
+                  style={{
+                    fontSize: "1.5vh",
+                    marginBottom: "2vh",
+                  }}
+                >
+                  Win Chance
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-between items-center mx-auto">
+                <div
+                  style={{
+                    fontSize: "1.5vh",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {multiplierTarget}x
+                </div>
+                <div
+                  style={{
+                    fontSize: "1.5vh",
+                    marginBottom: "2vh",
+                  }}
+                >
+                  Multiplier
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-between items-center mx-auto">
+                <div
+                  style={{
+                    fontSize: "1.5vh",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <TokenValue
+                    mint={pool.token}
+                    suffix={selectedToken?.symbol}
+                    amount={wager * multiplierTarget}
+                  />
+                </div>
+                <div
+                  style={{
+                    fontSize: "1.5vh",
+                    marginBottom: "2vh",
+                  }}
+                >
+                  Payout
+                </div>
+              </div>
+            </div>
+            <Slider
+              disabled={gamba.isPlaying}
+              range={[2, 100]}
+              min={2}
+              max={100}
+              value={multiplierTarget}
+              onChange={setMultiplierTarget}
+            />
+          </div>
+
           <Rocket style={getRocketStyle()} />
         </ScreenWrapper>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <CustomSlider value={multiplierTarget} onChange={setMultiplierTarget} />
-
-        <GambaPlayButton disabled={!wager} onPlay={play} text="Play" />
+        <GambaPlayButton disabled={!wager} onClick={play} text="Play" />
       </GambaUi.Portal>
     </>
   );

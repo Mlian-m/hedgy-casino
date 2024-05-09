@@ -9,16 +9,22 @@ import {
   barrierWidth,
   bucketHeight,
 } from "./game";
+import React, {
+  DependencyList,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-import React from "react";
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
-function usePlinko(props: PlinkoProps, deps: React.DependencyList) {
-  const [plinko, set] = React.useState<PlinkoGame>(null!);
+function usePlinko(props: PlinkoProps, deps: DependencyList) {
+  const [plinko, set] = useState<PlinkoGame>(null!);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const p = new PlinkoGame(props);
     set(p);
     return () => p.cleanup();
@@ -47,31 +53,21 @@ export default function Plinko() {
   const game = GambaUi.useGame();
   const gamba = useGamba();
   const [wager, setWager] = useWagerInput();
-  const [debug, setDebug] = React.useState(false);
-  const [degen, setDegen] = React.useState(false);
+  const [debug, setDebug] = useState(false);
+  const [degen, setDegen] = useState(false);
   const sounds = useSound({
     bump: BUMP,
     win: WIN,
     fall: FALL,
   });
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
 
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
-  };
-
-  const pegAnimations = React.useRef<Record<number, number>>({});
-  const bucketAnimations = React.useRef<Record<number, number>>({});
+  const pegAnimations = useRef<Record<number, number>>({});
+  const bucketAnimations = useRef<Record<number, number>>({});
 
   const bet = degen ? DEGEN_BET : BET;
   const rows = degen ? 12 : 14;
 
-  const multipliers = React.useMemo(() => Array.from(new Set(bet)), [bet]);
+  const multipliers = useMemo(() => Array.from(new Set(bet)), [bet]);
 
   const plinko = usePlinko(
     {
@@ -97,10 +93,18 @@ export default function Plinko() {
   );
 
   const play = async () => {
-    await game.play({ wager, bet });
-    const result = await gamba.result();
-    plinko.reset();
-    plinko.run(result.multiplier);
+    try {
+      plinko.reset();
+
+      await game.play({ wager, bet });
+
+      const result = await gamba.result();
+
+      plinko.run(result.multiplier);
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
+      plinko.reset();
+    }
   };
 
   return (
@@ -117,7 +121,7 @@ export default function Plinko() {
             const s = Math.min(xx, yy);
 
             ctx.clearRect(0, 0, size.width, size.height);
-            ctx.fillStyle = "#0b0b13";
+            ctx.fillStyle = "#1A1B28";
             ctx.fillRect(0, 0, size.width, size.height);
             ctx.save();
             ctx.translate(
@@ -260,13 +264,7 @@ export default function Plinko() {
           onChange={setDegen}
         />
 
-        {wallet.connected ? (
-          <GambaUi.PlayButton onClick={() => play()}>Play</GambaUi.PlayButton>
-        ) : (
-          <GambaUi.Button main onClick={connect}>
-            Play
-          </GambaUi.Button>
-        )}
+        <GambaPlayButton onClick={play} text="Play" />
       </GambaUi.Portal>
     </>
   );

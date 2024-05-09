@@ -31,7 +31,7 @@ export function ProvablyFairModal(props: { onClose: () => void }) {
             first time, you can request the initial hashed seed ahead of time.
             After this it will be done automatically for each play.
           </p>
-          <GambaPlayButton onPlay={initialize} text="Get hashed seed" />
+          <GambaPlayButton onClick={initialize} text="Get hashed seed" />
         </>
       )}
       {gamba.userCreated && (

@@ -25,11 +25,11 @@ import {
   SOUND_PLAY,
   SOUND_WIN,
 } from "./constants";
+import React, { useMemo, useState } from "react";
 
-import React from "react";
+import GambaPlayButton from "@/components/ui/GambaPlayButton";
+import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const BPS_PER_WHOLE = 10000;
 
@@ -88,29 +88,18 @@ export default function HiLo(props: HiLoConfig) {
   const game = GambaUi.useGame();
   const gamba = useGamba();
   const pool = useCurrentPool();
-  const [cards, setCards] = React.useState([card()]);
-  const [claiming, setClaiming] = React.useState(false);
+  const [cards, setCards] = useState([card()]);
+  const [claiming, setClaiming] = useState(false);
   const [initialWager, setInitialWager] = useWagerInput();
-  const [profit, setProfit] = React.useState(0);
+  const [profit, setProfit] = useState(0);
   const currentRank = cards[cards.length - 1].rank;
-  const [option, setOption] = React.useState<"hi" | "lo">(
+  const [option, setOption] = useState<"hi" | "lo">(
     currentRank > RANKS / 2 ? "lo" : "hi",
   );
-  const [hoveredOption, hoverOption] = React.useState<"hi" | "lo">();
+  const [hoveredOption, hoverOption] = useState<"hi" | "lo">();
 
   const addCard = (rank: number) =>
     setCards((cards) => [...cards, card(rank)].slice(-MAX_CARD_SHOWN));
-
-  const walletModal = useWalletModal();
-  const wallet = useWallet();
-
-  const connect = () => {
-    if (wallet.wallet) {
-      wallet.connect();
-    } else {
-      walletModal.setVisible(true);
-    }
-  };
 
   const sounds = useSound({
     card: SOUND_CARD,
@@ -120,16 +109,16 @@ export default function HiLo(props: HiLoConfig) {
     finish: SOUND_FINISH,
   });
 
-  const betHi = React.useMemo(
+  const betHi = useMemo(
     () => generateBetArray(currentRank, true),
     [currentRank],
   );
-  const betLo = React.useMemo(
+  const betLo = useMemo(
     () => generateBetArray(currentRank, false),
     [currentRank],
   );
 
-  const _bet = React.useMemo(() => {
+  const _bet = useMemo(() => {
     const _option = hoveredOption ?? option;
     if (_option === "hi") return betHi;
     if (_option === "lo") return betLo;
@@ -158,26 +147,31 @@ export default function HiLo(props: HiLoConfig) {
   const wager = Math.min(maxWagerForBet, profit || initialWager);
 
   const play = async () => {
-    sounds.play("play");
+    try {
+      sounds.play("play");
 
-    await game.play({
-      bet,
-      wager,
-    });
+      await game.play({
+        bet,
+        wager,
+      });
 
-    const result = await gamba.result();
-    addCard(result.resultIndex);
-    sounds.play("card", { playbackRate: 0.8 });
-    const win = result.payout > 0;
+      const result = await gamba.result();
+      addCard(result.resultIndex);
+      sounds.play("card", { playbackRate: 0.8 });
 
-    setTimeout(() => {
-      setProfit(result.payout);
-      if (win) {
-        sounds.play("win");
-      } else {
-        sounds.play("lose");
-      }
-    }, 300);
+      const win = result.payout > 0;
+
+      setTimeout(() => {
+        setProfit(result.payout);
+        if (win) {
+          sounds.play("win");
+        } else {
+          sounds.play("lose");
+        }
+      }, 300);
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err.message}`);
+    }
   };
 
   return (
@@ -267,33 +261,31 @@ export default function HiLo(props: HiLoConfig) {
               value={initialWager}
               onChange={setInitialWager}
             />
-            {wallet.connected ? (
-              <GambaUi.PlayButton
-                disabled={!option || initialWager > maxWagerForBet}
-                onClick={play}
-              >
-                Deal card
-              </GambaUi.PlayButton>
-            ) : (
-              <GambaUi.Button main onClick={connect}>
-                Play
-              </GambaUi.Button>
-            )}
+            <GambaPlayButton
+              disabled={!option || initialWager > maxWagerForBet}
+              onClick={play}
+              text="Roll"
+            />
             {initialWager > maxWagerForBet && (
-              <GambaUi.Button onClick={() => setInitialWager(maxWagerForBet)}>
-                Set max
-              </GambaUi.Button>
+              <GambaPlayButton
+                onClick={() => setInitialWager(maxWagerForBet)}
+                text="Set Max"
+              />
             )}
           </>
         ) : (
           <>
             <TokenValue amount={wager} />
-            <GambaUi.Button disabled={gamba.isPlaying} onClick={resetGame}>
-              Finish
-            </GambaUi.Button>
-            <GambaUi.PlayButton disabled={!option} onClick={play}>
-              Deal card
-            </GambaUi.PlayButton>
+            <GambaPlayButton
+              disabled={gamba.isPlaying}
+              onClick={resetGame}
+              text="Finish"
+            />
+            <GambaPlayButton
+              disabled={!option}
+              onClick={play}
+              text="Deal card"
+            />
           </>
         )}
       </GambaUi.Portal>

@@ -119,8 +119,8 @@ export const CellButton = styled.button<{
   position: relative;
   align-items: center;
   justify-content: center;
-  background: #9358ff;
-  /* background: url(https://i.pinimg.com/236x/7d/a1/04/7da10489ada2a7fded7b28f0184acd1c.jpg); */
+  // blue to purple
+  background: linear-gradient(to bottom, #764cc4 50%, #945ef7 100%);
   background-size: 100%;
   border: none;
   border-bottom: 5px solid #00000055;
