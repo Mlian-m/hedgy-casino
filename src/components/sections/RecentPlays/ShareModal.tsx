@@ -183,7 +183,7 @@ export function ShareModal({
               </div>
               <div className="h-4" />
               <div className="mt-4 items-center justify-center flex">
-                <img src="/logo.png" className="h-6 w-auto" alt="Gamba" />
+                <img src="/logo.svg" className="h-6 w-auto" alt="Gamba" />
               </div>
             </div>
           </div>

@@ -3,7 +3,23 @@ import React from "react";
 
 export function WelcomeBanner() {
   return (
-    <div className="relative overflow-hidden flex flex-col items-center justify-center p-4 rounded-lg lg:grid lg:grid-cols-3 gap-4 lg:p-10 bg-gradient-to-br from-blue-800 to-purple-800">
+    <div className="relative overflow-hidden flex flex-col items-center justify-center p-4 rounded-lg lg:grid lg:grid-cols-3 gap-4 lg:p-10 bg-transparent">
+      <div
+        style={{
+          backgroundImage: "url(/seo.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          transform: "perspective(800px) rotateX(40deg)",
+          transformOrigin: "top center",
+          zIndex: -1,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      />
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-10 transform rotate-12 scale-150 blur-xl pointer-events-none"></div>
 
       <div className="lg:col-span-2 text-center lg:text-left">
