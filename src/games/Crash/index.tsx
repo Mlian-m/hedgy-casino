@@ -35,7 +35,7 @@ import {
 import React, { useState } from "react";
 
 import GambaPlayButton from "@/components/ui/GambaPlayButton";
-import Slider from "./Slider";
+import Slider from "./slide";
 import { toast } from "sonner";
 import { useGamba } from "gamba-react-v2";
 

@@ -122,5 +122,5 @@ export const GAMES: GameBundle<GameMeta>[] = [
       volatility: 5,
     },
     app: dynamic(() => import("./Crash")),
-  }
+  },
 ];
