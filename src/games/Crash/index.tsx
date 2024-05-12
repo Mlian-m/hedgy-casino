@@ -44,7 +44,7 @@ const CrashGame = () => {
   const [multiplierTarget, setMultiplierTarget] = useState(2);
   const [currentMultiplier, setCurrentMultiplier] = useState(0);
   const [rocketState, setRocketState] = useState<"idle" | "win" | "crash">(
-    "idle",
+    "idle"
   );
   const gamba = useGamba();
   const pool = useCurrentPool();
@@ -54,6 +54,7 @@ const CrashGame = () => {
     music: "/games/crash/music.mp3",
     crash: "/games/crash/crash.mp3",
     win: "/games/crash/win.mp3",
+    tick: "/games/crash/tick.mp3",
   });
 
   const calculateBetArray = (multiplier: number) => {
@@ -87,7 +88,7 @@ const CrashGame = () => {
   const doTheIntervalThing = (
     currentMultiplier: number,
     targetMultiplier: number,
-    win: boolean,
+    win: boolean
   ) => {
     const nextIncrement = 0.01 * (Math.floor(currentMultiplier) + 1);
     const nextValue = currentMultiplier + nextIncrement;
@@ -202,7 +203,9 @@ const CrashGame = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  {multiplierTarget}%
+                  {`${(multiplierTarget > 1 ? 1 / multiplierTarget : 0).toFixed(
+                    3
+                  )}%`}
                 </div>
                 <div
                   style={{
@@ -262,7 +265,10 @@ const CrashGame = () => {
               min={2}
               max={100}
               value={multiplierTarget}
-              onChange={setMultiplierTarget}
+              onChange={(value: number) => {
+                setMultiplierTarget(value);
+                sound.play("tick");
+              }}
             />
           </div>
 
