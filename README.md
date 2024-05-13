@@ -29,15 +29,15 @@ To get started with the Gamba Demo, follow these steps:
 
 3. **Configure your RPC**
 
-   Rename the `.env.example` file to `.env` and update the variables to match your environment.
+   Rename the `.env.example` file to `.env` and update the RPC with your RPC.
 
    ```
-   NEXT_PUBLIC_RPC_ENDPOINT=<Your RPC Endpoint>
+   NEXT_PUBLIC_RPC_ENDPOINT="<Your RPC Endpoint>"
    ```
 
 4. **Configure your platform**
 
-   Edit the [config.ts](./config.ts) and configure all your info:
+   Edit the [constants.ts](./src/constants.ts) and configure all your info:
 
    - Platform Creator
    - Platform FEEs
