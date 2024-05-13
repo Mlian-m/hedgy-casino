@@ -179,10 +179,15 @@ body::-webkit-scrollbar-thumb {
 }
 
 /* GambaUi.WagerInput overriding styles */
-.sc-gLLuof.cXPwGP img,
-.sc-gLLuof.iROQRr img {
-  width: 2rem !important;
-  height: 2rem !important;
+.sc-gLLuof.cXPwGP button img,
+.sc-gLLuof.iROQRr button img,
+.sc-gLLuof.jPfPoR button img,
+.sc-gLLuof.geLpjZ button img,
+.sc-iBdnpw.lkQOOO button img {
+  max-width: 2rem !important;
+  max-height: 2rem !important;
+  width: auto !important;
+  height: auto !important;
 }
 
 /* Game stepper animation */
