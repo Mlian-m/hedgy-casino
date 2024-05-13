@@ -179,7 +179,8 @@ body::-webkit-scrollbar-thumb {
 }
 
 /* GambaUi.WagerInput overriding styles */
-.sc-gLLuof.cXPwGP img {
+.sc-gLLuof.cXPwGP img,
+.sc-gLLuof.iROQRr img {
   width: 2rem !important;
   height: 2rem !important;
 }
