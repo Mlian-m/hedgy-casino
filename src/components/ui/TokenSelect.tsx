@@ -45,15 +45,20 @@ export default function TokenSelect() {
 
   const setToken = (token: {
     mint: any;
-    name: any;
+    poolAuthority?: any;
+    name: string;
     symbol?: string;
     image?: string;
     decimals?: number;
     baseWager?: number;
   }) => {
     try {
+      if (token && token.poolAuthority) {
+        context.setPool(token.mint, token.poolAuthority);
+      } else {
+        context.setPool(token.mint);
+      }
       toast.success(`Token set to ${token.name}`);
-      context.setToken(token.mint);
       setModalVisible(false);
     } catch (error) {
       toast.error("Error setting token");
