@@ -125,6 +125,7 @@ export const TOKENLIST = [
   // ADD NEW TOKENS HERE
   // {
   //   mint: new PublicKey(""),
+  //   poolAuthority?: new PublicKey(""), // Only required for private pools
   //   name: "",
   //   symbol: "",
   //   image: "",
