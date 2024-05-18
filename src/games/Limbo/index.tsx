@@ -29,6 +29,7 @@ export default function Limbo() {
   const [textColor, setTextColor] = useState<string>("#FFFFFF");
   const pool = useCurrentPool();
   const selectedToken = useCurrentToken();
+  const winChance = (1 / targetMultiplier) * 100;
 
   const sounds = useSound({
     spin: "/games/limbo/numbers.mp3",
@@ -45,7 +46,7 @@ export default function Limbo() {
   const startAnimation = (
     start: number,
     end: number,
-    winCondition: boolean,
+    winCondition: boolean
   ) => {
     let startTime: number | null = null;
     const duration = 2500;
@@ -133,7 +134,7 @@ export default function Limbo() {
                     transition: "color 0.5s ease-in-out",
                   }}
                 >
-                  {targetMultiplier}%
+                  {winChance.toFixed(2)}%
                 </div>
                 <div
                   style={{
