@@ -4,8 +4,12 @@ import { useGambaEventListener, useGambaEvents } from "gamba-react-v2";
 import { useMemo, useState } from "react";
 
 import { GambaTransaction } from "gamba-core-v2";
-import { PLATFORM_CREATOR_ADDRESS } from "../constants";
 import { useRouter } from "next/router";
+import { PublicKey } from "@solana/web3.js";
+
+const PLATFORM_CREATOR_ADDRESS = new PublicKey(
+  process.env.NEXT_PUBLIC_PLATFORM_CREATOR as string,
+);
 
 export function useRecentPlays(platformOnly = false) {
   const router = useRouter();

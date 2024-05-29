@@ -43,9 +43,8 @@ const CrashGame = () => {
   const [wager, setWager] = useWagerInput();
   const [multiplierTarget, setMultiplierTarget] = useState(2);
   const [currentMultiplier, setCurrentMultiplier] = useState(0);
-  const winChance = (1 / multiplierTarget) * 100;
   const [rocketState, setRocketState] = useState<"idle" | "win" | "crash">(
-    "idle"
+    "idle",
   );
   const gamba = useGamba();
   const pool = useCurrentPool();
@@ -89,7 +88,7 @@ const CrashGame = () => {
   const doTheIntervalThing = (
     currentMultiplier: number,
     targetMultiplier: number,
-    win: boolean
+    win: boolean,
   ) => {
     const nextIncrement = 0.01 * (Math.floor(currentMultiplier) + 1);
     const nextValue = currentMultiplier + nextIncrement;
@@ -204,7 +203,9 @@ const CrashGame = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  {winChance.toFixed(2)}%
+                  {`${(multiplierTarget > 1 ? 1 / multiplierTarget : 0).toFixed(
+                    3,
+                  )}%`}
                 </div>
                 <div
                   style={{

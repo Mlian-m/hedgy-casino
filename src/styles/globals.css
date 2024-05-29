@@ -24,15 +24,6 @@
   --gamba-ui-input-background-hover: #11111d;
 }
 
-.gambaButton {
-  background-color: var(--gamba-ui-button-main-background);
-  color: var(--text-color);
-}
-
-.gambaButton:hover {
-  background-color: var(--gamba-ui-button-main-background-hover);
-}
-
 body,
 input,
 button,
@@ -77,14 +68,6 @@ body::-webkit-scrollbar-thumb {
 
 .modal::-webkit-scrollbar-thumb {
   background-color: #9564ff;
-}
-
-.wallet-adapter-button.wallet-adapter-button-trigger {
-  height: 40px;
-  line-height: 40px;
-  font-weight: normal;
-  background: rgb(55, 57, 82);
-  border-radius: 10px;
 }
 
 @layer utilities {

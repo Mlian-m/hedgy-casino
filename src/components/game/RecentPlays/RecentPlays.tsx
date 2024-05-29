@@ -1,12 +1,16 @@
+// src/components/game/RecentPlays/RecentPlays.tsx
 import { GambaTransaction } from "gamba-core-v2";
 import { GambaUi } from "gamba-react-ui-v2";
-import { PLATFORM_CREATOR_ADDRESS } from "../../../constants";
 import { RecentPlay } from "@/utils/RecentPlay";
 import { ShareModal } from "./ShareModal";
 import { TimeDiff } from "@/utils/TimeDiff";
 import { useRecentPlays } from "../../../hooks/useRecentPlays";
-// src/components/sections/RecentPlays/RecentPlays.tsx
 import { useState } from "react";
+import { PublicKey } from "@solana/web3.js";
+
+const PLATFORM_CREATOR_ADDRESS = new PublicKey(
+  process.env.NEXT_PUBLIC_PLATFORM_CREATOR as string,
+);
 
 export default function RecentPlays() {
   const events = useRecentPlays(true);

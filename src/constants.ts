@@ -1,16 +1,11 @@
 // src\constants.ts
 import { PublicKey } from "@solana/web3.js";
 
-// Solana creator to receive fees
-export const PLATFORM_CREATOR_ADDRESS = new PublicKey(
-  "GzzWXXDjLD4FDwDkWB5sARjC2aaLSfCQDjx3dmpoTY7K",
-);
-
 // Platform fees
 export const PLATFORM_CREATOR_FEE = 0.05; // 5%
 export const PLATFORM_JACKPOT_FEE = 0.01; // 1%
 
-// Toggle live toast events - all game events (true = on, false = off)
+// Toggle live toast events - (true = on, false = off)
 export const LIVE_EVENT_TOAST = true;
 
 /******************************************
@@ -122,10 +117,21 @@ export const TOKENLIST = [
     decimals: 5,
     baseWager: 2000000e5,
   },
-  // ADD NEW TOKENS HERE
+
+  // Add New Public pool
   // {
   //   mint: new PublicKey(""),
-  //   poolAuthority?: new PublicKey(""), // Only required for private pools
+  //   name: "",
+  //   symbol: "",
+  //   image: "",
+  //   decimals: 0,
+  //   baseWager: 0,
+  // },
+
+  // Add New Private pool
+  // {
+  //   mint: new PublicKey(""),
+  //   poolAuthority: new PublicKey(""), // REQUIRED FOR PRIVATE POOLS ONLY
   //   name: "",
   //   symbol: "",
   //   image: "",

@@ -27,19 +27,24 @@ To get started with the Gamba Demo, follow these steps:
    npm install
    ```
 
-3. **Configure your RPC**
+3. **Configure your RPC and Creator**
 
-   Rename the `.env.example` file to `.env` and update the RPC with your RPC.
+   - **Upload to Vercel:** For deployment, it is recommended to upload your project to [Vercel](https://vercel.com/). Ensure that you set the necessary environment variables (`NEXT_PUBLIC_RPC_ENDPOINT` and `NEXT_PUBLIC_PLATFORM_CREATOR`) in the Vercel dashboard under the project settings.
 
-   ```
-   NEXT_PUBLIC_RPC_ENDPOINT="<Your RPC Endpoint>"
+   - **Environment Variables:** If you choose to publish your env on GitHub, make sure to use environment variables securely. Rename the `.env.example` file to `.env` and update the RPC with your RPC.
+     I would suggest setting up domain on helius RPC access control rules for your api key if publishing to github.
+
+   ```bash
+   ### Web3 connection
+   NEXT_PUBLIC_RPC_ENDPOINT="<HELIUS API KEY>"
+   ### Creator address
+   NEXT_PUBLIC_PLATFORM_CREATOR="<SOLANA WALLET ADDRESS>"
    ```
 
 4. **Configure your platform**
 
-   Edit the [constants.ts](./src/constants.ts) and configure all your info:
+   Edit the [constants.ts](./src/constants.ts) and configure ALL OF YOUR INFO LINE BY LINE:
 
-   - Platform Creator
    - Platform FEEs
    - MetaTags SEO
    - Footer Links
@@ -48,6 +53,7 @@ To get started with the Gamba Demo, follow these steps:
 
    To add a custom token to your platform, Update/Add to the following section with your custom token's details:
 
+   Add Public Pool 
    ```
    {
       mint: new PublicKey("So11111111111111111111111111111111111111112"),
@@ -57,6 +63,19 @@ To get started with the Gamba Demo, follow these steps:
       decimals: 9,
       baseWager: 0.01e9,
    }
+   ```
+
+   Add Private Pool
+   ```
+   {
+   mint: new PublicKey(""),
+   poolAuthority: new PublicKey(""), // REQUIRED FOR PRIVATE POOLS
+   name: "",
+   symbol: "",
+   image: "",
+   decimals: 0,
+   baseWager: 0,
+   },
    ```
 
 5. **Run the Application**

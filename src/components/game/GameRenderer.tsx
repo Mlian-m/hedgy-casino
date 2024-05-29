@@ -1,7 +1,7 @@
 // src/components/sections/Game/Game.tsx
 
 import { FaStar, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
-import { GambaUi, useGambaAudioStore } from "gamba-react-ui-v2";
+import { GambaUi, useSoundStore } from "gamba-react-ui-v2";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { decodeGame, getGameAddress } from "gamba-core-v2";
 import {
@@ -97,14 +97,13 @@ export default function CustomRenderer() {
   const { game } = GambaUi.useGame();
   const [info, setInfo] = useState(false);
   const [provablyFair, setProvablyFair] = useState(false);
-  const audioStore = useGambaAudioStore();
+  const audioStore = useSoundStore();
   const imagePath = `/games/${game.id}/logo.png`;
   const { newcomer, gamesPlayed, set } = useUserStore();
   const currentStep = useLoadingState();
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    audioStore.set(1);
     if (newcomer || !gamesPlayed.includes(game.id)) {
       setInfo(true);
       set((state) => ({
@@ -208,14 +207,15 @@ export default function CustomRenderer() {
             </div>
             <button
               className="p-2 text-white bg-transparent hover:bg-[#ffffff22] rounded-lg cursor-pointer focus:outline-none"
-              onClick={() => (
-                audioStore.set(audioStore.masterGain === 0 ? 1 : 0),
-                audioStore.masterGain === 0
-                  ? toast.success("Unmuted")
-                  : toast.error("Muted")
-              )}
+              onClick={() => {
+                const newVolume = audioStore.volume === 0 ? 1 : 0;
+                audioStore.set(newVolume);
+                newVolume === 0
+                  ? toast.error("Muted")
+                  : toast.success("Unmuted");
+              }}
             >
-              {audioStore.masterGain === 0 ? (
+              {audioStore.volume === 0 ? (
                 <>
                   <FaVolumeMute className="w-6 h-6" />
                 </>
