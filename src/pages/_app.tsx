@@ -68,8 +68,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     process.env.NEXT_PUBLIC_RPC_ENDPOINT ??
     "https://api.mainnet-beta.solana.com";
 
+  if (!process.env.NEXT_PUBLIC_PLATFORM_CREATOR) {
+    throw new Error(
+      "NEXT_PUBLIC_PLATFORM_CREATOR environment variable is not set"
+    );
+  }
+
   const PLATFORM_CREATOR_ADDRESS = new PublicKey(
-    process.env.NEXT_PUBLIC_PLATFORM_CREATOR as string,
+    process.env.NEXT_PUBLIC_PLATFORM_CREATOR as string
   );
 
   const wallets = useMemo(() => [], []);
