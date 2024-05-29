@@ -5,7 +5,6 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 import {
   BASE_SEO_CONFIG,
   LIVE_EVENT_TOAST,
-  PLATFORM_CREATOR_ADDRESS,
   PLATFORM_CREATOR_FEE,
   PLATFORM_JACKPOT_FEE,
   TOKENLIST,
@@ -14,13 +13,6 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { GambaPlatformProvider, TokenMetaProvider } from "gamba-react-ui-v2";
-import { GambaProvider, SendTransactionProvider } from "gamba-react-v2";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
-
 import { AppProps } from "next/app";
 import { DefaultSeo } from "next-seo";
 import Footer from "@/components/layout/Footer";
@@ -32,6 +24,33 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { useDisclaimer } from "@/hooks/useDisclaimer";
 import { useMemo } from "react";
 import { useUserStore } from "@/hooks/useUserStore";
+import { PublicKey } from "@solana/web3.js";
+
+import { GambaPlatformProvider, TokenMetaProvider } from "gamba-react-ui-v2";
+import { GambaProvider, SendTransactionProvider } from "gamba-react-v2";
+
+// Dynamic imports
+// import dynamic from "next/dynamic";
+
+// const GambaPlatformProvider = dynamic(
+//   () => import("gamba-react-ui-v2").then((mod) => mod.GambaPlatformProvider),
+//   { ssr: false }
+// );
+
+// const TokenMetaProvider = dynamic(
+//   () => import("gamba-react-ui-v2").then((mod) => mod.TokenMetaProvider),
+//   { ssr: false }
+// );
+
+// const GambaProvider = dynamic(
+//   () => import("gamba-react-v2").then((mod) => mod.GambaProvider),
+//   { ssr: false }
+// );
+
+// const SendTransactionProvider = dynamic(
+//   () => import("gamba-react-v2").then((mod) => mod.SendTransactionProvider),
+//   { ssr: false }
+// );
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { showDisclaimer, DisclaimerModal } = useDisclaimer();
@@ -49,10 +68,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     process.env.NEXT_PUBLIC_RPC_ENDPOINT ??
     "https://api.mainnet-beta.solana.com";
 
-  const wallets = useMemo(
-    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter({ network })],
-    [network],
+  const PLATFORM_CREATOR_ADDRESS = new PublicKey(
+    process.env.NEXT_PUBLIC_PLATFORM_CREATOR as string,
   );
+
+  const wallets = useMemo(() => [], []);
 
   return (
     <ConnectionProvider

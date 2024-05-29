@@ -32,7 +32,7 @@ function Flip() {
   const [result, setResult] = useState([]);
   const [side, setSide] = useState<Side>("heads");
 
-  const WAGER_OPTIONS = [1, 5, 10, 50, 100].map((x) => x * token.baseWager);
+  const WAGER_OPTIONS = [1, 5, 10, 50, 100];
   const [wager, setWager] = useState(WAGER_OPTIONS[0]);
 
   const sounds = useSound({
