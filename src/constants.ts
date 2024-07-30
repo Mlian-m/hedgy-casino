@@ -1,9 +1,20 @@
 // src\constants.ts
 import { PublicKey } from "@solana/web3.js";
 
-// Platform fees
-export const PLATFORM_CREATOR_FEE = 0.05; // 5%
-export const PLATFORM_JACKPOT_FEE = 0.01; // 1%
+/******************************************
+ * ┌──────────────────────────────────────┐ *
+ * │          PLATFORM FEES               │ *
+ * └──────────────────────────────────────┘ *
+ ******************************************/
+
+// Creator fee (in %)
+export const PLATFORM_CREATOR_FEE = 0.05; // 5% !!max 5%!!
+
+// Jackpot fee (in %)
+export const PLATFORM_JACKPOT_FEE = 0.01; // 0.1%
+
+// Referral fee (in %)
+export const PLATFORM_REFERRAL_FEE = 0.0025; // 0.25%
 
 // Toggle live toast events - (true = on, false = off)
 export const LIVE_EVENT_TOAST = true;
