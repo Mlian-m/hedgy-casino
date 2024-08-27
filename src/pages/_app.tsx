@@ -13,22 +13,27 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { GambaPlatformProvider, TokenMetaProvider } from "gamba-react-ui-v2";
 import { GambaProvider, SendTransactionProvider } from "gamba-react-v2";
 
 import { AppProps } from "next/app";
 import { DefaultSeo } from "next-seo";
 import Footer from "@/components/layout/Footer";
+import { GambaPlatformProvider } from "gamba-react-ui-v2";
 import GameToast from "@/hooks/useGameEvent";
 import Header from "@/components/layout/Header";
 import { PublicKey } from "@solana/web3.js";
 import { Toaster } from "sonner";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import dynamic from "next/dynamic";
 import { makeReferralPlugin } from "@/referral/plugin";
 import { useDisclaimer } from "@/hooks/useDisclaimer";
 import { useMemo } from "react";
 import { useUserStore } from "@/hooks/useUserStore";
+
+const DynamicTokenMetaProvider = dynamic(
+  () => import("gamba-react-ui-v2").then((mod) => mod.TokenMetaProvider),
+  { ssr: false },
+);
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { showDisclaimer, DisclaimerModal } = useDisclaimer();
@@ -63,9 +68,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     >
       <WalletProvider autoConnect wallets={wallets}>
         <WalletModalProvider>
-          <TokenMetaProvider tokens={TOKENLIST}>
+          <DynamicTokenMetaProvider tokens={TOKENLIST}>
             <SendTransactionProvider {...sendTransactionConfig}>
-              <GambaProvider __experimental_plugins={[makeReferralPlugin()]}>
+              <GambaProvider plugins={[makeReferralPlugin()]}>
                 <GambaPlatformProvider
                   creator={PLATFORM_CREATOR_ADDRESS}
                   defaultCreatorFee={PLATFORM_CREATOR_FEE}
@@ -90,7 +95,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 </GambaPlatformProvider>
               </GambaProvider>
             </SendTransactionProvider>
-          </TokenMetaProvider>
+          </DynamicTokenMetaProvider>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

@@ -1,5 +1,5 @@
 // src/referral/idl.ts
-export type ReferralIdl = {
+export type ReferalIdl = {
   version: "0.1.0";
   name: "refer_program";
   instructions: [
@@ -35,7 +35,7 @@ export type ReferralIdl = {
   ];
 };
 
-export const REFERRAL_IDL: ReferralIdl = {
+export const REFERAL_IDL: ReferalIdl = {
   version: "0.1.0",
   name: "refer_program",
   instructions: [

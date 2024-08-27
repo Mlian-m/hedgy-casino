@@ -12,20 +12,20 @@ import {
 
 import { GambaPlugin } from "gamba-react-v2";
 import { PLATFORM_REFERRAL_FEE } from "../constants";
-import { createReferral } from "./program";
+import { createReferal } from "./program";
 
 const getRecipientFromStorage = () => {
   try {
-    const referralAddressOnChain = sessionStorage.getItem(
-      "referralAddressOnChain",
+    const referalAddressOnChain = sessionStorage.getItem(
+      "referalAddressOnChain",
     );
-    const referralAddressLocal = sessionStorage.getItem("referralAddress");
-    const referralAddress = referralAddressOnChain ?? referralAddressLocal;
-    console.log(referralAddressOnChain, referralAddressLocal);
-    if (!referralAddress) return null;
+    const referalAddressLocal = sessionStorage.getItem("referalAddress");
+    const referalAddress = referalAddressOnChain ?? referalAddressLocal;
+    console.log(referalAddressOnChain, referalAddressLocal);
+    if (!referalAddress) return null;
     return {
-      recipient: new PublicKey(referralAddress),
-      onChain: !!referralAddressOnChain,
+      recipient: new PublicKey(referalAddress),
+      onChain: !!referalAddressOnChain,
     };
   } catch {
     return null;
@@ -33,25 +33,27 @@ const getRecipientFromStorage = () => {
 };
 
 /**
- * The instructions returned from this plugin will be executed before gamba's "play" instruction
+ * This function returns additional instructions that will be executed before playing
  */
 export const makeReferralPlugin =
   (feePercent = PLATFORM_REFERRAL_FEE): GambaPlugin =>
   async (input, context) => {
-    const referral = getRecipientFromStorage();
-    if (!referral) return [];
-    // TODO: Fix this to use context different and corrrect passing.. maybe
-    // const context = useContext(GambaPlatformContext);
+    const referal = getRecipientFromStorage();
+    if (!referal) return [];
 
     const instructions: TransactionInstruction[] = [];
     const tokenAmount = BigInt(Math.floor(input.wager * feePercent));
 
-    const { recipient, onChain } = referral;
+    const { recipient, onChain } = referal;
 
     if (!onChain) {
-      // Save the referral address on-chain
+      // Save the referal address on-chain
       instructions.push(
-        await createReferral(context.anchorProvider, input.creator, recipient),
+        await createReferal(
+          context.provider.anchorProvider!,
+          input.creator,
+          recipient,
+        ),
       );
     }
 
@@ -78,7 +80,7 @@ export const makeReferralPlugin =
       const recipientHasAta = await (async () => {
         try {
           await SplToken.getAccount(
-            context.anchorProvider.connection,
+            context.provider.anchorProvider.connection,
             toAta,
             "confirmed",
           );
