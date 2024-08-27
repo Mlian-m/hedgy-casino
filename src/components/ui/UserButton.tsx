@@ -66,7 +66,7 @@ export function UserButton() {
               {truncateString(address.toBase58(), 8, 8)}
             </h1>
             <p className="my-4 text-sm max-w-sm">
-              Share your link to earn a {PLATFORM_REFERRAL_FEE}% fee on each
+              Share your link to earn a {PLATFORM_REFERRAL_FEE * 100}% fee on each
               play when players use this platform using your code.
             </p>
             <button
