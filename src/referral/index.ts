@@ -1,11 +1,19 @@
 // src/referral/index.ts
 import { fetchReferral, getRefererPda } from "./program";
 
+import Cookies from "js-cookie";
 import { PublicKey } from "@solana/web3.js";
 
 const PLATFORM_CREATOR_ADDRESS = new PublicKey(
   process.env.NEXT_PUBLIC_PLATFORM_CREATOR as string,
 );
+
+interface ReferralData {
+  current: string | null;
+  history: string[];
+}
+
+const MAX_HISTORY = 5;
 
 export const extractReferralAddress = (): PublicKey | null => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -14,7 +22,7 @@ export const extractReferralAddress = (): PublicKey | null => {
 
   try {
     const publicKey = new PublicKey(referralCode);
-    sessionStorage.setItem("referralAddress", referralCode);
+    updateReferralData(referralCode);
     cleanUrlParams(urlParams);
     return publicKey;
   } catch (err) {
@@ -34,7 +42,7 @@ export const fetchAndStoreReferral = async (
     );
     const referer = await fetchReferral(anchorProvider, pda);
     if (referer) {
-      sessionStorage.setItem("referralAddressOnChain", referer.toString());
+      updateReferralData(referer.toString(), true);
     }
   } catch (err) {
     console.error("Referral", err);
@@ -45,7 +53,7 @@ export const cleanUrlAndExtractReferral = () => {
   try {
     const address = extractReferralAddress();
     if (address) {
-      sessionStorage.setItem("referralAddress", address.toString());
+      updateReferralData(address.toString());
     }
   } catch (err) {
     console.error("Error extracting or cleaning referral address:", err);
@@ -58,4 +66,28 @@ const cleanUrlParams = (urlParams: URLSearchParams) => {
     urlParams.toString() ? "?" + urlParams.toString() : ""
   }${window.location.hash}`;
   window.history.replaceState({}, "", newUrl);
+};
+
+export const updateReferralData = (
+  referralCode: string,
+  onChain: boolean = false,
+) => {
+  const referralData: ReferralData = JSON.parse(
+    Cookies.get("referralData") || '{"current":null,"history":[]}',
+  );
+  referralData.current = referralCode;
+  referralData.history = [
+    referralCode,
+    ...referralData.history.filter((code) => code !== referralCode),
+  ].slice(0, MAX_HISTORY);
+  Cookies.set("referralData", JSON.stringify(referralData));
+  if (onChain) {
+    Cookies.set("referralAddressOnChain", referralCode);
+  }
+};
+
+export const getReferralData = (): ReferralData => {
+  return JSON.parse(
+    Cookies.get("referralData") || '{"current":null,"history":[]}',
+  );
 };

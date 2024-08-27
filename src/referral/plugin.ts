@@ -1,5 +1,4 @@
 // src/referral/plugin.ts
-
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 import * as SplToken from "@solana/spl-token";
@@ -10,46 +9,42 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 
+import Cookies from "js-cookie";
 import { GambaPlugin } from "gamba-react-v2";
 import { PLATFORM_REFERRAL_FEE } from "../constants";
-import { createReferal } from "./program";
+import { createReferral } from "./program";
+import { getReferralData } from "./index";
 
 const getRecipientFromStorage = () => {
   try {
-    const referalAddressOnChain = sessionStorage.getItem(
-      "referalAddressOnChain",
-    );
-    const referalAddressLocal = sessionStorage.getItem("referalAddress");
-    const referalAddress = referalAddressOnChain ?? referalAddressLocal;
-    console.log(referalAddressOnChain, referalAddressLocal);
-    if (!referalAddress) return null;
+    const referralData = getReferralData();
+    const referralAddressOnChain = Cookies.get("referralAddressOnChain");
+    const referralAddress = referralAddressOnChain ?? referralData.current;
+    console.log(referralAddressOnChain, referralData.current);
+    if (!referralAddress) return null;
     return {
-      recipient: new PublicKey(referalAddress),
-      onChain: !!referalAddressOnChain,
+      recipient: new PublicKey(referralAddress),
+      onChain: !!referralAddressOnChain,
     };
   } catch {
     return null;
   }
 };
 
-/**
- * This function returns additional instructions that will be executed before playing
- */
 export const makeReferralPlugin =
   (feePercent = PLATFORM_REFERRAL_FEE): GambaPlugin =>
   async (input, context) => {
-    const referal = getRecipientFromStorage();
-    if (!referal) return [];
+    const referral = getRecipientFromStorage();
+    if (!referral) return [];
 
     const instructions: TransactionInstruction[] = [];
     const tokenAmount = BigInt(Math.floor(input.wager * feePercent));
 
-    const { recipient, onChain } = referal;
+    const { recipient, onChain } = referral;
 
     if (!onChain) {
-      // Save the referal address on-chain
       instructions.push(
-        await createReferal(
+        await createReferral(
           context.provider.anchorProvider!,
           input.creator,
           recipient,
@@ -57,7 +52,6 @@ export const makeReferralPlugin =
       );
     }
 
-    // Send native SOL
     if (input.token.equals(SplToken.NATIVE_MINT)) {
       instructions.push(
         SystemProgram.transfer({
@@ -67,7 +61,6 @@ export const makeReferralPlugin =
         }),
       );
     } else {
-      // Send SPL token
       const fromAta = SplToken.getAssociatedTokenAddressSync(
         input.token,
         input.wallet,
@@ -84,14 +77,12 @@ export const makeReferralPlugin =
             toAta,
             "confirmed",
           );
-          // Recipient account exists, return empty
           return true;
         } catch (error) {
           if (
             error instanceof SplToken.TokenAccountNotFoundError ||
             error instanceof SplToken.TokenInvalidAccountOwnerError
           ) {
-            // Recipient account doesn't exist, add create instruction
             return false;
           } else {
             throw error;
@@ -120,7 +111,6 @@ export const makeReferralPlugin =
       );
     }
 
-    // Override creatorFee so that the player doesn't end up paying more
     context.creatorFee = Math.max(0, context.creatorFee - feePercent);
 
     return instructions;
