@@ -57,7 +57,7 @@ export default function HomePage() {
               degeneracy on Solana.
             </p>
             <p className="my-2 text-sm max-w-sm">
-              Share your link to earn a {PLATFORM_REFERRAL_FEE}% fee on each
+              Share your link to earn a {PLATFORM_REFERRAL_FEE * 100}% fee on each
               play when players use this platform using your code.
             </p>
             <button
