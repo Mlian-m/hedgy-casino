@@ -56,28 +56,28 @@ export const FOOTER_TWITTER_LINK = {
  ******************************************/
 
 export const BASE_SEO_CONFIG = {
-  defaultTitle: "Gamba - NEXTjs Demo",
+  defaultTitle: "Hedgy Casino",
   description:
-    "The gambleFi protocol with end-to-end tools for on-chain degeneracy on Solana.",
+    "The Hedgy Casino is a decentralized casino on the Solana blockchain.",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://play-gamba.vercel.app/",
-    title: "Gamba - NEXTjs Demo",
+    url: "https://hedgy-casino.vercel.app/",
+    title: "Hedgy Casino",
     description:
-      "The gambleFi protocol with end-to-end tools for on-chain degeneracy on Solana.",
+      "The Hedgy Casino is a decentralized casino on the Solana blockchain.",
     images: [
       {
-        url: "https://play-gamba.vercel.app/seo.png",
-        alt: "Gamba - NEXTjs Demo",
+        url: "https://hedgy-casino.vercel.app/seo.png",
+        alt: "Hedgy Casino",
       },
     ],
-    site_name: "Gamba - NEXTjs Demo",
+    site_name: "Hedgy Casino",
   },
   twitter: {
     cardType: "summary_large_image",
-    site: "https://twitter.com/gambalabs",
-    handle: "@gambalabs",
+    site: "https://twitter.com/hedgehog_meme",
+    handle: "@hedgehog_meme",
   },
   additionalMetaTags: [
     {
