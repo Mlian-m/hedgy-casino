@@ -1,13 +1,10 @@
 # netlify.toml
 
 [build]
-  command = "npm run build" # Assuming this is correct
-  publish = ".next"         # Assuming this is correct
+  command = "npm run build" # Assuming this is correct based on logs
+  publish = ".next"         # Assuming this is correct based on logs
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs" # Explicitly declare the plugin
-
-# Simplest SPA rewrite rule
+# Minimal SPA rewrite rule
 [[redirects]]
   from = "/*"
   to = "/index.html"
