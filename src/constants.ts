@@ -62,13 +62,13 @@ export const BASE_SEO_CONFIG = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://hedgy-casino.vercel.app/",
+    url: "https://hedgy-casino.netlify.app/",
     title: "Hedgy Casino",
     description:
       "The Hedgy Casino is a decentralized casino on the Solana blockchain.",
     images: [
       {
-        url: "https://hedgy-casino.vercel.app/seo.png",
+        url: "https://hedgy-casino.netlify.app/seo.png",
         alt: "Hedgy Casino",
       },
     ],
