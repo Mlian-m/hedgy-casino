@@ -1,0 +1,14 @@
+# Example netlify.toml if publish = .next
+
+[build]
+  command = "npm run build" # Or your specific build command
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# This rewrite rule might still be needed if the plugin doesn't handle it
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
