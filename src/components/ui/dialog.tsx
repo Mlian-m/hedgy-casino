@@ -1,6 +1,6 @@
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { X } from "lucide-react"
+import dynamic from 'next/dynamic';
 
 import { cn } from "@/lib/utils"
 
@@ -105,6 +105,8 @@ const DialogDescription = React.forwardRef<
   />
 ))
 DialogDescription.displayName = DialogPrimitive.Description.displayName
+
+const X = dynamic(() => import('lucide-react').then(mod => mod.X));
 
 export {
   Dialog,

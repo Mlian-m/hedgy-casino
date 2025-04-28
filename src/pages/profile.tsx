@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Copy, ExternalLink, RefreshCw, Wallet, X } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import {
   TokenValue,
   useCurrentToken,
@@ -21,6 +21,13 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+
+const Check = dynamic(() => import('lucide-react').then(mod => mod.Check));
+const Copy = dynamic(() => import('lucide-react').then(mod => mod.Copy));
+const ExternalLink = dynamic(() => import('lucide-react').then(mod => mod.ExternalLink));
+const RefreshCw = dynamic(() => import('lucide-react').then(mod => mod.RefreshCw));
+const Wallet = dynamic(() => import('lucide-react').then(mod => mod.Wallet));
+const X = dynamic(() => import('lucide-react').then(mod => mod.X));
 
 const Profile: React.FC = () => {
   const wallet = useWallet();
