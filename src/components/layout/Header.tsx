@@ -1,7 +1,6 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ChevronDown, ClipboardCopy, LogOut, User } from "lucide-react"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import {
   GambaPlatformContext,
@@ -23,6 +22,12 @@ import { toast } from "sonner"
 import { useUserStore } from "@/hooks/useUserStore"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import dynamic from 'next/dynamic'
+
+const ChevronDown = dynamic(() => import('lucide-react').then(mod => mod.ChevronDown))
+const ClipboardCopy = dynamic(() => import('lucide-react').then(mod => mod.ClipboardCopy))
+const LogOut = dynamic(() => import('lucide-react').then(mod => mod.LogOut))
+const User = dynamic(() => import('lucide-react').then(mod => mod.User))
 
 export default function Header() {
   const context = React.useContext(GambaPlatformContext)

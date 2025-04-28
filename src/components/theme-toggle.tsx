@@ -1,6 +1,8 @@
 "use client"
 
 import * as React from "react"
+import dynamic from 'next/dynamic';
+// import { Moon, MoonIcon, Sun } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -8,10 +10,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Moon, MoonIcon, Sun } from "lucide-react"
+// Note: MoonIcon seems redundant if Moon is imported, but keeping dynamic import if used
+const MoonIcon = dynamic(() => import('lucide-react').then(mod => mod.MoonIcon));
 
 import { Button } from "@/components/ui/button"
 import { useTheme } from "next-themes"
+
+const Moon = dynamic(() => import('lucide-react').then(mod => mod.Moon));
+const Sun = dynamic(() => import('lucide-react').then(mod => mod.Sun));
 
 export function ThemeToggle() {
   const { setTheme } = useTheme()
