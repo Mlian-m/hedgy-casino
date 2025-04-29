@@ -101,12 +101,13 @@ export const TOKENLIST = [
   // DIOGH
   {
     mint: new PublicKey("CnJzTPbjFzpo5ogNPwRFjt2ade8s2NoBfJVhrFAt31X9"),
+    poolAuthority: new PublicKey("GSKfjvHD7Pg379XLfxXSd99gNQ74bye8REE8WEFf4SW7"), // Your pool address
     name: "Double It Or Go Home",
     symbol: "DIOGH",
     image:
       "https://ipfs.io/ipfs/QmYvNuiuYqQEtDJV3VeoTAmnpFYoi6E2s8hGChJqRGFYyv",
-    decimals: 5,
-    baseWager: 100e5,
+    decimals: 6,
+    baseWager: 100e6,
   },
   // SOL
   {
