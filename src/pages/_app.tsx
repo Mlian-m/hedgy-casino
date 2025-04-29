@@ -14,12 +14,12 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { GambaProvider, SendTransactionProvider } from "gamba-react-v2";
+import { GambaProvider, SendTransactionProvider, useGambaContext } from "gamba-react-v2";
 
 import { AppProps } from "next/app";
 import { DefaultSeo } from "next-seo";
 import Footer from "@/components/layout/Footer";
-import { GambaPlatformProvider } from "gamba-react-ui-v2";
+import { GambaPlatformProvider, useCurrentToken } from "gamba-react-ui-v2";
 import GameToast from "@/hooks/useGameEvent";
 import Header from "@/components/layout/Header";
 import { PublicKey } from "@solana/web3.js";
@@ -30,11 +30,32 @@ import dynamic from "next/dynamic";
 import { useDisclaimer } from "@/hooks/useDisclaimer";
 import { useMemo } from "react";
 import { useUserStore } from "@/hooks/useUserStore";
+import React, { useContext, useEffect, useState } from "react";
+import { GambaPlatformContext } from "gamba-react-ui-v2";
 
 const DynamicTokenMetaProvider = dynamic(
   () => import("gamba-react-ui-v2").then((mod) => mod.TokenMetaProvider),
   { ssr: false }
 );
+
+// Helper component to set the default token
+const SetDefaultToken: React.FC = () => {
+  const { setPool } = useContext(GambaPlatformContext) ?? {};
+  const currentToken = useCurrentToken();
+  const [defaultSet, setDefaultSet] = useState(false);
+
+  useEffect(() => {
+    if (!defaultSet && setPool && currentToken && TOKENLIST.length > 0) {
+      const defaultTokenMint = TOKENLIST[0].mint;
+      if (!currentToken.mint.equals(defaultTokenMint)) {
+        setPool(defaultTokenMint);
+      }
+      setDefaultSet(true);
+    }
+  }, [setPool, currentToken, defaultSet]);
+
+  return null;
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { showDisclaimer, DisclaimerModal } = useDisclaimer();
@@ -87,6 +108,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                       prefix: "code",
                     }}
                   >
+                    <SetDefaultToken />
                     <Header />
                     <DefaultSeo {...BASE_SEO_CONFIG} />
                     <main className="pt-12">

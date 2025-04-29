@@ -101,7 +101,7 @@ export default function CustomRenderer() {
   const imagePath = `/games/${game.id}/logo.png`;
   const { newcomer, gamesPlayed, set } = useUserStore();
   const currentStep = useLoadingState();
-  const [showSplash, setShowSplash] = useState(true);
+  // const [showSplash, setShowSplash] = useState(true); // Remove state if not needed elsewhere
 
   useEffect(() => {
     if (newcomer || !gamesPlayed.includes(game.id)) {
@@ -178,6 +178,7 @@ export default function CustomRenderer() {
         <ProvablyFairModal onClose={() => setProvablyFair(false)} />
       )}
       <div className="w-full relative grid gap-1">
+        {/* REMOVED SPLASH SCREEN BLOCK
         {showSplash && (
           <div className="pointer-events-none rounded-lg absolute inset-0 flex justify-center items-center z-10 bg-[#0c0c11] text-6xl font-bold animate-[splashAnimation_1s_ease-out_forwards]">
             <img
@@ -187,6 +188,7 @@ export default function CustomRenderer() {
             />
           </div>
         )}
+        */}
         <div className="relative flex-grow bg-[#1A1B28] rounded-lg overflow-hidden transition-height duration-200 md:min-h-[550px] min-h-[500px]">
           <GambaUi.PortalTarget target="error" />
           <GambaUi.PortalTarget target="screen" />

@@ -101,11 +101,7 @@ export function ShareModal({
               <div className="grid grid-cols-2 items-center gap-4">
                 <div className="col-span-1">
                   {imagePath && (
-                    <img
-                      src={imagePath}
-                      alt="Game Image"
-                      className="h-full w-full"
-                    />
+                    <span>DOUBLE IT OR GO HOME</span>
                   )}
                   <div
                     className={`text-3xl md:text-5xl font-extrabold ${
@@ -183,14 +179,14 @@ export function ShareModal({
                 </div>
               </div>
               <div className="h-4" />
-              <div className="mt-4 items-center justify-center flex">
+              {/* <div className="mt-4 items-center justify-center flex">
                 <img src="/logo.svg" className="h-6 w-auto" alt="Gamba" />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
         <div className="mt-4 flex gap-2">
-          <GambaButton
+          {/* <GambaButton
             onClick={() =>
               window.open(
                 `https://explorer.gamba.so/tx/${event.signature}`,
@@ -198,7 +194,7 @@ export function ShareModal({
               )
             }
             text="Verify"
-          />
+          /> */}
 
           {!isFallback && (
             <GambaButton onClick={gotoGame} text={`Play ${game?.meta?.name}`} />

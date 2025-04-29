@@ -25,29 +25,29 @@ export const LIVE_EVENT_TOAST = true;
  * └──────────────────────────────────────┘ *
  ******************************************/
 
-export const FOOTER_LINKS = [
-  {
-    href: "https://github.com/BankkRoll/Gamba-V2-Next.js",
-    title: "👨‍💻 Build your own",
-  },
-  {
-    href: "https://explorer.gamba.so/create",
-    title: "🚀 Create Pool",
-  },
-  {
-    href: "https://gamba.so/docs",
-    title: "📖 Gamba Docs",
-  },
-  {
-    href: "https://discord.com/invite/HSTtFFwR",
-    title: "💬 Join Discord",
-  },
-];
+// export const FOOTER_LINKS = [
+//   {
+//     href: "https://github.com/BankkRoll/Gamba-V2-Next.js",
+//     title: "👨‍💻 Build your own",
+//   },
+//   {
+//     href: "https://explorer.gamba.so/create",
+//     title: "🚀 Create Pool",
+//   },
+//   {
+//     href: "https://gamba.so/docs",
+//     title: "📖 Gamba Docs",
+//   },
+//   {
+//     href: "https://discord.com/invite/HSTtFFwR",
+//     title: "💬 Join Discord",
+//   },
+// ];
 
-export const FOOTER_TWITTER_LINK = {
-  href: "https://twitter.com/bankkroll_eth",
-  title: "© 2024 Template made with ❤️ by Bankk",
-};
+// export const FOOTER_TWITTER_LINK = {
+//   href: "https://twitter.com/bankkroll_eth",
+//   title: "© 2024 Template made with ❤️ by Bankk",
+// };
 
 /******************************************
  * ┌──────────────────────────────────────┐ *
@@ -56,28 +56,28 @@ export const FOOTER_TWITTER_LINK = {
  ******************************************/
 
 export const BASE_SEO_CONFIG = {
-  defaultTitle: "Hedgy Casino",
+  defaultTitle: "Double It Or Go Home",
   description:
-    "The Hedgy Casino is a decentralized casino on the Solana blockchain.",
+    "The DIOGH is a decentralized casino on the Solana blockchain.",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://hedgy-casino.netlify.app/",
-    title: "Hedgy Casino",
+    url: "https://dioghgame.netlify.app/",
+    title: "Double It Or Go Home",
     description:
-      "The Hedgy Casino is a decentralized casino on the Solana blockchain.",
+      "The DIOGH is a decentralized casino on the Solana blockchain.",
     images: [
       {
-        url: "https://hedgy-casino.netlify.app/seo.png",
-        alt: "Hedgy Casino",
+        url: "https://dioghgame.netlify.app/seo.png",
+        alt: "Double It Or Go Home",
       },
     ],
-    site_name: "Hedgy Casino",
+    site_name: "Double It Or Go Home",
   },
   twitter: {
     cardType: "summary_large_image",
-    site: "https://twitter.com/hedgehog_meme",
-    handle: "@hedgehog_meme",
+    site: "https://x.com/DoublItOrGoHome",
+    handle: "@oublItOrGoHome",
   },
   additionalMetaTags: [
     {
@@ -98,6 +98,16 @@ export const BASE_SEO_CONFIG = {
  ******************************************/
 
 export const TOKENLIST = [
+  // DIOGH
+  {
+    mint: new PublicKey("CnJzTPbjFzpo5ogNPwRFjt2ade8s2NoBfJVhrFAt31X9"),
+    name: "Double It Or Go Home",
+    symbol: "DIOGH",
+    image:
+      "https://ipfs.io/ipfs/QmYvNuiuYqQEtDJV3VeoTAmnpFYoi6E2s8hGChJqRGFYyv",
+    decimals: 5,
+    baseWager: 100e5,
+  },
   // SOL
   {
     mint: new PublicKey("So11111111111111111111111111111111111111112"),
@@ -118,16 +128,7 @@ export const TOKENLIST = [
     decimals: 9,
     baseWager: 0.01e9,
   },
-  // GUAC
-  {
-    mint: new PublicKey("AZsHEMXd36Bj1EMNXhowJajpUXzrKcK57wW4ZGXVa7yR"),
-    name: "Guacamole",
-    symbol: "GUAC",
-    image:
-      "https://bafkreiccbqs4jty2yjvuxp5x7gzgepquvv657ttauaqgxfhxghuz5us54u.ipfs.nftstorage.link/",
-    decimals: 5,
-    baseWager: 2000000e5,
-  },
+
 
   // Add New Public pool
   // {

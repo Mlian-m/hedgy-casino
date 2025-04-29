@@ -69,17 +69,7 @@ const GamePage: React.FC = () => {
 
       {isLoading ? (
         <div className="bg-black mt-20 flex flex-col justify-center items-center mx-auto max-w-sm md:max-w-6xl pb-1 min-h-[580px] md:min-h-[650px] rounded-lg shadow-xl">
-          <div className="flex flex-col justify-center items-center max-w-lg rounded-lg">
-            <video
-              src="/gamba.mp4"
-              className="w-full h-full"
-              autoPlay
-              muted
-              playsInline
-              loop
-            />
-            <p className="text-2xl text-white mt-5">Loading...</p>
-          </div>
+          <p className="text-2xl text-white mt-5">Loading...</p>
         </div>
       ) : (
         <>
@@ -106,11 +96,6 @@ const GamePage: React.FC = () => {
           )}
         </>
       )}
-      <div className="flex flex-col justify-center items-center mx-auto max-w-6xl max-sm:max-w-sm mb-4">
-        <div className="py-4">
-          <GameSlider />
-        </div>
-      </div>
     </>
   );
 };

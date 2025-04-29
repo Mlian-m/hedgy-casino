@@ -7,6 +7,7 @@ import { extractMetadata } from "@/utils/RecentPlay";
 import { toast } from "sonner";
 import { useGambaEventListener } from "gamba-react-v2";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useRouter } from "next/router";
 
 function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
   const data = event.data;
@@ -100,20 +101,13 @@ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
 
 const GameToast = () => {
   const { publicKey } = useWallet();
+  const router = useRouter();
+  const currentGameId = router.query.gameId as string;
 
   useGambaEventListener("GameSettled", (event) => {
     const { game } = extractMetadata(event);
 
-    // - Filter events by a specific creator
-    // - To enable filtering by a specific creator, uncomment the following lines and
-    // - this will auto filter your events from your platform only.
-
-    // const allowedCreator = PLATFORM_CREATOR_ADDRESS;
-    // const eventCreatorPublicKeyString = event.data.creator.toBase58();
-
-    // - Swap the line below to add the filter
-    // if (game && (allowedCreator.includes(eventCreatorPublicKeyString)) ) {
-    if (game) {
+    if (game && currentGameId && game.id === currentGameId) {
       const connectedUserPublicKeyString = publicKey?.toString();
       const eventUserPublicKeyString = event.data.user.toBase58();
 

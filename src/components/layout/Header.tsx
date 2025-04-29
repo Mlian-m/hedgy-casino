@@ -56,14 +56,17 @@ export default function Header() {
 
   const handleSetToken = (token: any) => {
     try {
+      console.log("Attempting to set token:", token.symbol, token.mint.toString());
       if (token && token.poolAuthority) {
         context.setPool(token.mint, token.poolAuthority)
       } else {
         context.setPool(token.mint)
       }
       toast.success(`Token set to ${token.name}`)
+      console.log("Token should now be:", token.symbol);
     } catch (error) {
       toast.error("Error setting token")
+      console.error("Error setting token:", error)
     }
   }
 
@@ -90,8 +93,10 @@ export default function Header() {
         <div className="absolute top-0 left-0 right-0 backdrop-blur w-full h-full rounded-b-2xl -z-20" />
         <div className="flex gap-5 items-center">
           <Link href="/" passHref>
-            <div className="h-9 m-0 cursor-pointer">
-              <img alt="Gamba logo" src="/logo.svg" className="h-full" />
+            <div className="h-9 m-0 cursor-pointer flex items-center">
+              <span className="text-xl font-bold text-white">
+                $DIOGH
+              </span>
             </div>
           </Link>
         </div>

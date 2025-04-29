@@ -1,11 +1,11 @@
 // src/components/game/RecentPlays/RecentPlays.tsx
 import { GambaTransaction } from "gamba-core-v2";
 import { GambaUi } from "gamba-react-ui-v2";
-import { RecentPlay } from "@/utils/RecentPlay";
+import { RecentPlay, extractMetadata } from "@/utils/RecentPlay";
 import { ShareModal } from "./ShareModal";
 import { TimeDiff } from "@/utils/TimeDiff";
 import { useRecentPlays } from "../../../hooks/useRecentPlays";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PublicKey } from "@solana/web3.js";
 
 const PLATFORM_CREATOR_ADDRESS = new PublicKey(
@@ -13,10 +13,17 @@ const PLATFORM_CREATOR_ADDRESS = new PublicKey(
 );
 
 export default function RecentPlays() {
-  const events = useRecentPlays(true);
+  const allEvents = useRecentPlays(true);
   const [selectedGame, setSelectedGame] =
     useState<GambaTransaction<"GameSettled"> | null>(null);
   const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
+
+  const diceEvents = useMemo(() => {
+    return allEvents.filter(tx => {
+      const { game } = extractMetadata(tx);
+      return game?.id === 'dice';
+    });
+  }, [allEvents]);
 
   return (
     <div className="w-full relative flex flex-col gap-2.5">
@@ -26,8 +33,8 @@ export default function RecentPlays() {
           onClose={() => setSelectedGame(null)}
         />
       )}
-      {events.length > 0
-        ? events.map((tx, index) => (
+      {diceEvents.length > 0
+        ? diceEvents.map((tx, index) => (
             <button
               key={tx.signature + "-" + index}
               onClick={() => setSelectedGame(tx)}
@@ -46,9 +53,11 @@ export default function RecentPlays() {
             ></div>
           ))}
 
+      {/* REMOVED Platform Explorer Button
       <GambaUi.Button main onClick={() => window.open(PLATFORM_EXPLORER_URL)}>
         🚀 Platform Explorer
       </GambaUi.Button>
+      */}
     </div>
   );
 }
