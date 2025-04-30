@@ -1,0 +1,1057 @@
+diff --git a/.gitignore b/.gitignore
+index 32a3b64..5f1fa81 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -4,3 +4,4 @@ node_modules
+ dist
+ dev-dist
+ .env
++.next/
+diff --git a/src/components/game/GameRenderer.tsx b/src/components/game/GameRenderer.tsx
+index 2ae6e69..a719dfc 100644
+--- a/src/components/game/GameRenderer.tsx
++++ b/src/components/game/GameRenderer.tsx
+@@ -101,7 +101,7 @@ export default function CustomRenderer() {
+   const imagePath = `/games/${game.id}/logo.png`;
+   const { newcomer, gamesPlayed, set } = useUserStore();
+   const currentStep = useLoadingState();
+-  const [showSplash, setShowSplash] = useState(true);
++  // const [showSplash, setShowSplash] = useState(true); // Remove state if not needed elsewhere
+ 
+   useEffect(() => {
+     if (newcomer || !gamesPlayed.includes(game.id)) {
+@@ -178,6 +178,7 @@ export default function CustomRenderer() {
+         <ProvablyFairModal onClose={() => setProvablyFair(false)} />
+       )}
+       <div className="w-full relative grid gap-1">
++        {/* REMOVED SPLASH SCREEN BLOCK
+         {showSplash && (
+           <div className="pointer-events-none rounded-lg absolute inset-0 flex justify-center items-center z-10 bg-[#0c0c11] text-6xl font-bold animate-[splashAnimation_1s_ease-out_forwards]">
+             <img
+@@ -187,6 +188,7 @@ export default function CustomRenderer() {
+             />
+           </div>
+         )}
++        */}
+         <div className="relative flex-grow bg-[#1A1B28] rounded-lg overflow-hidden transition-height duration-200 md:min-h-[550px] min-h-[500px]">
+           <GambaUi.PortalTarget target="error" />
+           <GambaUi.PortalTarget target="screen" />
+diff --git a/src/components/game/RecentPlays/RecentPlays.tsx b/src/components/game/RecentPlays/RecentPlays.tsx
+index e42be1f..8f62e36 100644
+--- a/src/components/game/RecentPlays/RecentPlays.tsx
++++ b/src/components/game/RecentPlays/RecentPlays.tsx
+@@ -1,11 +1,11 @@
+ // src/components/game/RecentPlays/RecentPlays.tsx
+ import { GambaTransaction } from "gamba-core-v2";
+ import { GambaUi } from "gamba-react-ui-v2";
+-import { RecentPlay } from "@/utils/RecentPlay";
++import { RecentPlay, extractMetadata } from "@/utils/RecentPlay";
+ import { ShareModal } from "./ShareModal";
+ import { TimeDiff } from "@/utils/TimeDiff";
+ import { useRecentPlays } from "../../../hooks/useRecentPlays";
+-import { useState } from "react";
++import { useState, useMemo } from "react";
+ import { PublicKey } from "@solana/web3.js";
+ 
+ const PLATFORM_CREATOR_ADDRESS = new PublicKey(
+@@ -13,11 +13,18 @@ const PLATFORM_CREATOR_ADDRESS = new PublicKey(
+ );
+ 
+ export default function RecentPlays() {
+-  const events = useRecentPlays(true);
++  const allEvents = useRecentPlays(true);
+   const [selectedGame, setSelectedGame] =
+     useState<GambaTransaction<"GameSettled"> | null>(null);
+   const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
+ 
++  const diceEvents = useMemo(() => {
++    return allEvents.filter(tx => {
++      const { game } = extractMetadata(tx);
++      return game?.id === 'dice';
++    });
++  }, [allEvents]);
++
+   return (
+     <div className="w-full relative flex flex-col gap-2.5">
+       {selectedGame && (
+@@ -26,8 +33,8 @@ export default function RecentPlays() {
+           onClose={() => setSelectedGame(null)}
+         />
+       )}
+-      {events.length > 0
+-        ? events.map((tx, index) => (
++      {diceEvents.length > 0
++        ? diceEvents.map((tx, index) => (
+             <button
+               key={tx.signature + "-" + index}
+               onClick={() => setSelectedGame(tx)}
+@@ -46,9 +53,11 @@ export default function RecentPlays() {
+             ></div>
+           ))}
+ 
++      {/* REMOVED Platform Explorer Button
+       <GambaUi.Button main onClick={() => window.open(PLATFORM_EXPLORER_URL)}>
+         🚀 Platform Explorer
+       </GambaUi.Button>
++      */}
+     </div>
+   );
+ }
+diff --git a/src/components/game/RecentPlays/ShareModal.tsx b/src/components/game/RecentPlays/ShareModal.tsx
+index cc03e27..151d0d8 100644
+--- a/src/components/game/RecentPlays/ShareModal.tsx
++++ b/src/components/game/RecentPlays/ShareModal.tsx
+@@ -101,11 +101,7 @@ export function ShareModal({
+               <div className="grid grid-cols-2 items-center gap-4">
+                 <div className="col-span-1">
+                   {imagePath && (
+-                    <img
+-                      src={imagePath}
+-                      alt="Game Image"
+-                      className="h-full w-full"
+-                    />
++                    <span>DOUBLE IT OR GO HOME</span>
+                   )}
+                   <div
+                     className={`text-3xl md:text-5xl font-extrabold ${
+@@ -183,14 +179,14 @@ export function ShareModal({
+                 </div>
+               </div>
+               <div className="h-4" />
+-              <div className="mt-4 items-center justify-center flex">
++              {/* <div className="mt-4 items-center justify-center flex">
+                 <img src="/logo.svg" className="h-6 w-auto" alt="Gamba" />
+-              </div>
++              </div> */}
+             </div>
+           </div>
+         </div>
+         <div className="mt-4 flex gap-2">
+-          <GambaButton
++          {/* <GambaButton
+             onClick={() =>
+               window.open(
+                 `https://explorer.gamba.so/tx/${event.signature}`,
+@@ -198,7 +194,7 @@ export function ShareModal({
+               )
+             }
+             text="Verify"
+-          />
++          /> */}
+ 
+           {!isFallback && (
+             <GambaButton onClick={gotoGame} text={`Play ${game?.meta?.name}`} />
+diff --git a/src/components/layout/Footer.tsx b/src/components/layout/Footer.tsx
+index 956c210..5a21f7c 100644
+--- a/src/components/layout/Footer.tsx
++++ b/src/components/layout/Footer.tsx
+@@ -1,41 +1,28 @@
+ // src/components/layout/Footer.tsx
+ 
+-import { FOOTER_LINKS, FOOTER_TWITTER_LINK } from "../../constants";
+-
+ export default function Footer() {
+   return (
+-    <footer className="bg-background border border-b-0 rounded-t-2xl shadow-t-3xl">
+-      <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+-        <div className="sm:flex sm:items-center sm:justify-between">
++    <footer className="bg-background border-t border-gray-700 py-4 mt-10">
++      <div className="w-full max-w-screen-xl mx-auto px-4">
++        <div className="flex justify-center items-center gap-6 text-sm text-gray-400">
+           <a
++            href="https://dapp.solforgeai.com"
+             target="_blank"
+             rel="noopener noreferrer"
+-            href="https://gamba.so/"
+-            className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
++            className="hover:underline hover:text-white"
+           >
+-            <img src="/logo.svg" className="h-10" alt="Gamba Logo" />
++            Made on SOL FORGE
+           </a>
+-          <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+-            {FOOTER_LINKS.map((link) => (
+-              <li key={link.href}>
+-                <a
+-                  target="_blank"
+-                  rel="noopener noreferrer"
+-                  href={link.href}
+-                  className="hover:underline me-4 md:me-6"
+-                >
+-                  {link.title}
+-                </a>
+-              </li>
+-            ))}
+-          </ul>
+-        </div>
+-        <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+-        <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
+-          <a href={FOOTER_TWITTER_LINK.href} className="hover:underline">
+-            {FOOTER_TWITTER_LINK.title}
++          <span>|</span>
++          <a
++            href="https://diogh.xyz"
++            target="_blank"
++            rel="noopener noreferrer"
++            className="hover:underline hover:text-white"
++          >
++            DIOGH
+           </a>
+-        </span>
++        </div>
+       </div>
+     </footer>
+   );
+diff --git a/src/components/layout/Header.tsx b/src/components/layout/Header.tsx
+index 49353ae..5ec2e48 100644
+--- a/src/components/layout/Header.tsx
++++ b/src/components/layout/Header.tsx
+@@ -56,14 +56,17 @@ export default function Header() {
+ 
+   const handleSetToken = (token: any) => {
+     try {
++      console.log("Attempting to set token:", token.symbol, token.mint.toString());
+       if (token && token.poolAuthority) {
+         context.setPool(token.mint, token.poolAuthority)
+       } else {
+         context.setPool(token.mint)
+       }
+       toast.success(`Token set to ${token.name}`)
++      console.log("Token should now be:", token.symbol);
+     } catch (error) {
+       toast.error("Error setting token")
++      console.error("Error setting token:", error)
+     }
+   }
+ 
+@@ -90,8 +93,10 @@ export default function Header() {
+         <div className="absolute top-0 left-0 right-0 backdrop-blur w-full h-full rounded-b-2xl -z-20" />
+         <div className="flex gap-5 items-center">
+           <Link href="/" passHref>
+-            <div className="h-9 m-0 cursor-pointer">
+-              <img alt="Gamba logo" src="/logo.svg" className="h-full" />
++            <div className="h-9 m-0 cursor-pointer flex items-center">
++              <span className="text-xl font-bold text-white">
++                $DIOGH
++              </span>
+             </div>
+           </Link>
+         </div>
+diff --git a/src/constants.ts b/src/constants.ts
+index 4fecc23..391ae1a 100644
+--- a/src/constants.ts
++++ b/src/constants.ts
+@@ -25,29 +25,29 @@ export const LIVE_EVENT_TOAST = true;
+  * └──────────────────────────────────────┘ *
+  ******************************************/
+ 
+-export const FOOTER_LINKS = [
+-  {
+-    href: "https://github.com/BankkRoll/Gamba-V2-Next.js",
+-    title: "👨‍💻 Build your own",
+-  },
+-  {
+-    href: "https://explorer.gamba.so/create",
+-    title: "🚀 Create Pool",
+-  },
+-  {
+-    href: "https://gamba.so/docs",
+-    title: "📖 Gamba Docs",
+-  },
+-  {
+-    href: "https://discord.com/invite/HSTtFFwR",
+-    title: "💬 Join Discord",
+-  },
+-];
++// export const FOOTER_LINKS = [
++//   {
++//     href: "https://github.com/BankkRoll/Gamba-V2-Next.js",
++//     title: "👨‍💻 Build your own",
++//   },
++//   {
++//     href: "https://explorer.gamba.so/create",
++//     title: "🚀 Create Pool",
++//   },
++//   {
++//     href: "https://gamba.so/docs",
++//     title: "📖 Gamba Docs",
++//   },
++//   {
++//     href: "https://discord.com/invite/HSTtFFwR",
++//     title: "💬 Join Discord",
++//   },
++// ];
+ 
+-export const FOOTER_TWITTER_LINK = {
+-  href: "https://twitter.com/bankkroll_eth",
+-  title: "© 2024 Template made with ❤️ by Bankk",
+-};
++// export const FOOTER_TWITTER_LINK = {
++//   href: "https://twitter.com/bankkroll_eth",
++//   title: "© 2024 Template made with ❤️ by Bankk",
++// };
+ 
+ /******************************************
+  * ┌──────────────────────────────────────┐ *
+@@ -56,28 +56,28 @@ export const FOOTER_TWITTER_LINK = {
+  ******************************************/
+ 
+ export const BASE_SEO_CONFIG = {
+-  defaultTitle: "Hedgy Casino",
++  defaultTitle: "Double It Or Go Home",
+   description:
+-    "The Hedgy Casino is a decentralized casino on the Solana blockchain.",
++    "The DIOGH is a decentralized casino on the Solana blockchain.",
+   openGraph: {
+     type: "website",
+     locale: "en_US",
+-    url: "https://hedgy-casino.netlify.app/",
+-    title: "Hedgy Casino",
++    url: "https://dioghgame.netlify.app/",
++    title: "Double It Or Go Home",
+     description:
+-      "The Hedgy Casino is a decentralized casino on the Solana blockchain.",
++      "The DIOGH is a decentralized casino on the Solana blockchain.",
+     images: [
+       {
+-        url: "https://hedgy-casino.netlify.app/seo.png",
+-        alt: "Hedgy Casino",
++        url: "https://dioghgame.netlify.app/seo.png",
++        alt: "Double It Or Go Home",
+       },
+     ],
+-    site_name: "Hedgy Casino",
++    site_name: "Double It Or Go Home",
+   },
+   twitter: {
+     cardType: "summary_large_image",
+-    site: "https://twitter.com/hedgehog_meme",
+-    handle: "@hedgehog_meme",
++    site: "https://x.com/DoublItOrGoHome",
++    handle: "@oublItOrGoHome",
+   },
+   additionalMetaTags: [
+     {
+@@ -98,6 +98,17 @@ export const BASE_SEO_CONFIG = {
+  ******************************************/
+ 
+ export const TOKENLIST = [
++  // DIOGH
++  {
++    mint: new PublicKey("CnJzTPbjFzpo5ogNPwRFjt2ade8s2NoBfJVhrFAt31X9"),
++    poolAuthority: new PublicKey("GSKfjvHD7Pg379XLfxXSd99gNQ74bye8REE8WEFf4SW7"), // Your pool address
++    name: "Double It Or Go Home",
++    symbol: "DIOGH",
++    image:
++      "https://ipfs.io/ipfs/QmYvNuiuYqQEtDJV3VeoTAmnpFYoi6E2s8hGChJqRGFYyv",
++    decimals: 6,
++    baseWager: 100e6,
++  },
+   // SOL
+   {
+     mint: new PublicKey("So11111111111111111111111111111111111111112"),
+@@ -118,16 +129,7 @@ export const TOKENLIST = [
+     decimals: 9,
+     baseWager: 0.01e9,
+   },
+-  // GUAC
+-  {
+-    mint: new PublicKey("AZsHEMXd36Bj1EMNXhowJajpUXzrKcK57wW4ZGXVa7yR"),
+-    name: "Guacamole",
+-    symbol: "GUAC",
+-    image:
+-      "https://bafkreiccbqs4jty2yjvuxp5x7gzgepquvv657ttauaqgxfhxghuz5us54u.ipfs.nftstorage.link/",
+-    decimals: 5,
+-    baseWager: 2000000e5,
+-  },
++
+ 
+   // Add New Public pool
+   // {
+diff --git a/src/games/Dice/Dice3D.tsx b/src/games/Dice/Dice3D.tsx
+new file mode 100644
+index 0000000..efd8040
+--- /dev/null
++++ b/src/games/Dice/Dice3D.tsx
+@@ -0,0 +1,195 @@
++import React, { useRef, useMemo } from 'react';
++import { Canvas, useFrame } from '@react-three/fiber';
++import { RoundedBox, Text } from '@react-three/drei'; // Import Text
++import * as THREE from 'three';
++
++interface Dice3DProps {
++  isSpinning: boolean;
++  resultNumber: number | null; // Add prop for the numerical result (1-100)
++  winStatus: 'win' | 'loss' | null; // Added prop for win/loss status
++  multiplier: number | null;      // Added prop for the achieved multiplier
++}
++
++// Define pip positions for each face using the example's structure
++type PipPosition = [number, number, number];
++
++const faceOffset = 0.9;
++const posA = 0.5;
++const posB = 0;
++
++const pipPositions: Record<string, PipPosition[]> = {
++  // Face 1 (+Z)
++  front: [[posB, posB, faceOffset]] as PipPosition[],
++  // Face 6 (-Z)
++  back: [
++    [-posA, posA, -faceOffset], [-posA, posB, -faceOffset], [-posA, -posA, -faceOffset],
++    [posA, posA, -faceOffset], [posA, posB, -faceOffset], [posA, -posA, -faceOffset]
++  ] as PipPosition[],
++  // Face 3 (+X) - Adjusted from example's right face (2)
++  right: [
++    [faceOffset, posA, posA],
++    [faceOffset, posB, posB],
++    [faceOffset, -posA, -posA]
++  ] as PipPosition[],
++  // Face 4 (-X) - Adjusted from example's left face (5)
++  left: [
++    [-faceOffset, posA, posA], [-faceOffset, posA, -posA],
++    [-faceOffset, posB, posB],
++    [-faceOffset, -posA, posA], [-faceOffset, -posA, -posA]
++  ] as PipPosition[],
++  // Face 2 (+Y)
++  top: [
++    [posA, faceOffset, posA],
++    [-posA, faceOffset, -posA]
++  ] as PipPosition[],
++  // Face 5 (-Y)
++  bottom: [
++    [-posA, -faceOffset, posA], [posA, -faceOffset, posA],
++    [-posA, -faceOffset, -posA], [posA, -faceOffset, -posA]
++  ] as PipPosition[]
++};
++
++// Reverse mapping: Face number -> Face key
++const numberToFaceKey: Record<number, string> = {
++  1: 'front', // +Z
++  2: 'top',     // +Y
++  3: 'right',   // +X
++  4: 'bottom',  // -Y
++  5: 'left',    // -X
++  6: 'back'     // -Z
++};
++
++function SpinningDice(props: Dice3DProps) {
++  const groupRef = useRef<THREE.Group>(null!);
++  const diceSize = 1.8; // Size used in RoundedBox args
++  const pipRadius = 0.15; // Radius for sphere pips
++  const baseColor = '#ffffff';
++  const pipColor = '#000000';
++
++  useFrame((_state, delta) => {
++    if (props.isSpinning && groupRef.current) {
++      groupRef.current.rotation.x += delta * 4;
++      groupRef.current.rotation.y += delta * 5;
++    } else if (!props.isSpinning && groupRef.current) {
++      // Optional: Slow down rotation instead of stopping abruptly
++      groupRef.current.rotation.x *= 0.95;
++      groupRef.current.rotation.y *= 0.95;
++    }
++  });
++
++  // Determine which face corresponds to the result number (if any)
++  const resultFaceKey = useMemo(() => {
++    if (props.resultNumber === null) return null;
++    // Simple modulo 6 for demo purposes - THIS IS NOT ACCURATE TO A REAL DICE
++    // A real implementation would need the actual dice face from the game logic if possible
++    const faceNumber = ((props.resultNumber - 1) % 6) + 1;
++    return numberToFaceKey[faceNumber];
++  }, [props.resultNumber]);
++
++  const createPips = (positions: PipPosition[]) => {
++    if (!Array.isArray(positions)) return null;
++    return positions.map((pos, index) => (
++      <mesh key={index} position={pos}>
++        <sphereGeometry args={[pipRadius * 0.8, 16, 16]} />
++        <meshStandardMaterial
++          color={pipColor}
++          metalness={0.1} // Slightly less metallic than example
++          roughness={0.4} // Slightly less rough than example
++        />
++      </mesh>
++    ));
++  };
++
++  // Determine message and color based on props
++  let message = "";
++  let messageColor = "#ffffff";
++  let resultTextColor = "#22c55e"; // Default to green for result number
++  if (!props.isSpinning && props.winStatus) {
++    if (props.winStatus === 'win') {
++      if (props.multiplier !== null && props.multiplier >= 2) {
++        message = "You Doubled It";
++        messageColor = "#22c55e"; // Green
++      } else {
++        message = "You Win!"; // Default win message
++        messageColor = "#22c55e"; // Green
++      }
++    } else { // Loss
++      message = "You Lose, Go Home";
++      messageColor = "#ef4444"; // Red
++      resultTextColor = "#ef4444"; // Use red for loss number too
++    }
++  }
++
++  return (
++    <group ref={groupRef} scale={1.1}> {/* Slightly increase scale for visibility */}
++      {/* Main dice cube with rounded corners */}
++      <RoundedBox args={[diceSize, diceSize, diceSize]} radius={0.15} smoothness={4}>
++        <meshStandardMaterial
++          color={baseColor}
++          metalness={0.1}
++          roughness={0.3}
++        />
++      </RoundedBox>
++
++      {/* Pips - Conditionally rendered based on resultFaceKey */}
++      {Object.entries(numberToFaceKey).map(([numStr, faceKey]) => {
++        // Only render pips if spinning OR if this face is NOT the result face
++        if (props.isSpinning || faceKey !== resultFaceKey) {
++          const positions = pipPositions[faceKey];
++          return positions ? createPips(positions) : null;
++        }
++        return null; // Don't render pips for the result face when stopped
++      })}
++
++      {/* Display Result Text when not spinning and result is available */}
++      {!props.isSpinning && props.resultNumber !== null && (
++        <>
++          {/* Result Number Text */}
++          <Text
++            position={[0, -diceSize * 0.1, diceSize * 0.65]} // Slightly lower position
++            fontSize={1.0}
++            color={resultTextColor} // Use dynamic color
++            anchorX="center"
++            anchorY="middle"
++            outlineWidth={0.05}
++            outlineColor="#000000"
++          >
++            {props.resultNumber}
++          </Text>
++          {/* Win/Loss Message Text */}
++          {message && (
++            <Text
++              position={[0, diceSize * 0.5, diceSize * 0.65]} // Position above number
++              fontSize={0.5} // Smaller font size for message
++              color={messageColor}
++              anchorX="center"
++              anchorY="middle"
++              outlineWidth={0.03}
++              outlineColor="#000000"
++            >
++              {message}
++            </Text>
++          )}
++        </>
++      )}
++    </group>
++  );
++}
++
++export default function Dice3D(props: Dice3DProps) {
++  return (
++    <div style={{ height: '150px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
++      <Canvas camera={{ position: [0, 0, 4], fov: 50 }}> {/* Adjusted camera slightly closer */}
++        <ambientLight intensity={1.0} />
++        <directionalLight position={[10, 15, 10]} intensity={1.5} />
++        <directionalLight position={[-10, -10, -10]} intensity={0.8} />
++        <SpinningDice
++          isSpinning={props.isSpinning}
++          resultNumber={props.resultNumber}
++          winStatus={props.winStatus}
++          multiplier={props.multiplier}
++        />
++      </Canvas>
++    </div>
++  );
++}
+\ No newline at end of file
+diff --git a/src/games/Dice/index.tsx b/src/games/Dice/index.tsx
+index 4111e44..52b0d57 100644
+--- a/src/games/Dice/index.tsx
++++ b/src/games/Dice/index.tsx
+@@ -5,16 +5,18 @@ import {
+   GambaUi,
+   TokenValue,
+   useCurrentPool,
++  useCurrentToken,
+   useSound,
+   useWagerInput,
+ } from "gamba-react-ui-v2";
+-import { useMemo, useState } from "react";
++import { useMemo, useState, useEffect } from "react";
+ 
+ import { BPS_PER_WHOLE } from "gamba-core-v2";
+ import GambaPlayButton from "@/components/GambaPlayButton";
+ import Slider from "./slide";
+ import { toast } from "sonner";
+ import { useGamba } from "gamba-react-v2";
++import Dice3D from "./Dice3D";
+ 
+ const SOUND_PLAY = "/games/dice/play.mp3";
+ const SOUND_LOSE = "/games/dice/lose.mp3";
+@@ -23,31 +25,22 @@ const SOUND_TICK = "/games/dice/tick.mp3";
+ 
+ const DICE_SIDES = 100;
+ 
+-export const outcomes = (
+-  length: number,
+-  multiplierCallback: (resultIndex: number) => number | undefined,
+-) => {
+-  const payoutArray = Array.from({ length }).map((_, resultIndex) => {
+-    const payout = multiplierCallback(resultIndex) ?? 0;
+-    return payout;
+-  });
+-  const totalValue = payoutArray.reduce((p, x) => p + x, 0);
+-  return payoutArray.map(
+-    (x) =>
+-      Number(
+-        (BigInt(x * BPS_PER_WHOLE) / BigInt(totalValue || 1)) * BigInt(length),
+-      ) / BPS_PER_WHOLE,
+-  );
+-};
+-
+ export default function Dice() {
+   const gamba = useGamba();
++  const token = useCurrentToken();
+   const [wager, setWager] = useWagerInput();
+   const pool = useCurrentPool();
+   const [resultIndex, setResultIndex] = useState(-1);
+   const [rollUnderIndex, setRollUnderIndex] = useState(
+     Math.floor(DICE_SIDES / 2),
+   );
++  const [isAnimating, setIsAnimating] = useState(false);
++  const [displayedResult, setDisplayedResult] = useState<number | null>(null);
++  const [winStatus, setWinStatus] = useState<'win' | 'loss' | null>(null);
++  const [achievedMultiplier, setAchievedMultiplier] = useState<number | null>(null);
++
++  console.log("Dice component rendering. Current token:", token?.symbol);
++
+   const sounds = useSound({
+     win: SOUND_WIN,
+     play: SOUND_PLAY,
+@@ -55,21 +48,39 @@ export default function Dice() {
+     tick: SOUND_TICK,
+   });
+ 
+-  const multiplier =
+-    Number(BigInt(DICE_SIDES * BPS_PER_WHOLE) / BigInt(rollUnderIndex)) /
+-    BPS_PER_WHOLE;
+-
+-  const bet = useMemo(
+-    () =>
+-      outcomes(DICE_SIDES, (resultIndex) => {
+-        if (resultIndex < rollUnderIndex) {
+-          return DICE_SIDES - rollUnderIndex;
+-        }
+-      }),
+-    [rollUnderIndex],
++  const potentialMultiplier = useMemo(() => {
++    if (rollUnderIndex === 0) return 0;
++    return Number(BigInt(DICE_SIDES * BPS_PER_WHOLE) / BigInt(rollUnderIndex)) / BPS_PER_WHOLE;
++  },
++    [rollUnderIndex]
+   );
+ 
+-  const maxWin = multiplier * wager;
++  // Log the values for debugging
++  useEffect(() => {
++    if (token && pool) {
++      const calculatedMaxWin = potentialMultiplier * wager;
++      console.log(`---
++Token: ${token.symbol}
++Potential Multiplier: ${potentialMultiplier.toFixed(2)}
++Wager (smallest unit): ${wager}
++Calculated Max Win (smallest unit): ${calculatedMaxWin}
++Pool Max Payout (smallest unit): ${pool.maxPayout}
++Payout Exceeded: ${calculatedMaxWin > pool.maxPayout}
++---`);
++    }
++  }, [token, pool, wager, potentialMultiplier]);
++
++  const scaledMultiplier = useMemo(() => {
++    const result = potentialMultiplier * BPS_PER_WHOLE;
++    return Number.isFinite(result) ? Math.floor(result) : 0;
++  }, [potentialMultiplier]);
++
++  const bet = useMemo(() =>
++    Array.from({ length: DICE_SIDES }).map((_, i) =>
++      i < rollUnderIndex ? scaledMultiplier : 0
++    ),
++    [rollUnderIndex, scaledMultiplier]
++  );
+ 
+   const game = GambaUi.useGame();
+ 
+@@ -77,6 +88,10 @@ export default function Dice() {
+     try {
+       sounds.play("play");
+       setResultIndex(-1);
++      setDisplayedResult(null);
++      setWinStatus(null);
++      setAchievedMultiplier(null);
++      setIsAnimating(true);
+ 
+       await game.play({
+         wager,
+@@ -84,16 +99,32 @@ export default function Dice() {
+       });
+ 
+       const result = await game.result();
+-      setResultIndex(result.resultIndex);
+ 
+-      if (result.resultIndex < rollUnderIndex) {
+-        sounds.play("win");
+-      } else {
+-        sounds.play("lose");
+-      }
++      const didWin = result.payout > 0;
++      const currentWinStatus = didWin ? 'win' : 'loss';
++      const currentMultiplier = didWin ? potentialMultiplier : null;
++
++      setTimeout(() => {
++        setResultIndex(result.resultIndex);
++        setDisplayedResult(result.resultIndex + 1);
++        setWinStatus(currentWinStatus);
++        setAchievedMultiplier(currentMultiplier);
++        setIsAnimating(false);
++
++        if (didWin) {
++          sounds.play("win");
++        } else {
++          sounds.play("lose");
++        }
++      }, 500);
++
+     } catch (err: any) {
+       toast.error(`An error occurred: ${err.message}`);
+       setResultIndex(-1);
++      setIsAnimating(false);
++      setDisplayedResult(null);
++      setWinStatus(null);
++      setAchievedMultiplier(null);
+     }
+   };
+ 
+@@ -102,42 +133,35 @@ export default function Dice() {
+       <GambaUi.Portal target="screen">
+         <GambaUi.Responsive>
+           <Container>
+-            <RollUnder>
+-              <div>
+-                <div>{rollUnderIndex + 1}</div>
+-                <div>Roll Under</div>
+-              </div>
+-            </RollUnder>
++            <Dice3D
++              isSpinning={isAnimating}
++              resultNumber={displayedResult}
++              winStatus={winStatus}
++              multiplier={achievedMultiplier}
++            />
+             <Stats>
+               <div>
+                 <div>{((rollUnderIndex / DICE_SIDES) * 100).toFixed(0)}%</div>
+                 <div>Win Chance</div>
+               </div>
+               <div>
+-                <div>{multiplier.toFixed(2)}x</div>
++                <div>{potentialMultiplier.toFixed(2)}x</div>
+                 <div>Multiplier</div>
+               </div>
+               <div>
+-                {maxWin > pool.maxPayout ? (
++                {potentialMultiplier * wager > pool.maxPayout ? (
+                   <div style={{ color: "red" }}>Too high</div>
+                 ) : (
+                   <div>
+-                    <TokenValue suffix="" amount={maxWin} />
++                    <TokenValue suffix="" amount={potentialMultiplier * wager} />
+                   </div>
+                 )}
+                 <div>Payout</div>
+               </div>
+             </Stats>
+-            <div style={{ position: "relative" }}>
+-              {resultIndex > -1 && (
+-                <Result
+-                  style={{ left: `${(resultIndex / DICE_SIDES) * 100}%` }}
+-                >
+-                  <div key={resultIndex}>{resultIndex + 1}</div>
+-                </Result>
+-              )}
++            <div style={{ position: "relative", marginTop: "20px" }}>
+               <Slider
+-                disabled={gamba.isPlaying}
++                disabled={gamba.isPlaying || isAnimating}
+                 range={[0, DICE_SIDES]}
+                 min={1}
+                 max={DICE_SIDES - 5}
+@@ -148,12 +172,18 @@ export default function Dice() {
+                 }}
+               />
+             </div>
++            <RollUnder style={{ marginTop: "40px" }}>
++              <div>
++                <div>{rollUnderIndex + 1}</div>
++                <div>Roll Under</div>
++              </div>
++            </RollUnder>
+           </Container>
+         </GambaUi.Responsive>
+       </GambaUi.Portal>
+       <GambaUi.Portal target="controls">
+         <GambaUi.WagerInput value={wager} onChange={setWager} />
+-        <GambaPlayButton onClick={play} text="Roll" />
++        <GambaPlayButton onClick={play} text="Roll" disabled={gamba.isPlaying || isAnimating} />
+       </GambaUi.Portal>
+     </>
+   );
+diff --git a/src/hooks/useGameEvent.tsx b/src/hooks/useGameEvent.tsx
+index 3cd735b..b64d753 100644
+--- a/src/hooks/useGameEvent.tsx
++++ b/src/hooks/useGameEvent.tsx
+@@ -7,6 +7,7 @@ import { extractMetadata } from "@/utils/RecentPlay";
+ import { toast } from "sonner";
+ import { useGambaEventListener } from "gamba-react-v2";
+ import { useWallet } from "@solana/wallet-adapter-react";
++import { useRouter } from "next/router";
+ 
+ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
+   const data = event.data;
+@@ -100,20 +101,13 @@ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
+ 
+ const GameToast = () => {
+   const { publicKey } = useWallet();
++  const router = useRouter();
++  const currentGameId = router.query.gameId as string;
+ 
+   useGambaEventListener("GameSettled", (event) => {
+     const { game } = extractMetadata(event);
+ 
+-    // - Filter events by a specific creator
+-    // - To enable filtering by a specific creator, uncomment the following lines and
+-    // - this will auto filter your events from your platform only.
+-
+-    // const allowedCreator = PLATFORM_CREATOR_ADDRESS;
+-    // const eventCreatorPublicKeyString = event.data.creator.toBase58();
+-
+-    // - Swap the line below to add the filter
+-    // if (game && (allowedCreator.includes(eventCreatorPublicKeyString)) ) {
+-    if (game) {
++    if (game && currentGameId && game.id === currentGameId) {
+       const connectedUserPublicKeyString = publicKey?.toString();
+       const eventUserPublicKeyString = event.data.user.toBase58();
+ 
+diff --git a/src/pages/_app.tsx b/src/pages/_app.tsx
+index dd517d4..de60aa0 100644
+--- a/src/pages/_app.tsx
++++ b/src/pages/_app.tsx
+@@ -14,12 +14,12 @@ import {
+   ConnectionProvider,
+   WalletProvider,
+ } from "@solana/wallet-adapter-react";
+-import { GambaProvider, SendTransactionProvider } from "gamba-react-v2";
++import { GambaProvider, SendTransactionProvider, useGambaContext } from "gamba-react-v2";
+ 
+ import { AppProps } from "next/app";
+ import { DefaultSeo } from "next-seo";
+ import Footer from "@/components/layout/Footer";
+-import { GambaPlatformProvider } from "gamba-react-ui-v2";
++import { GambaPlatformProvider, useCurrentToken } from "gamba-react-ui-v2";
+ import GameToast from "@/hooks/useGameEvent";
+ import Header from "@/components/layout/Header";
+ import { PublicKey } from "@solana/web3.js";
+@@ -30,12 +30,33 @@ import dynamic from "next/dynamic";
+ import { useDisclaimer } from "@/hooks/useDisclaimer";
+ import { useMemo } from "react";
+ import { useUserStore } from "@/hooks/useUserStore";
++import React, { useContext, useEffect, useState } from "react";
++import { GambaPlatformContext } from "gamba-react-ui-v2";
+ 
+ const DynamicTokenMetaProvider = dynamic(
+   () => import("gamba-react-ui-v2").then((mod) => mod.TokenMetaProvider),
+   { ssr: false }
+ );
+ 
++// Helper component to set the default token
++const SetDefaultToken: React.FC = () => {
++  const { setPool } = useContext(GambaPlatformContext) ?? {};
++  const currentToken = useCurrentToken();
++  const [defaultSet, setDefaultSet] = useState(false);
++
++  useEffect(() => {
++    if (!defaultSet && setPool && currentToken && TOKENLIST.length > 0) {
++      const defaultTokenMint = TOKENLIST[0].mint;
++      if (!currentToken.mint.equals(defaultTokenMint)) {
++        setPool(defaultTokenMint);
++      }
++      setDefaultSet(true);
++    }
++  }, [setPool, currentToken, defaultSet]);
++
++  return null;
++};
++
+ function MyApp({ Component, pageProps }: AppProps) {
+   const { showDisclaimer, DisclaimerModal } = useDisclaimer();
+   const { isPriorityFeeEnabled, priorityFee, set } = useUserStore((state) => ({
+@@ -87,6 +108,7 @@ function MyApp({ Component, pageProps }: AppProps) {
+                       prefix: "code",
+                     }}
+                   >
++                    <SetDefaultToken />
+                     <Header />
+                     <DefaultSeo {...BASE_SEO_CONFIG} />
+                     <main className="pt-12">
+diff --git a/src/pages/index.tsx b/src/pages/index.tsx
+index b1ea169..b313a1e 100644
+--- a/src/pages/index.tsx
++++ b/src/pages/index.tsx
+@@ -6,6 +6,7 @@ import { toast } from "sonner";
+ import { useReferral } from "gamba-react-ui-v2";
+ import { useWallet } from "@solana/wallet-adapter-react";
+ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
++import Link from "next/link";
+ 
+ export default function HomePage() {
+   const walletModal = useWalletModal();
+@@ -25,78 +26,55 @@ export default function HomePage() {
+   return (
+     <>
+       <div className="relative mx-auto flex flex-col gap-5 mt-20 pb-10 px-2.5 transition-all duration-250 ease-in-out sm:px-5 sm:pt-5 md:max-w-6xl">
+-        <div className="relative overflow-hidden flex flex-col items-center justify-center p-4 rounded-lg lg:grid lg:grid-cols-3 gap-4 lg:p-10 bg-transparent">
+-          <div
+-            style={{
+-              backgroundImage: "url(/seo.png)",
+-              backgroundSize: "cover",
+-              backgroundPosition: "center",
+-              backgroundRepeat: "no-repeat",
+-              transform: "perspective(800px) rotateX(40deg)",
+-              transformOrigin: "top center",
+-              zIndex: -1,
+-              position: "absolute",
+-              top: 0,
+-              left: 0,
+-              width: "100%",
+-              height: "100%",
+-            }}
+-          />
++        <div className="relative overflow-hidden flex flex-col items-center justify-center p-4 rounded-lg lg:grid lg:grid-cols-3 gap-4 lg:p-10 bg-gradient-to-br from-purple-600 via-indigo-700 to-blue-800">
+           <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-10 transform rotate-12 scale-150 blur-xl pointer-events-none"></div>
+ 
+-          <div className="bg-[#15152e]/80 rounded-lg p-4 lg:col-span-2 text-center lg:text-left">
++          <div className="rounded-lg p-4 lg:col-span-2 text-center lg:text-left flex flex-col items-center lg:items-start z-10">
+             <div className=" flex items-center justify-center md:justify-start">
+               <h1 className="text-2xl md:text-4xl font-bold text-white drop-shadow-md">
+-                Welcome to Gamba
++                Double It Or Go Home 🎲
+               </h1>
+               <img src="/wave.gif" className="h-14" alt="Gamba Logo" />
+             </div>
+-            <p className="my-2 text-white drop-shadow">
+-              The gambleFi protocol with end-to-end tools for on-chain
+-              degeneracy on Solana.
++            <p className="my-2 text-white drop-shadow text-lg md:text-xl">
++              On-chain
++              degeneracy on Solana. Roll Dice, Double It, or Go Home.
+             </p>
+-            <p className="my-2 text-sm max-w-sm">
++            <Link href="/play/dice" passHref>
++              <button className="my-4 px-8 py-3 text-2xl font-bold text-black bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-200 ease-in-out animate-pulse">
++                PLAY
++              </button>
++            </Link>
++            <p className="my-2 text-sm md:text-base max-w-sm">
+               Share your link to earn a {PLATFORM_REFERRAL_FEE * 100}% fee on
+               each play when players use this platform using your code.
+             </p>
+             <button
+-              className="bg-[#8851ff] hover:bg-[#9564ff] rounded-lg p-2 text-xs bg-"
++              className="bg-[#8851ff] hover:bg-[#9564ff] rounded-lg p-2 text-xs"
+               onClick={handleCopyInvite}
+             >
+               Copy Link
+             </button>
+           </div>
+-          <div className="whitespace-nowrap grid grid-cols-2 grid-rows-2 gap-2 mt-5 md:flex md:flex-col md:mt-0 md:justify-start">
++          <div className="whitespace-nowrap grid grid-cols-2 grid-rows-2 gap-2 mt-5 md:flex md:flex-col md:mt-0 md:justify-start z-10">
+             <button
+               onClick={() =>
+-                window.open("https://github.com/BankkRoll/Gamba-V2-Next.js")
++                window.open("https://raydium.io/swap/?outputMint=CnJzTPbjFzpo5ogNPwRFjt2ade8s2NoBfJVhrFAt31X9&inputMint=sol", "_blank", "noopener,noreferrer")
+               }
+-              className="rounded-lg p-3 bg-white hover:bg-gray-200 hover:-translate-y-0.5 transform text-black transition-all duration-200 ease-in-out cursor-pointer shadow-lg hover:shadow-xl"
+-            >
+-              👨‍💻 Build your own
+-            </button>
+-            <button
+-              onClick={() => window.open("https://gamba.so/docs")}
+-              className="rounded-lg p-3 bg-white hover:bg-gray-200 hover:-translate-y-0.5 transform text-black transition-all duration-200 ease-in-out cursor-pointer shadow-lg hover:shadow-xl"
++              className="rounded-lg p-3 bg-yellow-400 hover:bg-yellow-500 hover:-translate-y-0.5 transform text-black font-semibold transition-all duration-200 ease-in-out cursor-pointer shadow-lg hover:shadow-xl"
+             >
+-              📖 Gamba Docs
+-            </button>
+-            <button
+-              onClick={() => window.open("https://explorer.gamba.so")}
+-              className="rounded-lg p-3 bg-white hover:bg-gray-200 hover:-translate-y-0.5 transform text-black transition-all duration-200 ease-in-out cursor-pointer shadow-lg hover:shadow-xl"
+-            >
+-              🌐 Explorer
++              Buy DIOGH
+             </button>
++           
++
+             <button
+-              onClick={() => window.open("https://discord.com/invite/HSTtFFwR")}
++              onClick={() => window.open("https://t.me/+eRls5c1GgutjYTk0")}
+               className="rounded-lg p-3 bg-white hover:bg-gray-200 hover:-translate-y-0.5 transform text-black transition-all duration-200 ease-in-out cursor-pointer shadow-lg hover:shadow-xl"
+             >
+-              💬 Join Discord
++              💬 Join Community
+             </button>
+           </div>
+         </div>
+-        <h2 className="text-2xl font-bold text-center">Games</h2>
+-        <GameGrid />
+         <h2 className="text-2xl font-bold text-center">Recent Plays</h2>
+         <RecentPlays />
+       </div>
+diff --git a/src/pages/play/[gameId].tsx b/src/pages/play/[gameId].tsx
+index c417069..bd0e245 100644
+--- a/src/pages/play/[gameId].tsx
++++ b/src/pages/play/[gameId].tsx
+@@ -69,17 +69,7 @@ const GamePage: React.FC = () => {
+ 
+       {isLoading ? (
+         <div className="bg-black mt-20 flex flex-col justify-center items-center mx-auto max-w-sm md:max-w-6xl pb-1 min-h-[580px] md:min-h-[650px] rounded-lg shadow-xl">
+-          <div className="flex flex-col justify-center items-center max-w-lg rounded-lg">
+-            <video
+-              src="/gamba.mp4"
+-              className="w-full h-full"
+-              autoPlay
+-              muted
+-              playsInline
+-              loop
+-            />
+-            <p className="text-2xl text-white mt-5">Loading...</p>
+-          </div>
++          <p className="text-2xl text-white mt-5">Loading...</p>
+         </div>
+       ) : (
+         <>
+@@ -106,11 +96,6 @@ const GamePage: React.FC = () => {
+           )}
+         </>
+       )}
+-      <div className="flex flex-col justify-center items-center mx-auto max-w-6xl max-sm:max-w-sm mb-4">
+-        <div className="py-4">
+-          <GameSlider />
+-        </div>
+-      </div>
+     </>
+   );
+ };
