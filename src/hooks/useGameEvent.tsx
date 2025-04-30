@@ -30,11 +30,12 @@ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
     <>
       <img src={`/games/${game.id}/logo.png`} alt={"Splash"} className="h-10" />
       <div className={textColorClass}>
-        <img
+        {/* Comment out the gamba logo.svg image */}
+        {/* <img
           src="/logo.svg"
           alt="gamba"
           className="absolute top-2 right-2 w-24 h-6 rounded-full"
-        />
+        /> */}
         <div className="font-bold text-lg">
           {data.user.toBase58().substring(0, 4)}...{" "}
           <span className="text-sm">{profit >= 0 ? "WON" : "LOST"}</span>{" "}
@@ -79,7 +80,8 @@ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
           </div>
         )}
         <div className="flex flex-row gap-2 absolute bottom-2 right-2">
-          <a
+          {/* Comment out the Verify button block */}
+          {/* <a
             href={`https://explorer.gamba.so/tx/${event.signature}`}
             target="_blank"
             rel="noreferrer"
@@ -87,7 +89,7 @@ function RecentPlay({ event }: { event: GambaTransaction<"GameSettled"> }) {
             <button className="bg-[#8851ff] hover:bg-[#9564ff] text-xs rounded-lg p-1">
               Verify
             </button>
-          </a>
+          </a> */}
           <Link href={`/play/${game.id}`} passHref>
             <button className="bg-[#8851ff] hover:bg-[#9564ff] text-xs rounded-lg p-1">
               Play

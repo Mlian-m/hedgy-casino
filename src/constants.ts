@@ -101,7 +101,6 @@ export const TOKENLIST = [
   // DIOGH
   {
     mint: new PublicKey("CnJzTPbjFzpo5ogNPwRFjt2ade8s2NoBfJVhrFAt31X9"),
-    poolAuthority: new PublicKey("GSKfjvHD7Pg379XLfxXSd99gNQ74bye8REE8WEFf4SW7"), // Your pool address
     name: "Double It Or Go Home",
     symbol: "DIOGH",
     image:
