@@ -8,7 +8,7 @@ import { PublicKey } from "@solana/web3.js";
  ******************************************/
 
 // Creator fee (in %)
-export const PLATFORM_CREATOR_FEE = 0.05; // 5% !!max 5%!!
+export const PLATFORM_CREATOR_FEE = 2.5; // 5% !!max 5%!!
 
 // Jackpot fee (in %)
 export const PLATFORM_JACKPOT_FEE = 0.01; // 0.1%
