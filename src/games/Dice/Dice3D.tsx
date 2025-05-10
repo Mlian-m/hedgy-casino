@@ -179,7 +179,7 @@ function SpinningDice(props: Dice3DProps) {
 export default function Dice3D(props: Dice3DProps) {
   return (
     <div style={{ height: '150px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Canvas className="diceHolder" camera={{ position: [0, 0, 4], fov: 50 }}> {/* Adjusted camera slightly closer */}
+      <Canvas camera={{ position: [0, 0, 4], fov: 50 }}> {/* Adjusted camera slightly closer */}
         <ambientLight intensity={1.0} />
         <directionalLight position={[10, 15, 10]} intensity={1.5} />
         <directionalLight position={[-10, -10, -10]} intensity={0.8} />
