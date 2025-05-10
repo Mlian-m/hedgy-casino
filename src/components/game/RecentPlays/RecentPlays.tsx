@@ -18,10 +18,10 @@ export default function RecentPlays() {
     useState<GambaTransaction<"GameSettled"> | null>(null);
   const PLATFORM_EXPLORER_URL = `https://explorer.gamba.so/platform/${PLATFORM_CREATOR_ADDRESS.toString()}`;
 
-  const diceEvents = useMemo(() => {
+  const gameEvents = useMemo(() => {
     return allEvents.filter(tx => {
       const { game } = extractMetadata(tx);
-      return game?.id === 'dice';
+      return game?.id === 'dice' || game?.id === 'plinko';
     });
   }, [allEvents]);
 
@@ -33,8 +33,8 @@ export default function RecentPlays() {
           onClose={() => setSelectedGame(null)}
         />
       )}
-      {diceEvents.length > 0
-        ? diceEvents.map((tx, index) => (
+      {gameEvents.length > 0
+        ? gameEvents.map((tx, index) => (
             <button
               key={tx.signature + "-" + index}
               onClick={() => setSelectedGame(tx)}

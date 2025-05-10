@@ -53,19 +53,17 @@ export function RecentPlay({
     <div className="flex items-center justify-between w-full gap-4 md:gap-6">
       <div className="flex items-center justify-center gap-2">
         {!isFallback ? (
-          <img
-            src={`/games/${game.id}/logo.png`}
-            alt={`${game?.meta?.name} Splash`}
-            className="items-center justify-center"
-            width="60px"
-          />
+          <div className={`px-3 py-1 rounded-lg font-bold text-sm ${
+            game.id === 'dice' 
+              ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-black'
+              : 'bg-gradient-to-r from-blue-400 to-purple-500 text-black'
+          }`}>
+            {game.id.toUpperCase()}
+          </div>
         ) : (
-          <img
-            src="/logo.svg"
-            alt={`${gameNameFallback} Splash`}
-            className="items-center justify-center"
-            width="60px"
-          />
+          <div className="px-3 py-1 rounded-lg font-bold text-sm bg-gray-500 text-black">
+            {(gameNameFallback || 'UNKNOWN').toUpperCase()}
+          </div>
         )}
       </div>
       <div
