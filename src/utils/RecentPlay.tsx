@@ -86,10 +86,10 @@ export function RecentPlay({
             src={token.image}
             alt="Token"
             width={24}
-            className="rounded-full flex-shrink-0"
+            className="rounded-full flex-shrink-0 hidden sm:block"
           />
         ) : (
-          <span className="inline-block w-6 h-6 border border-white rounded-full flex items-center justify-center text-xs font-medium text-white">
+          <span className="inline-block w-6 h-6 border border-white rounded-full flex items-center justify-center text-xs font-medium text-white hidden sm:flex">
             {token.symbol}
           </span>
         )}
