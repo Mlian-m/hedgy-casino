@@ -125,6 +125,9 @@ body::-webkit-scrollbar-thumb {
       transform: scale(1);
     }
   }
+  .diceHolder canvas {
+    margin: 0 auto;
+  }
 }
 
 @keyframes loadingAnimation {
