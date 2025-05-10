@@ -18,7 +18,7 @@ export const GAMES: GameBundle<GameMeta>[] = [
       background: "#E91E63",
       name: "Dice",
       image: "/games/logo.png",
-      description: `DIOGH offers an exhilarating challenge where players must forecast the outcome of a roll with a unique twist. By selecting a number, participants aim to roll below it to clinch victory. The dynamic nature of the game allows for adjustments in choices, directly influencing potential payouts and skillfully balancing risk and reward, ensuring an immersive and stimulating gaming experience.`,
+      description: `DIOGHfile text offers an exhilarating challenge where players must forecast the outcome of a roll with a unique twist. By selecting a number, participants aim to roll below it to clinch victory. The dynamic nature of the game allows for adjustments in choices, directly influencing potential payouts and skillfully balancing risk and reward, ensuring an immersive and stimulating gaming experience.`,
       volatility: 2,
     },
     app: dynamic(() => import("./Dice")),

@@ -40,11 +40,18 @@ export default function HomePage() {
               On-chain
               degeneracy on Solana. Roll Dice, Double It, or Go Home.
             </p>
-            <Link href="/play/dice" passHref>
-              <button className="my-4 px-8 py-3 text-2xl font-bold text-black bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-200 ease-in-out animate-pulse">
-                PLAY
-              </button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/play/dice" passHref>
+                <button className="my-4 px-8 py-3 text-2xl font-bold text-black bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-200 ease-in-out animate-pulse">
+                  Play Dice
+                </button>
+              </Link>
+              <Link href="/play/plinko" passHref>
+                <button className="my-4 px-8 py-3 text-2xl font-bold text-black bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-200 ease-in-out animate-pulse">
+                  Play Plinko
+                </button>
+              </Link>
+            </div>
             <p className="my-2 text-sm md:text-base max-w-sm">
               Share your link to earn a {PLATFORM_REFERRAL_FEE * 100}% fee on
               each play when players use this platform using your code.
